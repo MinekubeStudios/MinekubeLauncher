@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/minekubelauncher.png" alt="Minekube Launcher" width="720" />
+
 # 🟩 Minekube Launcher
 
 **A lightweight, modern, open-source launcher for Minecraft.**
@@ -18,6 +20,7 @@ Manage multiple Minecraft installations at once, with a clean UI and privacy & s
 
 | | Feature | Description |
 |:-:|---|---|
+| 🖥️ | **For every operating system** | 🪟 **Windows**, 🍎 **macOS** and 🐧 **Linux** — Minekube Launcher is built for all of them, so your installations and settings follow you to any machine. |
 | 🗂️ | **Multiple installations** | Create and manage many Minecraft installations side by side, all from one place. |
 | 🎨 | **Modern UI** | A fast, clean, and lightweight interface built for everyday use. |
 | 🔒 | **Privacy & security first** | Designed to respect your data and keep your setup secure. |
