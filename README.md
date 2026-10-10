@@ -2,7 +2,7 @@
 
 <img src="assets/minekubelauncher.png" alt="Minekube Launcher" width="720" />
 
-# 🟩 Minekube Launcher
+# <img src="assets/brand-emoji.png" alt="" width="32" height="32" /> Minekube Launcher
 
 **A lightweight, modern, open-source launcher for Minecraft.**
 Manage multiple Minecraft installations at once, with a clean UI and privacy & security in mind. 🎮✨
