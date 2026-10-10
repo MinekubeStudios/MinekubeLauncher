@@ -1,6 +1,6 @@
 <div align="center">
 
-![Minekube Launcher](assets/minekubelauncher.png)
+<img src="assets/minekubelauncher.png" alt="Minekube Launcher" width="720" />
 
 # 🟩 Minekube Launcher
 
