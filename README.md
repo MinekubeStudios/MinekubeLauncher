@@ -5,6 +5,7 @@
 **A lightweight, modern, open-source launcher for Minecraft.**
 Manage multiple Minecraft installations at once, with a clean UI and privacy & security in mind. 🎮✨
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue?style=for-the-badge)](LICENSE)
 [![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red?style=for-the-badge)](https://github.com/MinekubeStudios/MinekubeLauncher)
 [![Minecraft](https://img.shields.io/badge/Minecraft-Launcher-3C8527?style=for-the-badge&logo=minecraft&logoColor=white)](https://github.com/MinekubeStudios/MinekubeLauncher)
 [![Fork of Modrinth App](https://img.shields.io/badge/Fork%20of-Modrinth%20App-1BD96A?style=for-the-badge)](https://modrinth.com/app)
@@ -25,7 +26,7 @@ Manage multiple Minecraft installations at once, with a clean UI and privacy & s
 
 ## 🚀 Installation
 
-📦 All downloads and step-by-step instructions are available on our **Website**.
+📦 All downloads and step-by-step instructions are available on our **[Website](https://minekubestudios.github.io/launcher/)**.
 
 Want to follow the latest development? Check the **GitHub Actions** tab for the current build status, including pull request checks. 🔍
 
@@ -33,6 +34,14 @@ Want to follow the latest development? Check the **GitHub Actions** tab for the 
 
 Minekube Launcher is a custom launcher for Minecraft, forked from the [Modrinth App](https://modrinth.com/app).
 It is **not endorsed by Modrinth**.
+
+## 📜 License
+
+Minekube Launcher is free software, licensed under the **[GNU General Public License v3.0](LICENSE)** (GPL-3.0).
+You are free to use, study, modify, and redistribute it under the terms of that license.
+
+It is a derivative of the [Modrinth App](https://github.com/modrinth/code), which is also GPL-3.0-licensed.
+Modrinth branding and logos are **not** part of this project and remain the property of Rinth, Inc.
 
 ## 🤝 Contributing
 
