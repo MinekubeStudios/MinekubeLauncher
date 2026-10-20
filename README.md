@@ -20,12 +20,13 @@ Manage multiple Minecraft installations at once, with a clean UI and privacy & s
 
 | | Feature | Description |
 |:-:|---|---|
-| 🖥️ | **For every operating system** | 🪟 **Windows**, 🍎 **macOS** and 🐧 **Linux** — Minekube Launcher is built for all of them, so your installations and settings follow you to any machine. |
-| 🗂️ | **Multiple installations** | Create and manage many Minecraft installations side by side, all from one place. |
-| 🎨 | **Modern UI** | A fast, clean, and lightweight interface built for everyday use. |
-| 🔒 | **Privacy & security first** | Designed to respect your data and keep your setup secure. |
-| 🛠️ | **Customization** | Tailor the launcher to the way you like to play. |
-| 🌍 | **Open source** | Transparent, community-driven development on GitHub. |
+| 👤 | **Local account by default** | Play right out of the box with a **built-in local profile** *(optional)* — **no mandatory registration** or third-party cloud account required from first launch. |
+| 🔒 | **Privacy & security first** | Built from the ground up for **privacy and security** in Minecraft and on servers — with a **hardcoded, built-in tracking & telemetry blocker** directly in the code. |
+| 🖥️ | **For every operating system** | Natively built for 🪟 **Windows**, 🍎 **macOS**, and 🐧 **Linux** — delivering **consistent performance** so your installations and settings follow you to any machine. |
+| 🗂️ | **Multiple installations** | Effortlessly create and manage **isolated Minecraft instances** side by side — keeping different **versions, modloaders, and worlds** cleanly organized in one place. |
+| 🎨 | **Modern UI** | A **fast, clean, and lightweight interface** crafted for everyday use — **zero bloat**, responsive navigation, and a distraction-free experience. |
+| 🛠️ | **Customization** | Fine-tune **instance settings, memory allocation, and launch options** to tailor the launcher to the exact way you like to play. |
+| 🌍 | **Open source** | **100% transparent, auditable source code** under **GPL-3.0** — community-driven development on GitHub with nothing hidden behind closed doors. |
 
 ## 🚀 Installation
 
