@@ -7325,7 +7325,7 @@ dependencies = [
 
 [[package]]
 name = "theseus"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "aho-corasick",
  "ariadne",
@@ -7419,7 +7419,7 @@ dependencies = [
 
 [[package]]
 name = "theseus_gui"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "async_zip",
  "chrono",
