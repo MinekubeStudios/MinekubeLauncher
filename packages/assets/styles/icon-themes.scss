@@ -1,0 +1,120 @@
+// Restyles launcher chrome icons. Custom themed glyphs opt out via .themed-icon
+// so their drawn shapes are not redrawn by the generic stroke overrides.
+
+@mixin chrome-icons {
+	:is(button, a, .btn, .nav-button, .version-badge, .label)
+		svg:not([data-brand-logo]):not(.brand-logo):not(.themed-icon) {
+		@content;
+	}
+}
+
+html[data-icon-theme='colorful'] {
+	@include chrome-icons {
+		filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+
+		:is(path, line, polyline, polygon, circle, rect, ellipse) {
+			stroke-linecap: round !important;
+			stroke-linejoin: round !important;
+			stroke-width: 2.3px !important;
+		}
+	}
+}
+
+html[data-icon-theme='emoji'] {
+	@include chrome-icons {
+		:is(path, line, polyline, polygon, circle, rect, ellipse) {
+			stroke-linecap: round !important;
+			stroke-linejoin: round !important;
+			stroke-width: 2.2px !important;
+		}
+	}
+}
+
+html[data-icon-theme='minecraft'] {
+	@include chrome-icons {
+		shape-rendering: crispEdges;
+		filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.45));
+
+		:is(path, line, polyline, polygon, circle, rect, ellipse) {
+			stroke-linecap: square !important;
+			stroke-linejoin: miter !important;
+			stroke-width: 2.5px !important;
+		}
+	}
+}
+
+html[data-icon-theme='neon'] {
+	@include chrome-icons {
+		filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 8px currentColor);
+
+		:is(path, line, polyline, polygon, circle, rect, ellipse) {
+			stroke-width: 1.6px !important;
+		}
+	}
+}
+
+html[data-icon-theme='candy'] {
+	@include chrome-icons {
+		filter: drop-shadow(0 1.5px 1px rgba(0, 0, 0, 0.28));
+
+		:is(path, line, polyline, polygon, circle, rect, ellipse) {
+			stroke-linecap: round !important;
+			stroke-linejoin: round !important;
+			stroke-width: 2.7px !important;
+		}
+	}
+}
+
+html[data-icon-theme='arcade'] {
+	@include chrome-icons {
+		filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.4));
+
+		:is(path, line, polyline, polygon, circle, rect, ellipse) {
+			stroke-linecap: butt !important;
+			stroke-linejoin: miter !important;
+			stroke-width: 2.6px !important;
+		}
+	}
+}
+
+html[data-icon-theme='pixel'] {
+	@include chrome-icons {
+		shape-rendering: crispEdges;
+		filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.5));
+
+		:is(path, line, polyline, polygon, circle, rect, ellipse) {
+			stroke-linecap: square !important;
+			stroke-linejoin: miter !important;
+			stroke-width: 2.4px !important;
+		}
+	}
+}
+
+.themed-icon-emoji {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	font-size: 1.18em;
+	width: 1em;
+	height: 1em;
+}
+
+.themed-icon-colorful,
+.themed-icon-candy {
+	filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28));
+}
+
+.themed-icon-minecraft,
+.themed-icon-pixel {
+	shape-rendering: crispEdges;
+	filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.38));
+}
+
+.themed-icon-arcade {
+	filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.35));
+}
+
+.themed-icon-neon {
+	filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 9px currentColor);
+}

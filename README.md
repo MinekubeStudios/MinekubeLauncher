@@ -1,70 +1,39 @@
-<div align="center">
+# ![Modrinth Monorepo Cover](/.github/assets/monorepo_cover.png)
 
-<img src="assets/minekubelauncher.png" alt="Minekube Launcher" width="720" />
+![Issues](https://img.shields.io/github/issues-raw/Modrinth/code?color=c78aff&label=issues&style=for-the-badge)
+![Pull Requests](https://img.shields.io/github/issues-pr-raw/Modrinth/code?color=c78aff&label=PRs&style=for-the-badge)
+![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=c78aff&label=contributors&style=for-the-badge)
+![Lines of Code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge?style=flat&logoColor=white&color=c78aff&style=for-the-badge)
+![Commit Activity](https://img.shields.io/github/commit-activity/m/Modrinth/code?color=c78aff&label=commits&style=for-the-badge)
+![Last Commit](https://img.shields.io/github/last-commit/Modrinth/code?color=c78aff&label=last%20commit&style=for-the-badge)
 
-# <img src="assets/brand-emoji.png" alt="" width="32" height="32" /> Minekube Launcher
+## Modrinth Monorepo
 
-**A lightweight, modern, open-source launcher for Minecraft.**
-Manage multiple Minecraft installations at once, with a clean UI and privacy & security in mind. 🎮✨
+Welcome to the Modrinth Monorepo, the primary codebase for the Modrinth web interface and app. It contains ![Lines of code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge%3Fformat%3Dhuman&logoColor=white&color=black&label=) lines of code and has ![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=black&label=) contributors!
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue?style=for-the-badge)](LICENSE)
-[![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red?style=for-the-badge)](https://github.com/MinekubeStudios/MinekubeLauncher)
-[![Minecraft](https://img.shields.io/badge/Minecraft-Launcher-3C8527?style=for-the-badge&logo=minecraft&logoColor=white)](https://github.com/MinekubeStudios/MinekubeLauncher)
-[![Fork of Modrinth App](https://img.shields.io/badge/Fork%20of-Modrinth%20App-1BD96A?style=for-the-badge)](https://modrinth.com/app)
+If you're not a developer and you've stumbled upon this repository, you can access the web interface on the [Modrinth website](https://modrinth.com) and download the latest release of the app [here](https://modrinth.com/app).
 
-</div>
+## Development
 
----
+This repository contains two primary packages. For detailed development information, please refer to their respective guides:
 
-## ✨ Features
+- [Website frontend](https://docs.modrinth.com/contributing/knossos/)
+- [Desktop app](https://docs.modrinth.com/contributing/theseus/)
 
-| | Feature | Description |
-|:-:|---|---|
-| 👤 | **Local account by default** | Play right out of the box with a **built-in local profile** *(optional)* — **no mandatory registration** or third-party cloud account required from first launch. |
-| 🔒 | **Privacy & security first** | Built from the ground up for **privacy and security** in Minecraft and on servers — with a **hardcoded, built-in tracking & telemetry blocker** directly in the code. |
-| 🖥️ | **For every operating system** | Natively built for 🪟 **Windows**, 🍎 **macOS**, and 🐧 **Linux** — delivering **consistent performance** so your installations and settings follow you to any machine. |
-| 🗂️ | **Multiple installations** | Effortlessly create and manage **isolated Minecraft instances** side by side — keeping different **versions, modloaders, and worlds** cleanly organized in one place. |
-| 🎨 | **Modern UI** | A **fast, clean, and lightweight interface** crafted for everyday use — **zero bloat**, responsive navigation, and a distraction-free experience. |
-| 🛠️ | **Customization** | Fine-tune **instance settings, memory allocation, and launch options** to tailor the launcher to the exact way you like to play. |
-| 🌍 | **Open source** | **100% transparent, auditable source code** under **GPL-3.0** — community-driven development on GitHub with nothing hidden behind closed doors. |
+## Contributing
 
-## 🚀 Installation
+We welcome contributions! Before submitting any contributions, please read our [contributing guidelines](https://docs.modrinth.com/contributing/getting-started/).
 
-📦 All downloads and step-by-step instructions are available on our **[Website](https://minekubestudios.github.io/launcher/)**.
+If you plan to fork this repository for your own purposes, please review our [copying guidelines](COPYING.md).
 
-Want to follow the latest development? Check the **GitHub Actions** tab for the current build status, including pull request checks. 🔍
+## Security
 
-## 🧩 About the Project
+If you discover a security vulnerability within our codebase, please follow our [responsible disclosure guidelines](https://modrinth.com/legal/security).
 
-Minekube Launcher is a custom launcher for Minecraft, forked from the [Modrinth App](https://modrinth.com/app).
-It is **not endorsed by Modrinth**.
+## Support
 
-## 📜 License
+If you need help with the Modrinth web interface or app, please visit our [support page](https://support.modrinth.com). For general inquiries, you can also join our [Discord server](https://discord.modrinth.com).
 
-Minekube Launcher is free software, licensed under the **[GNU General Public License v3.0](LICENSE)** (GPL-3.0).
-You are free to use, study, modify, and redistribute it under the terms of that license.
+## License
 
-It is a derivative of the [Modrinth App](https://github.com/modrinth/code), which is also GPL-3.0-licensed.
-Modrinth branding and logos are **not** part of this project and remain the property of Rinth, Inc.
-
-## 🤝 Contributing
-
-Contributions are welcome! 🎉
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch (`git checkout -b feature/amazing-idea`)
-3. 💾 Commit your changes (`git commit -m "Add amazing idea"`)
-4. 🚀 Push to the branch (`git push origin feature/amazing-idea`)
-5. 🔃 Open a Pull Request
-
-Found a bug or have an idea? Please [open an issue](https://github.com/MinekubeStudios/MinekubeLauncher/issues). 🐛💡
-
----
-
-<div align="center">
-
-Made with ❤️ by **[Minekube Studios](https://github.com/MinekubeStudios)**
-
-⭐ If you like this project, consider giving it a star!
-
-</div>
+All packages in this repository are licensed under their respective licenses. Refer to the LICENSE file in each package for more information.

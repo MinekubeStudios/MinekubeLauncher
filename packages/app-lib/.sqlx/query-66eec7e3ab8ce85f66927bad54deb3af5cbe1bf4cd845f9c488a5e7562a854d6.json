@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT pid FROM processes WHERE instance_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "pid",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "66eec7e3ab8ce85f66927bad54deb3af5cbe1bf4cd845f9c488a5e7562a854d6"
+}

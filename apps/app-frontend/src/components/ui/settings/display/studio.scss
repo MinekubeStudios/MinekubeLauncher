@@ -1,0 +1,343 @@
+// Shared look of the Visual and Performance settings pages. Everything is
+// drawn from the theme variables, so every colour theme (light ones included)
+// keeps its own character; the Minekube gold and magenta only appear as
+// accents. Animations here are transform/opacity only and run only while the
+// element they belong to is hovered or selected.
+
+.studio {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 0.25rem 0 0.5rem;
+	color: var(--color-base);
+}
+
+.studio-hero {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.25rem;
+	overflow: hidden;
+	padding: 1.15rem 1.3rem;
+	border: 1px solid var(--color-divider);
+	border-radius: 1rem;
+	background:
+		radial-gradient(120% 140% at 0% 0%, rgba(252, 192, 0, 0.12), transparent 55%),
+		radial-gradient(120% 140% at 100% 100%, rgba(252, 0, 96, 0.1), transparent 55%),
+		var(--color-raised-bg);
+	isolation: isolate;
+}
+
+.studio-hero__copy {
+	min-width: 0;
+	max-width: 34rem;
+}
+
+.studio-eyebrow,
+.studio-kicker {
+	margin: 0;
+	color: var(--color-secondary);
+	font-size: 0.68rem;
+	font-weight: 800;
+	letter-spacing: 0.12em;
+	line-height: 1.3;
+	text-transform: uppercase;
+}
+
+.studio-eyebrow {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: var(--color-brand);
+
+	:deep(svg) {
+		width: 0.85rem;
+		height: 0.85rem;
+	}
+}
+
+.studio-hero__title {
+	margin: 0.45rem 0 0;
+	color: var(--color-contrast);
+	font-size: 1.35rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	line-height: 1.15;
+}
+
+.studio-hero__text {
+	margin: 0.45rem 0 0;
+	color: var(--color-secondary);
+	font-size: 0.85rem;
+	line-height: 1.5;
+}
+
+.studio-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	margin-top: 0.8rem;
+	padding: 0.3rem 0.65rem;
+	border: 1px solid var(--color-divider);
+	border-radius: 999px;
+	background: var(--color-bg);
+	color: var(--color-secondary);
+	font-size: 0.74rem;
+	font-weight: 700;
+
+	&::before {
+		content: '';
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 50%;
+		background: var(--color-secondary);
+	}
+
+	&.is-on {
+		color: var(--color-contrast);
+
+		&::before {
+			background: var(--color-brand);
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand) 25%, transparent);
+		}
+	}
+}
+
+.studio-section {
+	border: 1px solid var(--color-divider);
+	border-radius: 1rem;
+	background: var(--color-raised-bg);
+	transition: opacity var(--mk-dur-base) var(--mk-ease-standard);
+
+	&.is-disabled {
+		opacity: 0.55;
+	}
+}
+
+.studio-section__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem 1.1rem;
+}
+
+.studio-section__lead {
+	display: flex;
+	gap: 0.85rem;
+	min-width: 0;
+}
+
+.studio-badge {
+	display: grid;
+	flex: 0 0 auto;
+	place-items: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 0.7rem;
+	background: linear-gradient(140deg, #fcc000, #fc6000 55%, #fc0060);
+	color: #2a0008;
+
+	:deep(svg) {
+		width: 1.15rem;
+		height: 1.15rem;
+	}
+}
+
+.studio-section__title {
+	margin: 0.15rem 0 0;
+	color: var(--color-contrast);
+	font-size: 1rem;
+	font-weight: 750;
+	line-height: 1.3;
+}
+
+.studio-section__text {
+	margin: 0.3rem 0 0;
+	color: var(--color-secondary);
+	font-size: 0.84rem;
+	line-height: 1.5;
+}
+
+.studio-section__control {
+	flex: 0 0 auto;
+	padding-top: 0.2rem;
+}
+
+.studio-section__body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+	padding: 0 1.1rem 1.1rem;
+}
+
+.studio-divider {
+	height: 1px;
+	margin: 0 1.1rem;
+	background: var(--color-divider);
+}
+
+.studio-subhead {
+	margin: 0;
+	color: var(--color-contrast);
+	font-size: 0.86rem;
+	font-weight: 750;
+}
+
+.studio-subtext {
+	margin: 0.2rem 0 0;
+	color: var(--color-secondary);
+	font-size: 0.8rem;
+	line-height: 1.45;
+}
+
+.studio-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.85rem 0.95rem;
+	border: 1px solid var(--color-divider);
+	border-radius: 0.8rem;
+	background: var(--color-bg);
+}
+
+.studio-note {
+	padding: 0.75rem 0.9rem;
+	border-left: 3px solid var(--color-brand);
+	border-radius: 0 0.6rem 0.6rem 0;
+	background: var(--color-bg);
+	color: var(--color-secondary);
+	font-size: 0.8rem;
+	line-height: 1.5;
+
+	strong {
+		display: block;
+		margin-bottom: 0.15rem;
+		color: var(--color-contrast);
+		font-size: 0.8rem;
+	}
+}
+
+.studio-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+	gap: 0.6rem;
+}
+
+.studio-choice {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 0.55rem;
+	min-width: 0;
+	margin: 0;
+	padding: 0.55rem 0.55rem 0.7rem;
+	border: 1px solid var(--color-divider);
+	border-radius: 0.85rem;
+	background: var(--color-bg);
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+
+	&:hover {
+		border-color: color-mix(in srgb, var(--color-contrast) 30%, var(--color-divider));
+	}
+
+	&.is-selected {
+		border-color: var(--color-brand);
+		box-shadow: inset 0 0 0 1px var(--color-brand);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-brand);
+		outline-offset: 2px;
+	}
+}
+
+.studio-choice__art {
+	position: relative;
+	height: 4.25rem;
+	overflow: hidden;
+	border-radius: 0.6rem;
+	background:
+		radial-gradient(90% 120% at 50% 110%, rgba(252, 96, 0, 0.28), transparent 70%),
+		linear-gradient(160deg, #1d0d17, #120c1b);
+	isolation: isolate;
+}
+
+.studio-choice__name {
+	padding: 0 0.15rem;
+	color: var(--color-contrast);
+	font-size: 0.85rem;
+	font-weight: 750;
+	line-height: 1.25;
+}
+
+.studio-choice__desc {
+	padding: 0 0.15rem;
+	color: var(--color-secondary);
+	font-size: 0.74rem;
+	line-height: 1.4;
+}
+
+.studio-choice__check {
+	position: absolute;
+	top: 0.85rem;
+	right: 0.85rem;
+	z-index: 2;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.2rem;
+	padding: 0.12rem 0.45rem;
+	border-radius: 999px;
+	background: var(--color-brand);
+	color: var(--color-accent-contrast, #1a0006);
+	font-size: 0.64rem;
+	font-weight: 800;
+
+	:deep(svg) {
+		width: 0.7rem;
+		height: 0.7rem;
+	}
+}
+
+.studio-segmented {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+	padding: 0.25rem;
+	border: 1px solid var(--color-divider);
+	border-radius: 0.8rem;
+	background: var(--color-bg);
+}
+
+.studio-segment {
+	margin: 0;
+	padding: 0.45rem 0.85rem;
+	border: none;
+	border-radius: 0.6rem;
+	background: transparent;
+	color: var(--color-secondary);
+	font: inherit;
+	font-size: 0.82rem;
+	font-weight: 700;
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color-contrast);
+	}
+
+	&.is-selected {
+		background: var(--color-brand);
+		color: var(--color-accent-contrast, #1a0006);
+	}
+}
+
+@media (max-width: 720px) {
+	.studio-hero__art {
+		display: none;
+	}
+}

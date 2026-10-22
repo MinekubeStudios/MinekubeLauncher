@@ -1,0 +1,248 @@
+<script setup lang="ts">
+import {
+	CheckIcon,
+	CopyIcon,
+	DropdownIcon,
+	LogInIcon,
+	MessagesSquareIcon,
+	WrenchIcon,
+} from '@modrinth/assets'
+import {
+	Admonition,
+	Button,
+	ButtonLink,
+	Collapsible,
+	IconButton,
+	NewModal,
+	useVIntl,
+} from '@modrinth/ui'
+import { computed, ref } from 'vue'
+
+import { handleSevereError } from '@/composables/use-error.js'
+import { login as login_flow, set_default_user } from '@/helpers/auth.js'
+
+import {
+	authErrorLinks,
+	findMinecraftAuthError,
+	type MinecraftAuthError,
+	type MinecraftAuthErrorLink,
+	minecraftAuthErrorMessages as messages,
+	type MinecraftAuthErrorStep,
+} from './minecraft-auth-errors'
+
+const { formatMessage } = useVIntl()
+
+/** Problem reports go to the Minekube Launcher issue tracker. */
+const SUPPORT_URL = 'https://github.com/MinekubeStudios/MinekubeLauncher/issues'
+
+const modal = ref<InstanceType<typeof NewModal>>()
+const rawError = ref<string>('')
+const matchedError = ref<MinecraftAuthError | null>(null)
+const debugCollapsed = ref(true)
+const copied = ref(false)
+const loadingSignIn = ref(false)
+
+function show(errorVal: { message?: string }) {
+	rawError.value = errorVal?.message ?? String(errorVal)
+
+	matchedError.value = findMinecraftAuthError(rawError.value)
+
+	debugCollapsed.value = true
+	modal.value?.show()
+}
+
+function hide() {
+	modal.value?.hide()
+}
+
+defineExpose({
+	show,
+	hide,
+})
+
+async function signInAgain() {
+	try {
+		loadingSignIn.value = true
+		const loggedIn = await login_flow()
+		if (loggedIn) {
+			await set_default_user(loggedIn.profile.id)
+		}
+		loadingSignIn.value = false
+		modal.value?.hide()
+	} catch (err) {
+		loadingSignIn.value = false
+		handleSevereError(err)
+	}
+}
+
+const debugInfo = computed(() => rawError.value || formatMessage(messages.modalNoMessage))
+
+function escapeHtml(value: string): string {
+	return value
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+}
+
+function linkHtml(link: MinecraftAuthErrorLink): string {
+	return `<a href="${escapeHtml(link.href)}">${escapeHtml(formatMessage(link.label))}</a>`
+}
+
+/** A translated step, with its links filled in as HTML. */
+function stepHtml(step: MinecraftAuthErrorStep): string {
+	const values: Record<string, string> = {}
+	for (const [name, link] of Object.entries(step.links ?? {})) values[name] = linkHtml(link)
+	return escapeHtmlOutside(formatMessage(step.message, values), values)
+}
+
+/** Escapes the translated text while keeping the links that were filled in. */
+function escapeHtmlOutside(text: string, values: Record<string, string>): string {
+	const links = Object.values(values)
+	if (links.length === 0) return escapeHtml(text)
+	const pattern = new RegExp(
+		links.map((link) => link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'),
+		'g',
+	)
+	let result = ''
+	let last = 0
+	for (const match of text.matchAll(pattern)) {
+		result += escapeHtml(text.slice(last, match.index)) + match[0]
+		last = (match.index ?? 0) + match[0].length
+	}
+	return result + escapeHtml(text.slice(last))
+}
+
+const unknownHintHtml = computed(() => {
+	const values = { minecraftLogin: linkHtml(authErrorLinks.minecraftLogin) }
+	return escapeHtmlOutside(formatMessage(messages.modalUnknownHint, values), values)
+})
+
+async function copyToClipboard(text: string) {
+	await navigator.clipboard.writeText(text)
+	copied.value = true
+	setTimeout(() => {
+		copied.value = false
+	}, 3000)
+}
+</script>
+
+<template>
+	<NewModal ref="modal" :header="formatMessage(messages.modalTitle)" :max-width="'548px'">
+		<div class="flex flex-col gap-6">
+			<Admonition type="warning" :body="formatMessage(messages.modalWarning)"> </Admonition>
+
+			<!-- Matched error details -->
+			<div class="bg-surface-2 rounded-2xl p-4 px-5 flex flex-col gap-3">
+				<template v-if="matchedError">
+					<div class="flex flex-col gap-1.5">
+						<h3 class="text-base font-bold m-0">
+							{{ formatMessage(messages.modalWhatHappenedTitle) }}
+						</h3>
+						<p class="text-sm text-secondary m-0">
+							{{ formatMessage(matchedError.whatHappened) }}
+						</p>
+					</div>
+
+					<div class="flex flex-col gap-1.5">
+						<h3 class="text-base font-bold m-0">
+							{{ formatMessage(messages.modalHowToFixTitle) }}
+						</h3>
+						<ol class="list-none flex flex-col gap-2 m-0 pl-0">
+							<li
+								v-for="(step, index) in matchedError.stepsToFix"
+								:key="index"
+								class="flex items-baseline gap-2"
+							>
+								<span
+									class="inline-flex items-center justify-center shrink-0 w-5 h-5 rounded-full bg-surface-4 border border-solid border-surface-5 text-xs font-medium"
+								>
+									{{ index + 1 }}
+								</span>
+								<!-- eslint-disable vue/no-v-html -- translated text, every value is escaped -->
+								<span
+									class="text-sm [&_a]:text-info [&_a]:font-medium [&_a]:underline"
+									v-html="stepHtml(step)"
+								/>
+								<!-- eslint-enable vue/no-v-html -->
+							</li>
+						</ol>
+					</div>
+				</template>
+				<template v-else>
+					<div class="flex flex-col gap-1.5">
+						<h3 class="text-base font-bold m-0">
+							{{ formatMessage(messages.modalUnknownTitle) }}
+						</h3>
+						<p class="text-sm text-secondary m-0">
+							{{ formatMessage(messages.modalUnknownBody) }}
+						</p>
+						<!-- eslint-disable vue/no-v-html -- translated text, every value is escaped -->
+						<p
+							class="text-sm text-secondary m-0 [&_a]:text-info [&_a]:font-medium [&_a]:underline"
+							v-html="unknownHintHtml"
+						/>
+						<!-- eslint-enable vue/no-v-html -->
+					</div>
+				</template>
+			</div>
+
+			<!-- Action buttons -->
+			<div class="flex items-center gap-1">
+				<ButtonLink :href="SUPPORT_URL" class="flex-1" @click="modal?.hide()">
+					<MessagesSquareIcon /> {{ formatMessage(messages.modalContactSupport) }}
+				</ButtonLink>
+				<Button
+					type="colored"
+					color="brand"
+					:disabled="loadingSignIn"
+					class="flex-1"
+					@click="signInAgain"
+				>
+					<LogInIcon /> {{ formatMessage(messages.modalSignInAgain) }}
+				</Button>
+			</div>
+
+			<div class="flex flex-col gap-2">
+				<div class="w-full h-[1px] bg-surface-5"></div>
+
+				<!-- Debug info -->
+				<div class="overflow-clip">
+					<button
+						class="flex items-center justify-between w-full bg-transparent border-0 py-4 cursor-pointer"
+						@click="debugCollapsed = !debugCollapsed"
+					>
+						<span class="flex items-center gap-2 text-contrast font-extrabold m-0">
+							<WrenchIcon class="h-4 w-4" />
+							{{ formatMessage(messages.modalDebugTitle) }}
+						</span>
+						<DropdownIcon
+							class="h-5 w-5 text-secondary transition-transform"
+							:class="{ 'rotate-180': !debugCollapsed }"
+						/>
+					</button>
+					<Collapsible :collapsed="debugCollapsed">
+						<div
+							class="p-3 bg-surface-2 rounded-2xl text-xs grid grid-cols-[1fr_auto] max-w-full items-start"
+						>
+							<div
+								class="m-0 p-0 rounded-none bg-transparent text-sm font-mono break-words overflow-auto"
+							>
+								{{ debugInfo }}
+							</div>
+							<IconButton
+								v-tooltip="formatMessage(messages.modalCopyDebug)"
+								:label="formatMessage(messages.modalCopyDebug)"
+								:disabled="copied"
+								@click="copyToClipboard(debugInfo)"
+							>
+								<template v-if="copied"> <CheckIcon class="text-green" /> </template>
+								<template v-else> <CopyIcon /> </template>
+							</IconButton>
+						</div>
+					</Collapsible>
+				</div>
+			</div>
+		</div>
+	</NewModal>
+</template>

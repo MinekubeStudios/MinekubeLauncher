@@ -1,0 +1,1475 @@
+// =====================================================================
+//  Minekube Launcher — Special buttons
+//
+//  The "special" buttons are the handful of surfaces that carry the
+//  launcher's personality instead of looking like chrome: Play, Stop,
+//  Repair, the welcome CTA and the small round Play orbs on instance
+//  cards. Each of them carries one of the `.mk-play-cta`,
+//  `.mk-stop-cta`, `.welcome-create-button`, `.mk-play-icon` or
+//  `.mk-stop-icon` classes.
+//
+//  Every visual difference between the styles is expressed as a CSS
+//  custom property, and the shared block below only ever *reads* those
+//  properties. That has three consequences worth knowing:
+//
+//   1. a style is a list of variable values, nothing more — the layout,
+//      the transitions and the click behaviour are written once,
+//   2. the settings preview can render a real Play button in any style
+//      simply by setting the same variables on the preview card (custom
+//      properties inherit from the nearest ancestor, so a preview card
+//      overrides the globally selected style without any specificity
+//      fight),
+//   3. adding a style cannot break the others.
+//
+//  Styles live in two scopes:
+//    html[data-special-buttons='<id>']  — the choice made in Settings
+//    [data-special-preview='<id>']      — a card in the settings preview
+// =====================================================================
+
+@mixin special-scope($id) {
+	html[data-special-buttons='#{$id}'],
+	[data-special-preview='#{$id}'] {
+		@content;
+	}
+}
+
+// ---------------------------------------------------------------------
+//  Palette — sampled from the Minekube Studios logo
+// ---------------------------------------------------------------------
+:root {
+	--mk-gold-1: #ffe866;
+	--mk-gold-2: #fcc000;
+	--mk-orange-1: #ff8a2a;
+	--mk-orange-2: #ff5a1f;
+	--mk-magenta-1: #ff2e8b;
+	--mk-magenta-2: #fc0060;
+	--mk-maroon-deep: #3a0008;
+	--mk-maroon-mid: #6b0018;
+	--mk-cta-ink: #2a0a00;
+}
+
+// ---------------------------------------------------------------------
+//  Structure — identical for every style
+// ---------------------------------------------------------------------
+
+// The injected canvas is one shared, body-level layer; nothing is ever
+// added to the buttons themselves, so Vue's patching can never fight it.
+.sb-canvas {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none !important;
+	z-index: 8900;
+	opacity: 0;
+	transition: opacity 240ms ease;
+
+	&.sb-canvas--live {
+		opacity: 1;
+	}
+}
+
+.mk-play-cta,
+.mk-stop-cta,
+.welcome-create-button {
+	position: relative !important;
+	isolation: isolate;
+	overflow: hidden !important;
+
+	min-height: var(--sb-min-h, 3rem);
+	padding: var(--sb-pad, 0 1.4rem) !important;
+	border-radius: var(--sb-radius, 14px) !important;
+	font-weight: var(--sb-weight, 800) !important;
+	letter-spacing: var(--sb-tracking, 0.11em) !important;
+	text-transform: var(--sb-case, uppercase);
+	font-size: var(--sb-size, 0.9rem) !important;
+	text-shadow: var(--sb-text-shadow, none);
+
+	color: var(--sb-fg, var(--mk-cta-ink)) !important;
+	background-color: var(--sb-bg-color, transparent) !important;
+	background-image: var(--sb-surface, none), var(--sb-lines, none) !important;
+	background-repeat: no-repeat, var(--sb-lines-repeat, repeat) !important;
+	background-size: var(--sb-surface-size, 100% 100%), var(--sb-lines-size, auto) !important;
+	background-position:
+		0 0,
+		var(--sb-lines-pos, 0 0) !important;
+	border: var(--sb-border-w, 1px) solid var(--sb-border, transparent) !important;
+	box-shadow: var(--sb-shadow, none) !important;
+	filter: var(--sb-filter, none);
+
+	// Deliberately no backdrop-filter and no 3D rotation on the button
+	// itself. Both re-rasterise the label — the first has to re-blur the
+	// page behind it on every repaint, the second re-draws the glyphs at a
+	// new angle each frame — and that is what produced half-painted labels
+	// and a laggy pointer. The pointer tilt is applied to the decorative
+	// gloss layer instead (see `::before`).
+	transform: translate3d(0, var(--sb-lift, 0), 0) scale(var(--sb-scale, 1));
+	// `filter` is intentionally NOT transitioned: animating a colour filter
+	// over a label re-renders the text on every frame of the transition and
+	// leaves torn glyphs behind. Hover/press light changes land instantly.
+	transition:
+		transform 280ms var(--mk-ease-spring, cubic-bezier(0.34, 1.26, 0.64, 1)),
+		box-shadow 320ms var(--mk-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+		background-color 260ms var(--mk-ease-standard, cubic-bezier(0.32, 0.72, 0, 1)),
+		border-color 260ms var(--mk-ease-standard, cubic-bezier(0.32, 0.72, 0, 1)),
+		color 200ms var(--mk-ease-standard, cubic-bezier(0.32, 0.72, 0, 1)) !important;
+
+	animation: var(--sb-idle, none) var(--sb-idle-dur, 3.6s) ease-in-out infinite;
+
+	// Readability: the label is never blurred and never washed out.
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+
+	// Gloss / primary light layer. Doubles as the flowing gradient for
+	// the iridescent style, which is why the geometry is variable.
+	&::before {
+		content: '';
+		position: absolute;
+		inset: var(--sb-gloss-inset, 1px 1px auto 1px) !important;
+		height: var(--sb-gloss-h, 46%) !important;
+		padding: var(--sb-gloss-pad, 0);
+		border-radius: var(--sb-gloss-radius, 12px) !important;
+		background: var(--sb-gloss, none) !important;
+		opacity: var(--sb-gloss-o, 1);
+		mix-blend-mode: var(--sb-gloss-blend, normal);
+		// The tilt lives here, on the decorative layer only.
+		transform: perspective(var(--sb-persp, 900px)) rotateX(var(--sb-tilt-x, 0deg))
+			rotateY(var(--sb-tilt-y, 0deg));
+		-webkit-mask: var(--sb-gloss-mask, none);
+		mask: var(--sb-gloss-mask, none);
+		-webkit-mask-composite: var(--sb-mask-composite, xor);
+		mask-composite: var(--sb-mask-composite-standard, exclude);
+		pointer-events: none;
+		z-index: 3;
+		animation: var(--sb-gloss-anim, none) var(--sb-gloss-anim-dur, 7s) linear infinite;
+	}
+
+	// Specular highlight that follows the pointer — this is what makes
+	// the surface read as a physical material rather than a flat fill.
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: radial-gradient(
+			circle at var(--sb-mx, 50%) var(--sb-my, 50%),
+			var(--sb-specular, rgba(255, 255, 255, 0.55)) 0%,
+			transparent var(--sb-specular-spread, 55%)
+		);
+		opacity: 0;
+		transition: opacity 280ms var(--mk-ease-out, ease-out);
+		pointer-events: none;
+		z-index: 4;
+	}
+
+	// Content sits above every decorative layer.
+	& > :not(canvas) {
+		position: relative;
+		z-index: 5;
+	}
+
+	& > svg {
+		color: var(--sb-icon, currentColor) !important;
+		filter: var(--sb-icon-filter, drop-shadow(0 1px 0 rgba(255, 255, 255, 0.35)));
+		transition: transform 340ms var(--mk-ease-spring, cubic-bezier(0.34, 1.26, 0.64, 1));
+	}
+
+	// --- Hover -------------------------------------------------------
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--sb-lift: -3px;
+		--sb-scale: 1.035;
+
+		background-position:
+			0 0,
+			var(--sb-lines-pos-hover, var(--sb-lines-pos, 0 0)) !important;
+		border-color: var(--sb-border-hover, var(--sb-border, transparent)) !important;
+		box-shadow: var(--sb-shadow-hover, var(--sb-shadow, none)) !important;
+		filter: var(--sb-filter-hover, brightness(1.08) saturate(1.16));
+		color: var(--sb-fg-hover, var(--sb-fg, var(--mk-cta-ink))) !important;
+
+		&::after {
+			opacity: var(--sb-specular-o, 0.9);
+		}
+
+		& > svg {
+			transform: translateX(2px) scale(1.06);
+		}
+	}
+
+	// --- Press -------------------------------------------------------
+	// The press is expressed through variables only, so it can never be
+	// cancelled by a competing `transform` in a keyframe.
+	&:active:not(:disabled):not([aria-disabled='true']) {
+		--sb-lift: var(--sb-press-lift, 1px);
+		--sb-scale: var(--sb-press-scale, 0.955);
+		--sb-tilt-x: 0deg;
+		--sb-tilt-y: 0deg;
+
+		box-shadow: var(--sb-shadow-press, var(--sb-shadow, none)) !important;
+		filter: var(--sb-filter-press, brightness(1.2) saturate(1.25));
+		transition-duration: 90ms !important;
+	}
+
+	&:focus-visible {
+		outline: var(--sb-focus, 2px solid var(--mk-gold-2)) !important;
+		outline-offset: 3px;
+		box-shadow: var(--sb-shadow-focus, var(--sb-shadow-hover, var(--sb-shadow, none))) !important;
+	}
+
+	&:disabled,
+	&[aria-disabled='true'] {
+		cursor: not-allowed;
+		opacity: var(--sb-disabled-o, 0.72);
+		filter: var(--sb-disabled-filter, saturate(0.35) brightness(0.85));
+		animation: none !important;
+		transform: none !important;
+	}
+
+	// The click pulse. A single class toggle, transparently reverted by
+	// the runtime after the flash finishes.
+	&.sb-pressed {
+		animation: sb-press-flash 640ms var(--mk-ease-out, ease-out) !important;
+	}
+}
+
+// A press flash that only animates shadow and light — it composes with
+// the `:active` transform instead of fighting it.
+@keyframes sb-press-flash {
+	0%,
+	100% {
+		box-shadow: var(--sb-shadow, none);
+	}
+	18% {
+		box-shadow: var(--sb-shadow-press, var(--sb-shadow, none));
+	}
+	55% {
+		box-shadow: var(--sb-shadow-hover, var(--sb-shadow, none));
+	}
+}
+
+// --------------------------------- Split ---------------------------------
+.mk-play-cta[role='group'] {
+	padding: 0 !important;
+	gap: 0 !important;
+
+	& > button[data-button] {
+		background: transparent !important;
+		color: inherit !important;
+		border: 0 !important;
+		border-radius: var(--sb-radius, 14px) 0 0 var(--sb-radius, 14px) !important;
+		box-shadow: none !important;
+		font-weight: inherit !important;
+		letter-spacing: inherit !important;
+		text-transform: inherit;
+		font-size: inherit !important;
+		min-height: 100%;
+		padding: var(--sb-pad, 0 1.4rem) !important;
+
+		&:last-child {
+			border-radius: 0 var(--sb-radius, 14px) var(--sb-radius, 14px) 0 !important;
+			padding-inline: 0.75rem !important;
+			box-shadow: inset 1px 0 0 0 var(--sb-seam, rgba(0, 0, 0, 0.35)) !important;
+		}
+
+		&::after {
+			display: none;
+		}
+
+		&:hover:not(:disabled):not([aria-disabled='true']) {
+			filter: var(--sb-half-filter-hover, brightness(1.1) saturate(1.1));
+			transform: none;
+			box-shadow: none !important;
+		}
+	}
+}
+
+// ------------------------------ Icon orbs --------------------------------
+// `.mk-play-icon` is a standalone round Play button (the instance-card
+// action); `.mk-stop-icon` is its Stop twin, shown while an instance runs.
+.mk-play-icon,
+.mk-stop-icon {
+	position: relative !important;
+	isolation: isolate;
+	overflow: hidden !important;
+	background-color: var(--sb-bg-color, transparent) !important;
+	background-image: var(--sb-surface, none) !important;
+	background-repeat: no-repeat !important;
+	background-size: var(--sb-surface-size, 100% 100%) !important;
+	border: var(--sb-border-w, 1px) solid var(--sb-border, transparent) !important;
+	border-radius: var(--sb-icon-radius, 999px) !important;
+	color: var(--sb-fg, var(--mk-cta-ink)) !important;
+	box-shadow: var(--sb-icon-shadow, var(--sb-shadow, none)) !important;
+	filter: var(--sb-filter, none);
+	// `opacity` is listed too: instance cards reveal the orb on hover with a
+	// fade, and this `!important` list otherwise made it pop in instantly.
+	transition:
+		transform 280ms var(--mk-ease-spring, cubic-bezier(0.34, 1.26, 0.64, 1)),
+		opacity 200ms var(--mk-ease-out, ease-out),
+		box-shadow 300ms var(--mk-ease-out, ease-out) !important;
+
+	& > svg {
+		color: var(--sb-icon, currentColor) !important;
+		filter: var(--sb-icon-filter, drop-shadow(0 1px 0 rgba(255, 255, 255, 0.35)));
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+		inset: var(--sb-icon-gloss-inset, 1px 1px auto 1px);
+		height: var(--sb-icon-gloss-h, 45%);
+		border-radius: inherit;
+		background: var(--sb-gloss, none);
+		opacity: var(--sb-gloss-o, 1);
+		mix-blend-mode: var(--sb-gloss-blend, normal);
+		pointer-events: none;
+	}
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		transform: translateY(-2px) scale(1.07);
+		box-shadow: var(
+			--sb-icon-shadow-hover,
+			var(--sb-shadow-hover, var(--sb-shadow, none))
+		) !important;
+		filter: var(--sb-filter-hover, brightness(1.1) saturate(1.15));
+		z-index: 5;
+	}
+
+	&:active:not(:disabled):not([aria-disabled='true']) {
+		transform: scale(0.9) !important;
+		box-shadow: var(--sb-shadow-press, var(--sb-shadow, none)) !important;
+	}
+
+	&:focus-visible {
+		outline: var(--sb-focus, 2px solid var(--mk-gold-2)) !important;
+		outline-offset: 2px;
+	}
+
+	&.sb-pressed {
+		animation: sb-press-flash 640ms var(--mk-ease-out, ease-out) !important;
+	}
+}
+
+// =====================================================================
+//  STYLE: Minekube Studios  (default)
+//  Gold → orange → magenta, deep maroon shadow, glowing brand bloom.
+// =====================================================================
+@mixin sb-style-minekube {
+	--sb-radius: 14px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 1.4rem;
+	--sb-size: 0.9rem;
+	--sb-weight: 800;
+	--sb-tracking: 0.11em;
+	--sb-case: uppercase;
+	--sb-persp: 900px;
+
+	--sb-fg: var(--mk-cta-ink);
+	--sb-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.38);
+	--sb-icon: var(--mk-cta-ink);
+	--sb-icon-filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45));
+
+	--sb-surface: linear-gradient(
+		180deg,
+		var(--mk-gold-1) 0%,
+		var(--mk-gold-2) 26%,
+		var(--mk-orange-1) 58%,
+		var(--mk-orange-2) 82%,
+		var(--mk-magenta-2) 100%
+	);
+	--sb-bg-color: var(--mk-maroon-mid);
+	--sb-border-w: 1px;
+	--sb-border: color-mix(in srgb, var(--mk-gold-1) 78%, white);
+	--sb-border-hover: color-mix(in srgb, var(--mk-gold-1) 90%, white);
+	--sb-lines: none;
+	--sb-gloss: radial-gradient(
+		130% 120% at var(--sb-mx, 50%) var(--sb-my, -20%),
+		rgba(255, 255, 255, 0.8) 0%,
+		rgba(255, 255, 255, 0.2) 45%,
+		rgba(255, 255, 255, 0) 72%
+	);
+	--sb-gloss-h: 52%;
+	--sb-gloss-o: 1;
+	--sb-specular: rgba(255, 255, 255, 0.42);
+	--sb-specular-o: 0.95;
+
+	--sb-shadow:
+		0 0 0 1px color-mix(in srgb, var(--mk-maroon-mid) 55%, transparent),
+		0 10px 28px -8px color-mix(in srgb, var(--mk-magenta-2) 55%, transparent),
+		0 6px 14px -4px color-mix(in srgb, var(--mk-orange-2) 55%, transparent),
+		0 2px 4px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.55),
+		inset 0 -3px 0 color-mix(in srgb, var(--mk-magenta-2) 55%, transparent),
+		inset 0 -7px 14px -5px color-mix(in srgb, var(--mk-maroon-deep) 65%, transparent);
+	--sb-shadow-hover:
+		0 0 0 1px color-mix(in srgb, var(--mk-maroon-mid) 60%, transparent),
+		0 0 30px -3px color-mix(in srgb, var(--mk-magenta-2) 60%, transparent),
+		0 0 52px -10px color-mix(in srgb, var(--mk-gold-2) 50%, transparent),
+		0 18px 38px -10px color-mix(in srgb, var(--mk-magenta-2) 50%, transparent),
+		0 6px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.7),
+		inset 0 -3px 0 color-mix(in srgb, var(--mk-magenta-2) 60%, transparent),
+		inset 0 -7px 16px -5px color-mix(in srgb, var(--mk-maroon-deep) 55%, transparent);
+	--sb-shadow-press:
+		0 0 0 1px color-mix(in srgb, var(--mk-maroon-mid) 70%, transparent),
+		0 0 26px 2px color-mix(in srgb, var(--mk-gold-2) 60%, transparent),
+		0 0 60px 8px color-mix(in srgb, var(--mk-magenta-2) 50%, transparent),
+		0 3px 8px rgba(0, 0, 0, 0.4),
+		inset 0 3px 10px color-mix(in srgb, var(--mk-maroon-deep) 70%, transparent),
+		inset 0 -2px 0 color-mix(in srgb, var(--mk-magenta-2) 40%, transparent);
+	--sb-seam: color-mix(in srgb, var(--mk-maroon-mid) 60%, transparent);
+
+	--sb-filter-hover: brightness(1.07) saturate(1.16);
+	--sb-filter-press: brightness(1.22) saturate(1.3);
+
+	--sb-idle: sb-idle-minekube;
+	--sb-idle-dur: 3.6s;
+	--sb-tilt: 7deg;
+
+	--sb-glow: #ff9c00;
+	--sb-glow-2: var(--mk-magenta-2);
+	--sb-glow-3: var(--mk-gold-1);
+	--sb-particles: 16;
+
+	--sb-icon-radius: 999px;
+	--sb-icon-shadow:
+		0 0 0 1px color-mix(in srgb, var(--mk-maroon-mid) 50%, transparent),
+		0 8px 22px -6px color-mix(in srgb, var(--mk-magenta-2) 60%, transparent),
+		inset 0 1px 0 rgba(255, 255, 255, 0.55),
+		inset 0 -2px 0 color-mix(in srgb, var(--mk-maroon-deep) 50%, transparent);
+	--sb-icon-shadow-hover:
+		0 0 0 1px color-mix(in srgb, var(--mk-maroon-mid) 50%, transparent),
+		0 0 18px -2px color-mix(in srgb, var(--mk-gold-2) 60%, transparent),
+		0 12px 26px -6px color-mix(in srgb, var(--mk-magenta-2) 70%, transparent),
+		inset 0 1px 0 rgba(255, 255, 255, 0.65);
+	--sb-icon-gloss-h: 48%;
+}
+
+:root {
+	@include sb-style-minekube;
+}
+
+@include special-scope('minekube') {
+	@include sb-style-minekube;
+
+	.mk-play-icon {
+		--sb-surface: radial-gradient(
+			circle at 30% 25%,
+			var(--mk-gold-1),
+			var(--mk-gold-2) 40%,
+			var(--mk-orange-2) 70%,
+			var(--mk-magenta-2) 100%
+		);
+		--sb-border-w: 0;
+	}
+}
+
+@keyframes sb-idle-minekube {
+	0%,
+	100% {
+		box-shadow:
+			0 0 0 1px color-mix(in srgb, var(--mk-maroon-mid) 55%, transparent),
+			0 10px 28px -8px color-mix(in srgb, var(--mk-magenta-2) 55%, transparent),
+			0 6px 14px -4px color-mix(in srgb, var(--mk-orange-2) 55%, transparent),
+			0 2px 4px rgba(0, 0, 0, 0.35),
+			inset 0 1px 0 rgba(255, 255, 255, 0.55),
+			inset 0 -3px 0 color-mix(in srgb, var(--mk-magenta-2) 55%, transparent),
+			inset 0 -7px 14px -5px color-mix(in srgb, var(--mk-maroon-deep) 65%, transparent);
+	}
+	50% {
+		box-shadow:
+			0 0 0 1px color-mix(in srgb, var(--mk-maroon-mid) 55%, transparent),
+			0 13px 32px -6px color-mix(in srgb, var(--mk-magenta-2) 68%, transparent),
+			0 7px 18px -2px color-mix(in srgb, var(--mk-gold-2) 45%, transparent),
+			0 2px 4px rgba(0, 0, 0, 0.35),
+			inset 0 1px 0 rgba(255, 255, 255, 0.62),
+			inset 0 -3px 0 color-mix(in srgb, var(--mk-magenta-2) 55%, transparent),
+			inset 0 -7px 14px -5px color-mix(in srgb, var(--mk-maroon-deep) 65%, transparent);
+	}
+}
+
+// =====================================================================
+//  STYLE: Modrinth — the original app button, untouched
+// =====================================================================
+@mixin sb-style-modrinth {
+	--sb-radius: 16px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 0.875rem;
+	--sb-size: 1rem;
+	--sb-weight: 800;
+	--sb-tracking: 0;
+	--sb-case: none;
+	--sb-persp: 1200px;
+
+	--sb-fg: var(--color-accent-contrast, white);
+	--sb-text-shadow: none;
+	--sb-icon: inherit;
+	--sb-icon-filter: none;
+
+	--sb-surface: none;
+	--sb-bg-color: var(--button-color, var(--color-brand));
+	--sb-border-w: 0;
+	--sb-border: transparent;
+	--sb-lines: none;
+	--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+	--sb-gloss-inset: 0;
+	--sb-gloss-h: 100%;
+	--sb-gloss-pad: 1px;
+	--sb-gloss-radius: inherit;
+	--sb-gloss-blend: normal;
+	--sb-gloss-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	--sb-gloss-o: 1;
+	--sb-mask-composite: xor;
+	--sb-mask-composite-standard: exclude;
+	--sb-specular: rgba(255, 255, 255, 0.22);
+	--sb-specular-o: 0.8;
+
+	--sb-shadow:
+		0 0 0 1px color-mix(in srgb, var(--button-color, var(--color-brand)) 30%, transparent),
+		0 2px 4px rgba(0, 0, 0, 0.04), 0 5px 8px rgba(0, 0, 0, 0.04), 0 10px 18px rgba(0, 0, 0, 0.03),
+		0 24px 48px rgba(0, 0, 0, 0.03);
+	--sb-shadow-hover:
+		0 0 0 1px color-mix(in srgb, var(--button-color, var(--color-brand)) 45%, transparent),
+		0 4px 8px rgba(0, 0, 0, 0.05), 0 10px 16px rgba(0, 0, 0, 0.05), 0 18px 30px rgba(0, 0, 0, 0.04),
+		0 34px 60px rgba(0, 0, 0, 0.04);
+	--sb-shadow-press:
+		0 0 0 1px color-mix(in srgb, var(--button-color, var(--color-brand)) 35%, transparent),
+		0 1px 2px rgba(0, 0, 0, 0.06), inset 0 3px 10px rgba(0, 0, 0, 0.16);
+
+	--sb-filter-hover: brightness(1.06) saturate(1.04);
+	--sb-filter-press: brightness(1.14) saturate(1.06);
+	--sb-focus: 2px solid color-mix(in srgb, var(--button-color, var(--color-brand)) 70%, white);
+
+	--sb-idle: none;
+	--sb-tilt: 3deg;
+
+	--sb-glow: var(--button-color, var(--color-brand));
+	--sb-glow-2: color-mix(in srgb, var(--button-color, var(--color-brand)) 60%, white);
+	--sb-glow-3: color-mix(in srgb, var(--button-color, var(--color-brand)) 60%, black);
+	--sb-particles: 0;
+
+	--sb-icon-radius: 999px;
+	--sb-icon-gloss-h: 50%;
+}
+
+@include special-scope('modrinth') {
+	@include sb-style-modrinth;
+}
+
+// =====================================================================
+//  STYLE: Glass — frosted, translucent, softly lit
+// =====================================================================
+@mixin sb-style-glass {
+	--sb-radius: 16px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 1.35rem;
+	--sb-size: 0.92rem;
+	--sb-weight: 700;
+	--sb-tracking: 0.08em;
+	--sb-case: uppercase;
+	--sb-persp: 900px;
+
+	--sb-fg: var(--color-contrast, white);
+	--sb-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+	--sb-icon: var(--color-contrast, white);
+	--sb-icon-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+
+	--sb-surface: linear-gradient(
+		180deg,
+		rgba(255, 255, 255, 0.22) 0%,
+		rgba(255, 255, 255, 0.06) 45%,
+		rgba(255, 255, 255, 0.02) 100%
+	);
+	--sb-bg-color: color-mix(in srgb, var(--surface-4, #1b1b20) 42%, transparent);
+	--sb-border-w: 1px;
+	--sb-border: rgba(255, 255, 255, 0.34);
+	--sb-border-hover: rgba(255, 255, 255, 0.5);
+	--sb-lines: linear-gradient(
+		115deg,
+		transparent 38%,
+		color-mix(in srgb, var(--color-brand) 22%, transparent) 50%,
+		transparent 62%
+	);
+	--sb-lines-size: 220% 100%;
+	--sb-lines-repeat: no-repeat;
+	--sb-lines-pos: 0 0;
+	--sb-lines-pos-hover: 100% 0;
+	--sb-gloss: radial-gradient(
+		140% 130% at var(--sb-mx, 30%) var(--sb-my, -30%),
+		rgba(255, 255, 255, 0.62) 0%,
+		rgba(255, 255, 255, 0.12) 48%,
+		rgba(255, 255, 255, 0) 74%
+	);
+	--sb-gloss-h: 62%;
+	--sb-gloss-o: 0.95;
+	// Glassy, not blurred: translucency and the specular sweep do the work
+	// without the backdrop-filter that used to smear the page behind it.
+	--sb-backdrop: none;
+	--sb-specular: rgba(255, 255, 255, 0.3);
+	--sb-specular-o: 1;
+
+	--sb-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+		0 10px 26px -12px rgba(0, 0, 0, 0.65), 0 2px 6px rgba(0, 0, 0, 0.22);
+	--sb-shadow-hover:
+		inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+		0 0 26px -6px color-mix(in srgb, var(--color-brand) 45%, transparent),
+		0 16px 34px -14px rgba(0, 0, 0, 0.7);
+	--sb-shadow-press:
+		inset 0 3px 10px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25),
+		0 2px 8px rgba(0, 0, 0, 0.3);
+
+	--sb-filter-hover: brightness(1.08) saturate(1.12);
+	--sb-filter-press: brightness(1.16) saturate(1.18);
+	--sb-focus: 2px solid rgba(255, 255, 255, 0.8);
+
+	--sb-idle: sb-idle-glass;
+	--sb-idle-dur: 4.4s;
+	--sb-tilt: 8deg;
+
+	--sb-glow: color-mix(in srgb, var(--color-brand) 70%, white);
+	--sb-glow-2: #ffffff;
+	--sb-glow-3: var(--color-brand);
+	--sb-particles: 8;
+
+	--sb-icon-radius: 999px;
+	--sb-icon-gloss-h: 52%;
+}
+
+@include special-scope('glass') {
+	@include sb-style-glass;
+}
+
+@keyframes sb-idle-glass {
+	0%,
+	100% {
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.42),
+			inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+			0 10px 26px -12px rgba(0, 0, 0, 0.65),
+			0 2px 6px rgba(0, 0, 0, 0.22);
+	}
+	50% {
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.55),
+			inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+			0 12px 30px -12px rgba(0, 0, 0, 0.7),
+			0 0 22px -8px color-mix(in srgb, var(--color-brand) 40%, transparent);
+	}
+}
+
+// =====================================================================
+//  STYLE: Neon — a lit tube in an otherwise dark room
+// =====================================================================
+@mixin sb-style-neon {
+	--sb-radius: 12px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 1.5rem;
+	--sb-size: 0.9rem;
+	--sb-weight: 800;
+	--sb-tracking: 0.16em;
+	--sb-case: uppercase;
+	--sb-persp: 1000px;
+
+	--sb-fg: #fff2d6;
+	--sb-fg-hover: #fffaf0;
+	--sb-text-shadow:
+		0 0 10px color-mix(in srgb, var(--mk-gold-2) 75%, transparent),
+		0 0 26px color-mix(in srgb, var(--mk-magenta-2) 55%, transparent);
+	--sb-icon: var(--mk-gold-1);
+	--sb-icon-filter: drop-shadow(0 0 8px color-mix(in srgb, var(--mk-gold-2) 85%, transparent));
+
+	--sb-surface: linear-gradient(180deg, #170310 0%, #21040a 55%, #12020a 100%);
+	--sb-bg-color: #0b0106;
+	--sb-border-w: 1px;
+	--sb-border: color-mix(in srgb, var(--mk-magenta-2) 70%, transparent);
+	--sb-border-hover: var(--mk-gold-2);
+	--sb-lines: repeating-linear-gradient(
+		to bottom,
+		rgba(255, 255, 255, 0.075) 0 1px,
+		transparent 1px 4px
+	);
+	--sb-lines-size: auto;
+	--sb-gloss: radial-gradient(
+		120% 140% at var(--sb-mx, 50%) 120%,
+		color-mix(in srgb, var(--mk-gold-2) 40%, transparent) 0%,
+		transparent 62%
+	);
+	--sb-gloss-inset: 0;
+	--sb-gloss-h: 100%;
+	--sb-gloss-radius: inherit;
+	--sb-gloss-o: 0.9;
+	--sb-specular: color-mix(in srgb, var(--mk-magenta-1) 45%, transparent);
+	--sb-specular-spread: 62%;
+	--sb-specular-o: 1;
+
+	--sb-shadow:
+		inset 0 0 14px -2px color-mix(in srgb, var(--mk-magenta-2) 60%, transparent),
+		inset 0 0 34px -12px color-mix(in srgb, var(--mk-gold-2) 70%, transparent),
+		0 0 16px -2px color-mix(in srgb, var(--mk-magenta-2) 65%, transparent),
+		0 10px 26px -14px rgba(0, 0, 0, 0.8);
+	--sb-shadow-hover:
+		inset 0 0 18px 0 color-mix(in srgb, var(--mk-magenta-2) 70%, transparent),
+		inset 0 0 42px -10px color-mix(in srgb, var(--mk-gold-2) 80%, transparent),
+		0 0 30px 0 color-mix(in srgb, var(--mk-magenta-2) 65%, transparent),
+		0 0 60px 6px color-mix(in srgb, var(--mk-gold-2) 40%, transparent);
+	--sb-shadow-press:
+		inset 0 0 26px 2px color-mix(in srgb, var(--mk-gold-2) 75%, transparent),
+		inset 0 0 60px 6px color-mix(in srgb, var(--mk-magenta-2) 60%, transparent),
+		0 0 40px 4px color-mix(in srgb, var(--mk-gold-2) 60%, transparent);
+
+	--sb-filter-hover: brightness(1.12) saturate(1.2);
+	--sb-filter-press: brightness(1.3) saturate(1.35);
+	--sb-focus: 2px solid var(--mk-gold-1);
+
+	--sb-idle: sb-idle-neon;
+	--sb-idle-dur: 2.6s;
+	--sb-tilt: 4deg;
+
+	--sb-glow: var(--mk-gold-2);
+	--sb-glow-2: var(--mk-magenta-2);
+	--sb-glow-3: #ffffff;
+	--sb-particles: 10;
+
+	--sb-icon-radius: 10px;
+	--sb-icon-gloss-h: 100%;
+}
+
+@include special-scope('neon') {
+	@include sb-style-neon;
+}
+
+@keyframes sb-idle-neon {
+	0%,
+	100% {
+		box-shadow:
+			inset 0 0 14px -2px color-mix(in srgb, var(--mk-magenta-2) 55%, transparent),
+			inset 0 0 34px -12px color-mix(in srgb, var(--mk-gold-2) 65%, transparent),
+			0 0 14px -2px color-mix(in srgb, var(--mk-magenta-2) 55%, transparent),
+			0 10px 26px -14px rgba(0, 0, 0, 0.8);
+	}
+	50% {
+		box-shadow:
+			inset 0 0 20px 0 color-mix(in srgb, var(--mk-magenta-2) 70%, transparent),
+			inset 0 0 46px -8px color-mix(in srgb, var(--mk-gold-2) 80%, transparent),
+			0 0 26px 2px color-mix(in srgb, var(--mk-magenta-2) 70%, transparent),
+			0 10px 26px -14px rgba(0, 0, 0, 0.8);
+	}
+}
+
+// =====================================================================
+//  STYLE: Chrome — a machined metal key
+// =====================================================================
+@mixin sb-style-chrome {
+	--sb-radius: 9px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 1.4rem;
+	--sb-size: 0.88rem;
+	--sb-weight: 800;
+	--sb-tracking: 0.13em;
+	--sb-case: uppercase;
+	--sb-persp: 800px;
+
+	--sb-fg: #1b1f24;
+	--sb-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72);
+	--sb-icon: #1b1f24;
+	--sb-icon-filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.75));
+
+	--sb-surface: linear-gradient(
+		180deg,
+		#f6f8fa 0%,
+		#c8cdd5 11%,
+		#f1f4f7 24%,
+		#98a0ab 47%,
+		#d9dde3 60%,
+		#8a919c 83%,
+		#eef1f4 100%
+	);
+	--sb-bg-color: #b6bcc5;
+	--sb-border-w: 1px;
+	--sb-border: #6e7580;
+	--sb-border-hover: #9aa2ae;
+	--sb-lines: repeating-linear-gradient(
+		180deg,
+		rgba(255, 255, 255, 0.16) 0 1px,
+		rgba(0, 0, 0, 0.05) 1px 3px
+	);
+	--sb-lines-size: auto;
+	--sb-gloss: linear-gradient(
+		180deg,
+		rgba(255, 255, 255, 0.85) 0%,
+		rgba(255, 255, 255, 0.12) 42%,
+		rgba(255, 255, 255, 0) 60%
+	);
+	--sb-gloss-h: 58%;
+	--sb-gloss-o: 0.9;
+	--sb-gloss-blend: normal;
+	--sb-specular: rgba(255, 255, 255, 0.75);
+	--sb-specular-spread: 42%;
+	--sb-specular-o: 1;
+
+	--sb-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -2px 0 rgba(0, 0, 0, 0.28),
+		inset 0 -8px 14px -8px rgba(0, 0, 0, 0.35), 0 2px 3px rgba(0, 0, 0, 0.3),
+		0 8px 18px -8px rgba(0, 0, 0, 0.5);
+	--sb-shadow-hover:
+		inset 0 1px 0 #ffffff, inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+		inset 0 -8px 14px -8px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.32),
+		0 16px 30px -12px rgba(0, 0, 0, 0.55),
+		0 0 24px -10px color-mix(in srgb, var(--mk-gold-2) 55%, transparent);
+	--sb-shadow-press:
+		inset 0 3px 8px rgba(0, 0, 0, 0.35), inset 0 -1px 0 rgba(255, 255, 255, 0.5),
+		0 1px 2px rgba(0, 0, 0, 0.3);
+
+	--sb-filter-hover: brightness(1.06) contrast(1.05);
+	--sb-filter-press: brightness(1.12) contrast(1.08);
+	--sb-focus: 2px solid #6e7580;
+
+	--sb-idle: none;
+	--sb-tilt: 9deg;
+
+	--sb-glow: #d8dde4;
+	--sb-glow-2: var(--mk-gold-1);
+	--sb-glow-3: #ffffff;
+	--sb-particles: 0;
+
+	--sb-icon-radius: 9px;
+	--sb-icon-gloss-h: 55%;
+	--sb-icon-gloss-inset: 1px 1px auto 1px;
+}
+
+@include special-scope('chrome') {
+	@include sb-style-chrome;
+}
+
+// =====================================================================
+//  STYLE: Arcade — a chunky, physical key with a hard edge
+// =====================================================================
+@mixin sb-style-arcade {
+	--sb-radius: 5px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 1.4rem;
+	--sb-size: 0.9rem;
+	--sb-weight: 800;
+	--sb-tracking: 0.1em;
+	--sb-case: uppercase;
+	--sb-persp: 1200px;
+
+	--sb-fg: #2a0a00;
+	--sb-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+	--sb-icon: #2a0a00;
+	--sb-icon-filter: none;
+
+	--sb-surface: linear-gradient(180deg, #ffb347 0%, #ff8a2a 42%, #fc6000 88%, #e04b00 100%);
+	--sb-bg-color: #b83a00;
+	--sb-border-w: 2px;
+	--sb-border: #401000;
+	--sb-border-hover: #5c1800;
+	--sb-lines: repeating-linear-gradient(
+		90deg,
+		rgba(255, 255, 255, 0.09) 0 2px,
+		rgba(0, 0, 0, 0.07) 2px 4px
+	);
+	--sb-lines-size: auto;
+	--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0 3px, rgba(255, 255, 255, 0) 42%);
+	--sb-gloss-h: 48%;
+	--sb-gloss-o: 1;
+	--sb-gloss-blend: normal;
+	--sb-specular: rgba(255, 255, 255, 0.3);
+	--sb-specular-spread: 38%;
+	--sb-specular-o: 0.8;
+
+	// Hard-edged blocks instead of a soft glow: the key visibly sits on
+	// a base and gets pushed into it when pressed.
+	--sb-shadow:
+		inset 0 3px 0 rgba(255, 255, 255, 0.5), inset 0 -7px 0 rgba(0, 0, 0, 0.28), 0 6px 0 #7a2300,
+		0 6px 0 2px #401000, 0 9px 0 -1px rgba(0, 0, 0, 0.35);
+	--sb-shadow-hover:
+		inset 0 3px 0 rgba(255, 255, 255, 0.62), inset 0 -7px 0 rgba(0, 0, 0, 0.3), 0 8px 0 #7a2300,
+		0 8px 0 2px #401000, 0 13px 0 -1px rgba(0, 0, 0, 0.4);
+	--sb-shadow-press:
+		inset 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 -2px 0 rgba(255, 255, 255, 0.28), 0 2px 0 #7a2300,
+		0 2px 0 2px #401000, 0 3px 0 -1px rgba(0, 0, 0, 0.35);
+
+	--sb-press-lift: 4px;
+	--sb-press-scale: 1;
+	--sb-filter-hover: brightness(1.06) saturate(1.08);
+	--sb-filter-press: brightness(1.14) saturate(1.12);
+	--sb-focus: 3px dashed #401000;
+
+	--sb-idle: none;
+	--sb-tilt: 2deg;
+
+	--sb-glow: #fc6000;
+	--sb-glow-2: var(--mk-gold-1);
+	--sb-glow-3: #ff2e8b;
+	--sb-particles: 4;
+
+	--sb-icon-radius: 4px;
+	--sb-icon-gloss-h: 40%;
+}
+
+@include special-scope('arcade') {
+	@include sb-style-arcade;
+}
+
+// =====================================================================
+//  STYLE: Aurora — iridescent light flowing under glass
+// =====================================================================
+@mixin sb-style-aurora {
+	--sb-radius: 15px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 1.45rem;
+	--sb-size: 0.92rem;
+	--sb-weight: 800;
+	--sb-tracking: 0.12em;
+	--sb-case: uppercase;
+	--sb-persp: 900px;
+
+	--sb-fg: #ffffff;
+	--sb-text-shadow: 0 1px 4px rgba(12, 6, 26, 0.6);
+	--sb-icon: #ffffff;
+	--sb-icon-filter: drop-shadow(0 1px 4px rgba(12, 6, 26, 0.6));
+
+	--sb-surface: linear-gradient(180deg, rgba(10, 6, 20, 0.32) 0%, rgba(10, 6, 20, 0.5) 100%);
+	--sb-bg-color: #140a24;
+	--sb-border-w: 1px;
+	--sb-border: rgba(255, 255, 255, 0.45);
+	--sb-border-hover: rgba(255, 255, 255, 0.7);
+	--sb-lines: radial-gradient(
+		120% 150% at 50% 50%,
+		rgba(10, 6, 24, 0.1) 0%,
+		rgba(10, 6, 24, 0.45) 100%
+	);
+
+	// The gloss layer doubles as the flowing gradient: it is oversized
+	// and translated, so the animation stays on the compositor.
+	--sb-gloss: linear-gradient(
+		110deg,
+		#00ffd0 0%,
+		#3d8bff 18%,
+		#b06bff 36%,
+		#ff4d94 54%,
+		#ffd166 72%,
+		#00ffd0 100%
+	);
+	--sb-gloss-inset: -40% -60%;
+	--sb-gloss-h: 180%;
+	--sb-gloss-radius: 40%;
+	--sb-gloss-o: 1;
+	--sb-gloss-blend: normal;
+	--sb-gloss-anim: sb-gloss-flow;
+	--sb-gloss-anim-dur: 7s;
+	--sb-specular: rgba(255, 255, 255, 0.5);
+	--sb-specular-spread: 60%;
+	--sb-specular-o: 0.85;
+
+	--sb-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+		0 10px 30px -12px rgba(176, 107, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.3);
+	--sb-shadow-hover:
+		inset 0 1px 0 rgba(255, 255, 255, 0.62), inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+		0 0 34px -4px rgba(255, 77, 148, 0.6), 0 0 64px -12px rgba(0, 255, 208, 0.55),
+		0 18px 40px -14px rgba(0, 0, 0, 0.6);
+	--sb-shadow-press:
+		inset 0 3px 10px rgba(10, 6, 24, 0.5), inset 0 0 30px 0 rgba(255, 255, 255, 0.35),
+		0 2px 10px rgba(0, 0, 0, 0.35);
+
+	--sb-filter-hover: brightness(1.06) saturate(1.12);
+	--sb-filter-press: brightness(1.18) saturate(1.2);
+	--sb-focus: 2px solid #ff4d94;
+
+	--sb-idle: sb-idle-aurora;
+	--sb-idle-dur: 3.8s;
+	--sb-tilt: 8deg;
+
+	--sb-glow: #ff4d94;
+	--sb-glow-2: #00ffd0;
+	--sb-glow-3: #ffd166;
+	--sb-particles: 18;
+
+	--sb-icon-radius: 999px;
+	--sb-icon-gloss-h: 55%;
+}
+
+@include special-scope('aurora') {
+	@include sb-style-aurora;
+}
+
+@keyframes sb-gloss-flow {
+	0% {
+		transform: translate3d(-18%, 0, 0) scale(1.1);
+	}
+	50% {
+		transform: translate3d(18%, 0, 0) scale(1.1);
+	}
+	100% {
+		transform: translate3d(-18%, 0, 0) scale(1.1);
+	}
+}
+
+@keyframes sb-idle-aurora {
+	0%,
+	100% {
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.45),
+			inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+			0 10px 30px -14px rgba(176, 107, 255, 0.6),
+			0 4px 10px rgba(0, 0, 0, 0.3);
+	}
+	50% {
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.6),
+			inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+			0 12px 34px -12px rgba(255, 77, 148, 0.65),
+			0 0 26px -10px rgba(0, 255, 208, 0.5),
+			0 4px 10px rgba(0, 0, 0, 0.3);
+	}
+}
+
+// =====================================================================
+//  STYLE: Minimal — flat, sharp, hairline perfect
+// =====================================================================
+@mixin sb-style-minimal {
+	--sb-radius: 10px;
+	--sb-min-h: 3rem;
+	--sb-pad: 0 1.25rem;
+	--sb-size: 0.95rem;
+	--sb-weight: 650;
+	--sb-tracking: 0.06em;
+	--sb-case: none;
+	--sb-persp: 1200px;
+
+	--sb-fg: var(--color-contrast, white);
+	--sb-text-shadow: none;
+	--sb-icon: var(--color-brand);
+	--sb-icon-filter: none;
+
+	--sb-surface: linear-gradient(
+		180deg,
+		color-mix(in srgb, var(--surface-4, #1b1b20) 78%, transparent) 0%,
+		color-mix(in srgb, var(--surface-3, #101013) 82%, transparent) 100%
+	);
+	--sb-bg-color: color-mix(in srgb, var(--surface-4, #1b1b20) 70%, transparent);
+	--sb-border-w: 1px;
+	--sb-border: color-mix(in srgb, var(--color-brand) 42%, transparent);
+	--sb-border-hover: var(--color-brand);
+	--sb-lines: linear-gradient(90deg, var(--color-brand), var(--color-brand));
+	--sb-lines-size: 0% 2px;
+	--sb-lines-pos: 0 100%;
+	--sb-lines-repeat: no-repeat;
+	--sb-lines-pos-hover: 100% 100%;
+	--sb-lines-size-hover: 100% 2px;
+	--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+	--sb-gloss-h: 50%;
+	--sb-gloss-o: 0.8;
+	--sb-gloss-blend: normal;
+	--sb-specular: color-mix(in srgb, var(--color-brand) 30%, transparent);
+	--sb-specular-spread: 65%;
+	--sb-specular-o: 0.9;
+
+	--sb-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+	--sb-shadow-hover:
+		0 0 0 1px color-mix(in srgb, var(--color-brand) 45%, transparent),
+		0 8px 22px -14px rgba(0, 0, 0, 0.7);
+	--sb-shadow-press: 0 0 0 1px var(--color-brand), inset 0 2px 8px rgba(0, 0, 0, 0.35);
+
+	--sb-filter-hover: brightness(1.05);
+	--sb-filter-press: brightness(1.12);
+	--sb-focus: 2px solid var(--color-brand);
+
+	--sb-idle: none;
+	--sb-tilt: 4deg;
+
+	--sb-glow: var(--color-brand);
+	--sb-glow-2: color-mix(in srgb, var(--color-brand) 50%, white);
+	--sb-glow-3: #ffffff;
+	--sb-particles: 0;
+
+	--sb-icon-radius: 10px;
+	--sb-icon-gloss-h: 50%;
+}
+
+@include special-scope('minimal') {
+	@include sb-style-minimal;
+}
+
+// The hairline that grows along the bottom edge on hover. Expressed as
+// a size change on an already-composited surface, so it stays cheap.
+.mk-play-cta,
+.welcome-create-button {
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		background-size:
+			var(--sb-surface-size, 100% 100%), var(--sb-lines-size-hover, var(--sb-lines-size, auto)) !important;
+	}
+}
+
+// =====================================================================
+//  Stop buttons — same form, danger colouring per style
+// =====================================================================
+.mk-stop-cta {
+	--sb-danger-fg: #ffffff;
+
+	--sb-fg: #ffffff;
+	--sb-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+	--sb-icon: #ffffff;
+	--sb-icon-filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.3));
+	--sb-surface: linear-gradient(180deg, #ff6fa3 0%, #fc0060 50%, #c20046 100%);
+	--sb-bg-color: #3a0008;
+	--sb-border: color-mix(in srgb, #ff6fa3 60%, white);
+	--sb-border-hover: color-mix(in srgb, #ff6fa3 80%, white);
+	--sb-shadow:
+		0 0 0 1px color-mix(in srgb, #3a0008 55%, transparent),
+		0 10px 26px -8px color-mix(in srgb, #fc0060 60%, transparent), 0 2px 4px rgba(0, 0, 0, 0.35),
+		inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -3px 0 rgba(58, 0, 8, 0.45);
+	--sb-shadow-hover:
+		0 0 0 1px color-mix(in srgb, #3a0008 55%, transparent),
+		0 0 28px -4px color-mix(in srgb, #fc0060 65%, transparent),
+		0 16px 32px -8px color-mix(in srgb, #fc0060 55%, transparent), 0 4px 10px rgba(0, 0, 0, 0.4),
+		inset 0 1px 0 rgba(255, 255, 255, 0.55);
+	--sb-shadow-press:
+		0 0 0 1px color-mix(in srgb, #3a0008 60%, transparent), 0 3px 8px rgba(0, 0, 0, 0.45),
+		inset 0 3px 8px rgba(58, 0, 8, 0.55);
+	--sb-glow: var(--mk-magenta-2);
+	--sb-glow-2: #ff6fa3;
+	--sb-idle: none;
+	--sb-particles: 8;
+}
+
+// The round Stop twin. It borrows the danger palette above so a card can
+// show the same style in both of its states, and only the geometry changes.
+.mk-stop-icon {
+	--sb-icon-radius: 999px;
+
+	--sb-fg: #ffffff;
+	--sb-icon: #ffffff;
+	--sb-icon-filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.35));
+	--sb-surface: linear-gradient(180deg, #ff6fa3 0%, #fc0060 52%, #c20046 100%);
+	--sb-bg-color: #3a0008;
+	--sb-border: color-mix(in srgb, #ff6fa3 60%, white);
+	--sb-shadow:
+		0 0 0 1px color-mix(in srgb, #3a0008 55%, transparent),
+		0 6px 16px -6px color-mix(in srgb, #fc0060 60%, transparent), 0 2px 4px rgba(0, 0, 0, 0.35),
+		inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(58, 0, 8, 0.45);
+	--sb-shadow-hover:
+		0 0 0 1px color-mix(in srgb, #3a0008 55%, transparent),
+		0 0 20px -2px color-mix(in srgb, #fc0060 65%, transparent),
+		0 10px 22px -8px color-mix(in srgb, #fc0060 55%, transparent), 0 3px 8px rgba(0, 0, 0, 0.4),
+		inset 0 1px 0 rgba(255, 255, 255, 0.6);
+	--sb-shadow-press:
+		0 0 0 1px color-mix(in srgb, #3a0008 60%, transparent), 0 2px 6px rgba(0, 0, 0, 0.45),
+		inset 0 2px 6px rgba(58, 0, 8, 0.55);
+	--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+
+	--sb-glow: var(--mk-magenta-2);
+	--sb-glow-2: #ff6fa3;
+	--sb-glow-3: #ffffff;
+	--sb-particles: 6;
+	--sb-idle: none;
+	--sb-tilt: 0deg;
+}
+
+// Style-specific danger variants: the form stays, only the light changes.
+@include special-scope('modrinth') {
+	.mk-stop-cta {
+		--sb-bg-color: var(--color-red);
+		--sb-surface: none;
+		--sb-gloss-h: 100%;
+		--sb-gloss-inset: 0;
+		--sb-gloss-pad: 1px;
+		--sb-gloss-radius: inherit;
+		--sb-gloss-blend: normal;
+		--sb-shadow:
+			0 0 0 1px color-mix(in srgb, var(--color-red) 30%, transparent),
+			0 2px 4px rgba(0, 0, 0, 0.04), 0 5px 8px rgba(0, 0, 0, 0.04), 0 10px 18px rgba(0, 0, 0, 0.03),
+			0 24px 48px rgba(0, 0, 0, 0.03);
+		--sb-particles: 0;
+	}
+}
+
+@include special-scope('glass') {
+	.mk-stop-cta {
+		--sb-surface: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-red) 55%, transparent) 0%,
+			color-mix(in srgb, var(--color-red) 32%, transparent) 100%
+		);
+		--sb-bg-color: color-mix(in srgb, var(--color-red) 22%, transparent);
+		--sb-border: color-mix(in srgb, var(--color-red) 55%, white);
+	}
+}
+
+@include special-scope('neon') {
+	.mk-stop-cta {
+		--sb-fg: #ffd9e6;
+		--sb-border: color-mix(in srgb, #ff2e8b 75%, transparent);
+		--sb-border-hover: #ff6fa3;
+		--sb-surface: linear-gradient(180deg, #1c020c 0%, #25030a 60%, #12020a 100%);
+		--sb-glow: #ff2e8b;
+		--sb-glow-2: #fc0060;
+		--sb-shadow:
+			inset 0 0 14px -2px rgba(255, 46, 139, 0.65), 0 0 16px -2px rgba(255, 46, 139, 0.6),
+			0 10px 26px -14px rgba(0, 0, 0, 0.8);
+	}
+}
+
+@include special-scope('chrome') {
+	.mk-stop-cta {
+		--sb-surface: linear-gradient(
+			180deg,
+			#ffd0d3 0%,
+			#f09aa2 12%,
+			#ffe6e8 26%,
+			#c46b74 48%,
+			#f2b7bd 62%,
+			#a44b55 84%,
+			#ffdfe2 100%
+		);
+		--sb-fg: #2a0d10;
+		--sb-border: #7d3a41;
+		--sb-icon: #2a0d10;
+		--sb-glow: #ffb3ba;
+	}
+}
+
+@include special-scope('arcade') {
+	.mk-stop-cta {
+		--sb-surface: linear-gradient(180deg, #ff8fa8 0%, #fc2b62 45%, #c2003f 100%);
+		--sb-bg-color: #66001f;
+		--sb-border: #40000f;
+		--sb-shadow:
+			inset 0 3px 0 rgba(255, 255, 255, 0.5), inset 0 -7px 0 rgba(0, 0, 0, 0.28), 0 6px 0 #6d0022,
+			0 6px 0 2px #40000f, 0 9px 0 -1px rgba(0, 0, 0, 0.35);
+		--sb-shadow-hover:
+			inset 0 3px 0 rgba(255, 255, 255, 0.62), inset 0 -7px 0 rgba(0, 0, 0, 0.3), 0 8px 0 #6d0022,
+			0 8px 0 2px #40000f, 0 13px 0 -1px rgba(0, 0, 0, 0.4);
+		--sb-shadow-press:
+			inset 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 -2px 0 rgba(255, 255, 255, 0.28), 0 2px 0 #6d0022,
+			0 2px 0 2px #40000f, 0 3px 0 -1px rgba(0, 0, 0, 0.35);
+	}
+}
+
+@include special-scope('aurora') {
+	.mk-stop-cta {
+		--sb-gloss: linear-gradient(
+			110deg,
+			#ff2e8b 0%,
+			#ff8a2a 30%,
+			#fc0060 55%,
+			#b06bff 80%,
+			#ff2e8b 100%
+		);
+		--sb-glow: #fc0060;
+		--sb-glow-2: #ff8a2a;
+	}
+}
+
+@include special-scope('minimal') {
+	.mk-stop-cta {
+		--sb-fg: var(--color-red);
+		--sb-surface: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--surface-4) 78%, transparent) 0%,
+			color-mix(in srgb, var(--surface-3) 82%, transparent) 100%
+		);
+		--sb-border: color-mix(in srgb, var(--color-red) 45%, transparent);
+		--sb-border-hover: var(--color-red);
+		--sb-lines: linear-gradient(90deg, var(--color-red), var(--color-red));
+		--sb-glow: var(--color-red);
+		--sb-icon: var(--color-red);
+		--sb-shadow-hover:
+			0 0 0 1px color-mix(in srgb, var(--color-red) 45%, transparent),
+			0 8px 22px -14px rgba(0, 0, 0, 0.7);
+	}
+}
+
+// =====================================================================
+//  Icon orbs — the round Play buttons on instance cards
+// =====================================================================
+@include special-scope('modrinth') {
+	.mk-stop-icon {
+		--sb-surface: none;
+		--sb-bg-color: var(--color-red);
+		--sb-border: transparent;
+		--sb-border-w: 0;
+		--sb-icon-filter: none;
+		--sb-shadow:
+			0 0 0 1px color-mix(in srgb, var(--color-red) 30%, transparent), 0 2px 6px rgba(0, 0, 0, 0.18);
+		--sb-shadow-hover: var(--sb-shadow);
+		--sb-shadow-press: var(--sb-shadow);
+		--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+		--sb-gloss-blend: normal;
+		--sb-particles: 0;
+	}
+
+	.mk-play-icon {
+		--sb-surface: none;
+		--sb-bg-color: var(--color-brand);
+		--sb-fg: var(--color-accent-contrast, white);
+		--sb-icon: inherit;
+		--sb-icon-filter: none;
+		--sb-border-w: 0;
+		--sb-shadow:
+			0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent),
+			0 2px 6px rgba(0, 0, 0, 0.18);
+		--sb-icon-gloss-inset: 0;
+		--sb-icon-gloss-h: 100%;
+		--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+		--sb-gloss-blend: normal;
+	}
+}
+
+@include special-scope('glass') {
+	.mk-play-icon,
+	.mk-stop-icon {
+		--sb-icon-radius: 999px;
+	}
+
+	.mk-stop-icon {
+		--sb-surface: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-red) 55%, transparent) 0%,
+			color-mix(in srgb, var(--color-red) 32%, transparent) 100%
+		);
+		--sb-bg-color: color-mix(in srgb, var(--color-red) 22%, transparent);
+		--sb-border: color-mix(in srgb, var(--color-red) 55%, white);
+	}
+}
+
+@include special-scope('neon') {
+	.mk-play-icon {
+		--sb-icon-radius: 10px;
+		--sb-icon: var(--mk-gold-1);
+		--sb-border: color-mix(in srgb, var(--mk-gold-2) 65%, transparent);
+		--sb-shadow:
+			inset 0 0 12px -2px color-mix(in srgb, var(--mk-gold-2) 70%, transparent),
+			0 0 14px -2px color-mix(in srgb, var(--mk-magenta-2) 60%, transparent);
+	}
+
+	.mk-stop-icon {
+		--sb-icon-radius: 10px;
+		--sb-icon: #ff2e8b;
+		--sb-icon-filter: none;
+		--sb-border: color-mix(in srgb, #ff2e8b 70%, transparent);
+		--sb-border-hover: #ff6fa3;
+		--sb-surface: linear-gradient(180deg, #1c020c 0%, #25030a 60%, #12020a 100%);
+		--sb-bg-color: #12020a;
+		--sb-glow: #ff2e8b;
+		--sb-glow-2: #fc0060;
+		--sb-shadow:
+			inset 0 0 14px -2px rgba(255, 46, 139, 0.65), 0 0 16px -2px rgba(255, 46, 139, 0.6),
+			0 10px 26px -14px rgba(0, 0, 0, 0.8);
+		--sb-shadow-press: inset 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 22px -2px rgba(255, 46, 139, 0.75);
+	}
+}
+
+@include special-scope('chrome') {
+	.mk-play-icon {
+		--sb-icon-radius: 8px;
+		--sb-fg: #1b1f24;
+		--sb-icon: #1b1f24;
+		--sb-icon-filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.75));
+	}
+
+	.mk-stop-icon {
+		--sb-icon-radius: 8px;
+		--sb-surface: linear-gradient(
+			180deg,
+			#ffd0d3 0%,
+			#f09aa2 12%,
+			#ffe6e8 26%,
+			#c46b74 48%,
+			#f2b7bd 62%,
+			#a44b55 84%,
+			#ffdfe2 100%
+		);
+		--sb-fg: #2a0d10;
+		--sb-icon: #2a0d10;
+		--sb-icon-filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.7));
+		--sb-border: #7d3a41;
+		--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+		--sb-glow: #ffb3ba;
+		--sb-glow-2: #f09aa2;
+	}
+}
+
+@include special-scope('arcade') {
+	.mk-play-icon {
+		--sb-icon-radius: 3px;
+		--sb-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5), 0 3px 0 #7a2300, 0 3px 0 1px #401000;
+		--sb-shadow-hover: inset 0 2px 0 rgba(255, 255, 255, 0.6), 0 4px 0 #7a2300, 0 4px 0 1px #401000;
+		--sb-shadow-press: inset 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 0 #7a2300, 0 1px 0 1px #401000;
+	}
+
+	.mk-stop-icon {
+		--sb-icon-radius: 3px;
+		--sb-surface: linear-gradient(180deg, #ff8fa8 0%, #fc2b62 45%, #c2003f 100%);
+		--sb-bg-color: #66001f;
+		--sb-border: #40000f;
+		--sb-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5), 0 3px 0 #6d0022, 0 3px 0 1px #40000f;
+		--sb-shadow-hover: inset 0 2px 0 rgba(255, 255, 255, 0.6), 0 4px 0 #6d0022, 0 4px 0 1px #40000f;
+		--sb-shadow-press: inset 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 0 #6d0022, 0 1px 0 1px #40000f;
+	}
+}
+
+@include special-scope('minimal') {
+	.mk-play-icon {
+		--sb-icon-radius: 8px;
+		--sb-icon: var(--color-brand);
+		--sb-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+		--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+		--sb-gloss-blend: normal;
+	}
+
+	.mk-stop-icon {
+		--sb-icon-radius: 8px;
+		--sb-icon: var(--color-red);
+		--sb-icon-filter: none;
+		--sb-surface: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--surface-4) 78%, transparent) 0%,
+			color-mix(in srgb, var(--surface-3) 82%, transparent) 100%
+		);
+		--sb-border: color-mix(in srgb, var(--color-red) 45%, transparent);
+		--sb-border-hover: var(--color-red);
+		--sb-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+		--sb-glow: var(--color-red);
+		--sb-glow-2: var(--color-red);
+		--sb-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+		--sb-gloss-blend: normal;
+		--sb-particles: 4;
+	}
+}
+
+// =====================================================================
+//  Reduced motion / animations disabled
+// =====================================================================
+@media (prefers-reduced-motion: reduce) {
+	.mk-play-cta,
+	.mk-stop-cta,
+	.welcome-create-button,
+	.mk-play-icon,
+	.mk-stop-icon {
+		animation: none !important;
+
+		&::before,
+		&::after {
+			animation: none !important;
+		}
+
+		&:hover:not(:disabled):not([aria-disabled='true']) {
+			--sb-lift: -1px;
+			--sb-scale: 1;
+		}
+	}
+}
+
+html.no-animations {
+	.mk-play-cta,
+	.mk-stop-cta,
+	.welcome-create-button,
+	.mk-play-icon,
+	.mk-stop-icon {
+		&::before,
+		&::after {
+			animation: none !important;
+		}
+	}
+}

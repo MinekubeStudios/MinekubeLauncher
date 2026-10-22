@@ -1,0 +1,114 @@
+// Minekube Launcher — window outline themes.
+// Draws a decorative outline along the window edges above the app content.
+
+@keyframes outline-rgb-flow {
+	0% {
+		background-position: 0% 50%;
+	}
+	100% {
+		background-position: 400% 50%;
+	}
+}
+
+@keyframes outline-aurora-flow {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes outline-neon-pulse {
+	0%,
+	100% {
+		box-shadow:
+			inset 0 0 0 2px var(--color-brand),
+			inset 0 0 14px -1px var(--color-brand),
+			inset 0 0 42px -8px var(--color-brand-shadow);
+	}
+	50% {
+		box-shadow:
+			inset 0 0 0 2px var(--color-brand),
+			inset 0 0 26px 0 var(--color-brand),
+			inset 0 0 70px -6px var(--color-brand-shadow);
+	}
+}
+
+body::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: 100000;
+}
+
+html[data-outline-theme='glow'] body::after {
+	box-shadow:
+		inset 0 0 0 2px var(--color-brand),
+		inset 0 0 22px -4px var(--color-brand),
+		inset 0 0 64px -16px var(--color-brand-shadow);
+}
+
+html[data-outline-theme='neon'] body::after {
+	box-shadow:
+		inset 0 0 0 2px var(--color-brand),
+		inset 0 0 14px -1px var(--color-brand),
+		inset 0 0 42px -8px var(--color-brand-shadow);
+	animation: outline-neon-pulse 2.4s ease-in-out infinite;
+}
+
+html[data-outline-theme='rgb'] body::after {
+	padding: 3px;
+	background: linear-gradient(
+		120deg,
+		#ff004c,
+		#ff8a00,
+		#ffe600,
+		#3dff8f,
+		#00e0ff,
+		#4d5dff,
+		#c400ff,
+		#ff004c
+	);
+	background-size: 400% 400%;
+	box-shadow: inset 0 0 22px -6px rgba(255, 255, 255, 0.4);
+	-webkit-mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	mask-composite: exclude;
+	animation: outline-rgb-flow 5.5s linear infinite;
+}
+
+html[data-outline-theme='aurora'] body::after {
+	padding: 3px;
+	background: linear-gradient(120deg, #00ffd0, #3d8bff, #b06bff, #ff4d94, #00ffd0);
+	background-size: 280% 280%;
+	filter: drop-shadow(0 0 7px rgba(176, 107, 255, 0.55));
+	-webkit-mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	mask-composite: exclude;
+	animation: outline-aurora-flow 6.5s ease-in-out infinite;
+}
+
+html.no-animations body::after {
+	animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body::after {
+		animation: none !important;
+	}
+}

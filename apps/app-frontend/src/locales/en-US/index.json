@@ -1,0 +1,5786 @@
+{
+	"app.action-bar.automatic-updates": {
+		"message": "Automatic updates"
+	},
+	"app.action-bar.automatic-updates-description": {
+		"message": "Check for and download new versions in the background. Installing one always asks first."
+	},
+	"app.action-bar.check-updates": {
+		"message": "Check for updates"
+	},
+	"app.action-bar.checking-updates": {
+		"message": "Checking for updates…"
+	},
+	"app.action-bar.downloading-java": {
+		"message": "Downloading Java {version}"
+	},
+	"app.action-bar.downloading-update": {
+		"message": "Downloading update"
+	},
+	"app.action-bar.downloads": {
+		"message": "Downloads"
+	},
+	"app.action-bar.github-update-available-body": {
+		"message": "Version {version} is available on GitHub."
+	},
+	"app.action-bar.hide-downloads": {
+		"message": "Hide active downloads"
+	},
+	"app.action-bar.install.copied-details": {
+		"message": "Copied"
+	},
+	"app.action-bar.install.copy-details": {
+		"message": "Copy details"
+	},
+	"app.action-bar.install.dismiss": {
+		"message": "Dismiss"
+	},
+	"app.action-bar.install.open-instance": {
+		"message": "Open instance"
+	},
+	"app.action-bar.install.retry": {
+		"message": "Retry"
+	},
+	"app.action-bar.install.summary.app-closing": {
+		"message": "Canceled due to app closing"
+	},
+	"app.action-bar.install.summary.bad-modpack-file": {
+		"message": "Couldn't read modpack"
+	},
+	"app.action-bar.install.summary.canceled": {
+		"message": "Canceled"
+	},
+	"app.action-bar.install.summary.cleanup-incomplete": {
+		"message": "Cleanup didn't finish"
+	},
+	"app.action-bar.install.summary.content-download-failed": {
+		"message": "Couldn't download files"
+	},
+	"app.action-bar.install.summary.corrupt-download": {
+		"message": "Downloaded file is corrupt"
+	},
+	"app.action-bar.install.summary.could-not-save-files": {
+		"message": "Couldn't save files"
+	},
+	"app.action-bar.install.summary.download-failed": {
+		"message": "Download couldn't finish"
+	},
+	"app.action-bar.install.summary.instance-not-found": {
+		"message": "Instance couldn't be found"
+	},
+	"app.action-bar.install.summary.invalid-file-path": {
+		"message": "File path is invalid"
+	},
+	"app.action-bar.install.summary.invalid-modpack": {
+		"message": "Modpack data invalid"
+	},
+	"app.action-bar.install.summary.invalid-modpack-files": {
+		"message": "Modpack files have invalid metadata"
+	},
+	"app.action-bar.install.summary.java-setup-failed": {
+		"message": "Java setup couldn't finish"
+	},
+	"app.action-bar.install.summary.loader-setup-failed": {
+		"message": "Loader setup failed"
+	},
+	"app.action-bar.install.summary.local-data-error": {
+		"message": "Couldn't update local data"
+	},
+	"app.action-bar.install.summary.minecraft-setup-failed": {
+		"message": "Minecraft setup failed"
+	},
+	"app.action-bar.install.summary.modrinth-unreachable": {
+		"message": "Couldn't reach the online library"
+	},
+	"app.action-bar.install.summary.no-write-permission": {
+		"message": "No permission to write"
+	},
+	"app.action-bar.install.summary.pack-download-failed": {
+		"message": "Couldn't download pack"
+	},
+	"app.action-bar.install.summary.unexpected-error": {
+		"message": "Something went wrong"
+	},
+	"app.action-bar.install.unknown-instance": {
+		"message": "Unknown instance"
+	},
+	"app.action-bar.offline": {
+		"message": "Offline"
+	},
+	"app.action-bar.open-release": {
+		"message": "Open release"
+	},
+	"app.action-bar.reload-to-update": {
+		"message": "Reload to update"
+	},
+	"app.action-bar.show-downloads": {
+		"message": "Show active downloads"
+	},
+	"app.action-bar.up-to-date": {
+		"message": "Launcher is up to date"
+	},
+	"app.action-bar.up-to-date-body": {
+		"message": "You are running the latest version ({version})."
+	},
+	"app.action-bar.update": {
+		"message": "Update"
+	},
+	"app.action-bar.update-available": {
+		"message": "Update available"
+	},
+	"app.action-bar.update-available-body": {
+		"message": "Version {version} is available. Downloading it now…"
+	},
+	"app.action-bar.updates": {
+		"message": "Updates"
+	},
+	"app.action-bar.view-active-downloads": {
+		"message": "View active downloads"
+	},
+	"app.appearance-settings.compact-mode.description": {
+		"message": "Display library instances in a compact row layout."
+	},
+	"app.appearance-settings.compact-mode.title": {
+		"message": "Compact mode"
+	},
+	"app.appearance-settings.hide-nametag.description": {
+		"message": "Hide your username above the player preview on the Skin selector page."
+	},
+	"app.appearance-settings.hide-nametag.title": {
+		"message": "Hide nametag"
+	},
+	"app.appearance-settings.minimize-launcher.description": {
+		"message": "Minimize Minekube Launcher when Minecraft starts."
+	},
+	"app.appearance-settings.minimize-launcher.title": {
+		"message": "Minimize app"
+	},
+	"app.appearance-settings.skip-non-essential-warnings.description": {
+		"message": "Skip confirmations for low-risk actions such as duplicate installs, normal content deletion, bulk updates, unlinking, and repairs. Warnings for dangerous actions are always shown."
+	},
+	"app.appearance-settings.skip-non-essential-warnings.title": {
+		"message": "Skip non-essential warnings"
+	},
+	"app.appearance-settings.toggle-sidebar.description": {
+		"message": "Hide the right sidebar by default and add a button to show or hide it."
+	},
+	"app.appearance-settings.toggle-sidebar.title": {
+		"message": "Hide right sidebar"
+	},
+	"app.appearance-settings.unknown-pack-warning.description": {
+		"message": "Show a safety warning before installing a modpack (.mrpack) that isn't hosted in the online library."
+	},
+	"app.appearance-settings.unknown-pack-warning.title": {
+		"message": "Warn me before installing unknown modpacks"
+	},
+	"app.auth-error.clock.step-1": {
+		"message": "Open your system date and time settings"
+	},
+	"app.auth-error.clock.step-2": {
+		"message": "Turn on automatic time zone and automatic time, if available"
+	},
+	"app.auth-error.clock.step-3": {
+		"message": "Use the sync option in your system settings to synchronize the clock"
+	},
+	"app.auth-error.clock.step-4": {
+		"message": "Restart Minekube Launcher"
+	},
+	"app.auth-error.clock.step-5": {
+		"message": "Try signing in again"
+	},
+	"app.auth-error.clock.what-happened": {
+		"message": "Xbox services rejected the first sign-in response. This is most often caused by your system clock or time zone being out of sync."
+	},
+	"app.auth-error.korea.step-1": {
+		"message": "Visit {xbox} and sign in"
+	},
+	"app.auth-error.korea.step-2": {
+		"message": "Complete the identity verification process"
+	},
+	"app.auth-error.korea.step-3": {
+		"message": "Once finished, try signing in again"
+	},
+	"app.auth-error.korea.what-happened": {
+		"message": "This account requires adult verification under South Korean regulations."
+	},
+	"app.auth-error.link.familyGuide": {
+		"message": "Family Setup Guide"
+	},
+	"app.auth-error.link.minecraftLogin": {
+		"message": "Minecraft Login"
+	},
+	"app.auth-error.link.msFamily": {
+		"message": "Microsoft Family"
+	},
+	"app.auth-error.link.officialLauncher": {
+		"message": "official Minecraft Launcher"
+	},
+	"app.auth-error.link.rightAccount": {
+		"message": "Minecraft Help Center"
+	},
+	"app.auth-error.link.ukAge": {
+		"message": "UK age verification on Xbox"
+	},
+	"app.auth-error.link.xbox": {
+		"message": "Xbox"
+	},
+	"app.auth-error.link.xboxRegions": {
+		"message": "Xbox Availability"
+	},
+	"app.auth-error.link.xboxStatus": {
+		"message": "Xbox Status"
+	},
+	"app.auth-error.link.xboxSupport": {
+		"message": "Xbox Support"
+	},
+	"app.auth-error.modal.contact-support": {
+		"message": "Contact support"
+	},
+	"app.auth-error.modal.copy-debug": {
+		"message": "Copy debug info"
+	},
+	"app.auth-error.modal.debug-title": {
+		"message": "Debug information"
+	},
+	"app.auth-error.modal.how-to-fix-title": {
+		"message": "How to fix it"
+	},
+	"app.auth-error.modal.no-message": {
+		"message": "No error message."
+	},
+	"app.auth-error.modal.sign-in-again": {
+		"message": "Sign in again"
+	},
+	"app.auth-error.modal.title": {
+		"message": "Sign in Failed"
+	},
+	"app.auth-error.modal.unknown-body": {
+		"message": "We don't recognize this error and can't recommend specific steps to resolve it."
+	},
+	"app.auth-error.modal.unknown-hint": {
+		"message": "Try visiting {minecraftLogin} and signing in, as it may prompt you with the necessary steps. You can also contact support and we can look into it further."
+	},
+	"app.auth-error.modal.unknown-title": {
+		"message": "Unknown error"
+	},
+	"app.auth-error.modal.warning": {
+		"message": "We couldn't sign you into your Microsoft account. This may be due to account restrictions or regional limitations."
+	},
+	"app.auth-error.modal.what-happened-title": {
+		"message": "What we think happened"
+	},
+	"app.auth-error.network.step-1": {
+		"message": "Restart Minekube Launcher and try signing in again"
+	},
+	"app.auth-error.network.step-2": {
+		"message": "Check that your internet connection is working"
+	},
+	"app.auth-error.network.step-3": {
+		"message": "Allow Minekube Launcher through your firewall, antivirus, proxy, VPN, and hosts file rules"
+	},
+	"app.auth-error.network.step-4": {
+		"message": "Try a different network or temporarily disable VPN/proxy software if you use one"
+	},
+	"app.auth-error.network.step-5": {
+		"message": "If routing or DNS is the issue, a service like Cloudflare WARP can sometimes help"
+	},
+	"app.auth-error.network.what-happened": {
+		"message": "Minekube Launcher could not connect to a Microsoft, Xbox, or Minecraft service needed for sign-in. This is usually caused by a local network, DNS, proxy, firewall, hosts file, VPN, or antivirus issue."
+	},
+	"app.auth-error.no-profile.step-1": {
+		"message": "Make sure Minecraft is purchased on this account"
+	},
+	"app.auth-error.no-profile.step-2": {
+		"message": "Visit {minecraftLogin} and sign in"
+	},
+	"app.auth-error.no-profile.step-3": {
+		"message": "Complete Xbox profile setup if prompted"
+	},
+	"app.auth-error.no-profile.step-4": {
+		"message": "Once finished, try signing in again"
+	},
+	"app.auth-error.no-profile.what-happened": {
+		"message": "This account doesn't have an Xbox profile set up or doesn't own Minecraft."
+	},
+	"app.auth-error.profile.step-1": {
+		"message": "Sign in with the {officialLauncher}"
+	},
+	"app.auth-error.profile.step-2": {
+		"message": "Launch Minecraft: Java Edition once from the official launcher"
+	},
+	"app.auth-error.profile.step-3": {
+		"message": "Wait up to an hour if the purchase or profile setup was recent"
+	},
+	"app.auth-error.profile.step-4": {
+		"message": "Make sure you are using the Microsoft account that owns Minecraft. See {rightAccount} for help"
+	},
+	"app.auth-error.profile.step-5": {
+		"message": "Try signing in to Minekube Launcher again"
+	},
+	"app.auth-error.profile.what-happened": {
+		"message": "Minecraft services could not return a Java Edition profile for this account. This most often happens when the game was purchased recently, the Java profile has not finished being created, or the wrong Microsoft account is being used."
+	},
+	"app.auth-error.rate-limit.step-1": {
+		"message": "Wait about an hour before trying again"
+	},
+	"app.auth-error.rate-limit.step-2": {
+		"message": "Restart Minekube Launcher after waiting"
+	},
+	"app.auth-error.rate-limit.step-3": {
+		"message": "Try signing in once more"
+	},
+	"app.auth-error.rate-limit.step-4": {
+		"message": "If the same message appears, wait longer before retrying so the temporary limit can clear"
+	},
+	"app.auth-error.rate-limit.what-happened": {
+		"message": "Microsoft or Minecraft temporarily blocked the sign-in request because there were too many recent attempts."
+	},
+	"app.auth-error.refresh-token.step-1": {
+		"message": "Sign out of the affected Minecraft account in Minekube Launcher"
+	},
+	"app.auth-error.refresh-token.step-2": {
+		"message": "Sign in to the account again"
+	},
+	"app.auth-error.refresh-token.step-3": {
+		"message": "Once the new sign-in finishes, try launching Minecraft again"
+	},
+	"app.auth-error.refresh-token.what-happened": {
+		"message": "Your saved Microsoft sign-in token has expired or was revoked, so Minekube Launcher cannot refresh your Minecraft session."
+	},
+	"app.auth-error.region.step-1": {
+		"message": "Xbox services must be supported in your country before you can sign in"
+	},
+	"app.auth-error.region.step-2": {
+		"message": "Check {xboxRegions} for supported regions"
+	},
+	"app.auth-error.region.what-happened": {
+		"message": "Xbox Live isn't available in your region, so sign-in is blocked."
+	},
+	"app.auth-error.restricted.step-1": {
+		"message": "Have a guardian sign in to {msFamily}"
+	},
+	"app.auth-error.restricted.step-2": {
+		"message": "Update online play permissions"
+	},
+	"app.auth-error.restricted.step-3": {
+		"message": "Once finished, try signing in again"
+	},
+	"app.auth-error.restricted.what-happened": {
+		"message": "This account is restricted and doesn't have permission to play online."
+	},
+	"app.auth-error.server-error.step-1": {
+		"message": "Wait a few minutes and try signing in again"
+	},
+	"app.auth-error.server-error.step-2": {
+		"message": "Check {xboxStatus} for current service issues"
+	},
+	"app.auth-error.server-error.step-3": {
+		"message": "Try signing in with the {officialLauncher} to confirm whether Minecraft sign-in is also affected there"
+	},
+	"app.auth-error.server-error.step-4": {
+		"message": "If the service is healthy and this keeps happening, contact support with the debug information below"
+	},
+	"app.auth-error.server-error.what-happened": {
+		"message": "Minecraft's authentication service is returning a server error, so Minekube Launcher cannot finish signing you in right now."
+	},
+	"app.auth-error.suspended.step-1": {
+		"message": "Visit {xboxSupport} and review the enforcement details"
+	},
+	"app.auth-error.suspended.step-2": {
+		"message": "Submit an appeal if one is available"
+	},
+	"app.auth-error.suspended.what-happened": {
+		"message": "This account was suspended for violating Xbox Community Standards."
+	},
+	"app.auth-error.terms.step-1": {
+		"message": "Visit {xbox} and sign in"
+	},
+	"app.auth-error.terms.step-2": {
+		"message": "Accept the Terms if prompted"
+	},
+	"app.auth-error.terms.step-3": {
+		"message": "Once finished, try signing in again"
+	},
+	"app.auth-error.terms.what-happened": {
+		"message": "This account hasn't accepted Xbox's Terms of Service."
+	},
+	"app.auth-error.uk-age.step-1": {
+		"message": "Go to the {minecraftLogin} page and sign in"
+	},
+	"app.auth-error.uk-age.step-2": {
+		"message": "Follow the instructions to verify your age"
+	},
+	"app.auth-error.uk-age.step-3": {
+		"message": "Once verified, try signing in again"
+	},
+	"app.auth-error.uk-age.step-4": {
+		"message": "For additional help, visit {ukAge}"
+	},
+	"app.auth-error.uk-age.what-happened": {
+		"message": "Your Minecraft/Xbox Live account requires age verification to comply with UK regulations. You must complete this before signing in."
+	},
+	"app.auth-error.underage.step-1": {
+		"message": "Review the {familyGuide}"
+	},
+	"app.auth-error.underage.step-2": {
+		"message": "Join or create a family group as instructed"
+	},
+	"app.auth-error.underage.step-3": {
+		"message": "Once finished, try signing in again"
+	},
+	"app.auth-error.underage.what-happened": {
+		"message": "This account is underage and not linked to a Microsoft family group."
+	},
+	"app.auth-error.xsts.step-1": {
+		"message": "Sign in with the {officialLauncher}"
+	},
+	"app.auth-error.xsts.step-2": {
+		"message": "Complete any prompts shown by Microsoft, Xbox, or Minecraft"
+	},
+	"app.auth-error.xsts.step-3": {
+		"message": "Try signing in to Minekube Launcher again"
+	},
+	"app.auth-error.xsts.step-4": {
+		"message": "If the official launcher also fails, follow the error shown there or contact Xbox Support"
+	},
+	"app.auth-error.xsts.what-happened": {
+		"message": "Xbox services rejected the request to authorize this account for Minecraft services, but did not return a specific account restriction that Minekube Launcher recognizes."
+	},
+	"app.auth-servers.unreachable.body": {
+		"message": "Minecraft authentication servers may be down right now. Check your internet connection and try again later."
+	},
+	"app.auth-servers.unreachable.header": {
+		"message": "Cannot reach authentication servers"
+	},
+	"app.behavior-settings.confirmations.title": {
+		"message": "Confirmations"
+	},
+	"app.behavior-settings.content.title": {
+		"message": "Home and content"
+	},
+	"app.behavior-settings.download-manager.description": {
+		"message": "Keep the Download manager button in the toolbar at all times, next to the other buttons. When this is off, it only appears while a whole instance or modpack is being downloaded, imported, exported, duplicated or repaired."
+	},
+	"app.behavior-settings.download-manager.title": {
+		"message": "Always show the Download manager"
+	},
+	"app.behavior-settings.startup-and-navigation.title": {
+		"message": "Startup and navigation"
+	},
+	"app.browse.add-servers-to-instance": {
+		"message": "Adding server to instance"
+	},
+	"app.browse.add-to-an-instance": {
+		"message": "Add to an instance"
+	},
+	"app.browse.add-to-instance": {
+		"message": "Add to instance"
+	},
+	"app.browse.add-to-instance-name": {
+		"message": "Add to {instanceName}"
+	},
+	"app.browse.added": {
+		"message": "Added"
+	},
+	"app.browse.already-added": {
+		"message": "Already added"
+	},
+	"app.browse.back-to-home": {
+		"message": "Back to Home"
+	},
+	"app.browse.hide-added-servers": {
+		"message": "Hide servers already added"
+	},
+	"app.browse.hide-installed-modpacks": {
+		"message": "Hide already installed"
+	},
+	"app.browse.project-actions.label": {
+		"message": "Project actions"
+	},
+	"app.browse.project-type.data-packs": {
+		"message": "Data Packs"
+	},
+	"app.browse.project-type.modpacks": {
+		"message": "Modpacks"
+	},
+	"app.browse.project-type.mods": {
+		"message": "Mods"
+	},
+	"app.browse.project-type.resource-packs": {
+		"message": "Resource Packs"
+	},
+	"app.browse.project-type.servers": {
+		"message": "Servers"
+	},
+	"app.browse.project-type.shaders": {
+		"message": "Shaders"
+	},
+	"app.browse.server-instance-content-warning": {
+		"message": "Adding content may prevent you from joining this server. Any content you add will be removed when the managed server content is updated."
+	},
+	"app.browse.server.installing": {
+		"message": "Installing"
+	},
+	"app.content-install.no-compatible-versions": {
+		"message": "No available versions match {compatibilityLabel}. Select a version to install anyway. Dependencies will not be installed automatically."
+	},
+	"app.content.desync-pack": {
+		"message": "Desync"
+	},
+	"app.content.sync-data-packs-disabled": {
+		"message": "Turn on data pack syncing in app settings first."
+	},
+	"app.content.sync-pack": {
+		"message": "Sync"
+	},
+	"app.content.sync-packs-override": {
+		"message": "Turn off the pack syncing override in this instance’s settings first."
+	},
+	"app.content.sync-resource-packs-disabled": {
+		"message": "Turn on resource pack syncing in app settings first."
+	},
+	"app.creation-modal.unsupported-archive.text": {
+		"message": "\"{fileName}\" is neither an instance exported from Prism Launcher or MultiMC nor an .mrpack modpack."
+	},
+	"app.creation-modal.unsupported-archive.title": {
+		"message": "Unsupported file"
+	},
+	"app.download-manager.active": {
+		"message": "Active"
+	},
+	"app.download-manager.attention": {
+		"message": "Needs attention"
+	},
+	"app.download-manager.cancel": {
+		"message": "Cancel installation"
+	},
+	"app.download-manager.canceling": {
+		"message": "Canceling installation…"
+	},
+	"app.download-manager.clear-all": {
+		"message": "Clear all"
+	},
+	"app.download-manager.clear-completed": {
+		"message": "Clear all completed tasks"
+	},
+	"app.download-manager.complete": {
+		"message": "Complete"
+	},
+	"app.download-manager.duplicated-instance": {
+		"message": "Duplicated instance"
+	},
+	"app.download-manager.empty": {
+		"message": "No installation tasks"
+	},
+	"app.download-manager.estimated-rate": {
+		"message": "Estimated download speed"
+	},
+	"app.download-manager.eta": {
+		"message": "Estimated time remaining for this download"
+	},
+	"app.download-manager.hide": {
+		"message": "Hide installation tasks"
+	},
+	"app.download-manager.imported-instance": {
+		"message": "Imported instance"
+	},
+	"app.download-manager.instance-installation": {
+		"message": "Instance installation"
+	},
+	"app.download-manager.modpack": {
+		"message": "Modpack"
+	},
+	"app.download-manager.modpack-installation": {
+		"message": "Modpack installation"
+	},
+	"app.download-manager.new-instance": {
+		"message": "New instance"
+	},
+	"app.download-manager.pause": {
+		"message": "Pause installation"
+	},
+	"app.download-manager.paused": {
+		"message": "Paused"
+	},
+	"app.download-manager.remove": {
+		"message": "Remove from history"
+	},
+	"app.download-manager.resume": {
+		"message": "Resume installation"
+	},
+	"app.download-manager.show": {
+		"message": "Show installation tasks"
+	},
+	"app.download-manager.tasks": {
+		"message": "Tasks"
+	},
+	"app.download-manager.title": {
+		"message": "Download manager"
+	},
+	"app.download-manager.verifying": {
+		"message": "Verifying"
+	},
+	"app.error.auth.another-account.body": {
+		"message": "Double check you've signed in with the right account. You may own Minecraft on a different Microsoft account."
+	},
+	"app.error.auth.another-account.button": {
+		"message": "Try another account"
+	},
+	"app.error.auth.another-account.title": {
+		"message": "Try another Microsoft account"
+	},
+	"app.error.auth.game-pass.body": {
+		"message": "Try signing in with the {officialLauncher} first. Once you're done, come back here and sign in!"
+	},
+	"app.error.auth.game-pass.title": {
+		"message": "Using PC Game Pass, coming from Bedrock, or just bought the game?"
+	},
+	"app.error.auth.hosts.body": {
+		"message": "Minekube Launcher tried to connect to Microsoft, Xbox or Minecraft services, but the remote server rejected the connection. These services may be blocked by your hosts file, firewall or antivirus."
+	},
+	"app.error.auth.network.body": {
+		"message": "Minekube Launcher had trouble connecting to Microsoft's servers. This is often the result of a poor connection, so try again. If the problem continues, check your firewall, antivirus, VPN or proxy settings."
+	},
+	"app.error.auth.network.title": {
+		"message": "Network issues"
+	},
+	"app.error.auth.official-launcher": {
+		"message": "official Minecraft Launcher"
+	},
+	"app.error.auth.sign-in-again": {
+		"message": "Try signing in again"
+	},
+	"app.error.close": {
+		"message": "Close"
+	},
+	"app.error.copy-debug": {
+		"message": "Copy debug info"
+	},
+	"app.error.debug-title": {
+		"message": "Debug information"
+	},
+	"app.error.directory.cancel": {
+		"message": "Cancel directory change"
+	},
+	"app.error.directory.move-failed.body": {
+		"message": "Minekube Launcher is unable to move to the directory you selected. Report the problem on GitHub, or cancel the directory change."
+	},
+	"app.error.directory.no-space.body": {
+		"message": "There is not enough space on the disk containing the directory you selected. Free up some space and try again, or cancel the directory change."
+	},
+	"app.error.directory.no-space.title": {
+		"message": "Not enough space"
+	},
+	"app.error.directory.read-only.body": {
+		"message": "Minekube Launcher is unable to write to the directory you selected. Adjust the permissions of the directory and try again, or cancel the directory change."
+	},
+	"app.error.directory.read-only.title": {
+		"message": "Change directory permissions"
+	},
+	"app.error.directory.retry": {
+		"message": "Retry directory change"
+	},
+	"app.error.get-support": {
+		"message": "Get support"
+	},
+	"app.error.github-link": {
+		"message": "Minekube Launcher GitHub"
+	},
+	"app.error.help-text": {
+		"message": "If nothing works and you need help, open an issue on {github} and include the debug information below."
+	},
+	"app.error.no-loader.body": {
+		"message": "Minekube Launcher could not find the loader version for this instance."
+	},
+	"app.error.no-loader.hint": {
+		"message": "To fix this, repair the instance with the button below."
+	},
+	"app.error.no-loader.repair": {
+		"message": "Repair instance"
+	},
+	"app.error.no-message": {
+		"message": "No error message."
+	},
+	"app.error.state-init.body": {
+		"message": "Minekube Launcher failed to load correctly. This may be because of a corrupted file, or because the app is missing crucial files."
+	},
+	"app.error.state-init.fixes": {
+		"message": "You may be able to fix it in one of the following ways:"
+	},
+	"app.error.state-init.open-backups-folder": {
+		"message": "Open backups folder"
+	},
+	"app.error.state-init.redownload": {
+		"message": "Download the app again."
+	},
+	"app.error.state-init.restart": {
+		"message": "Make sure you are connected to the internet, then restart the app."
+	},
+	"app.error.title.directory-move": {
+		"message": "Could not change app directory"
+	},
+	"app.error.title.minecraft-auth": {
+		"message": "Unable to sign in to Minecraft"
+	},
+	"app.error.title.no-loader": {
+		"message": "No loader selected"
+	},
+	"app.error.title.state-init": {
+		"message": "Error initializing Minekube Launcher"
+	},
+	"app.error.title.unknown": {
+		"message": "An error occurred"
+	},
+	"app.export-modal.archive-name-label": {
+		"message": "Archive name"
+	},
+	"app.export-modal.archive-name-placeholder": {
+		"message": "Archive name"
+	},
+	"app.export-modal.description-placeholder": {
+		"message": "Enter modpack description..."
+	},
+	"app.export-modal.export-button": {
+		"message": "Export"
+	},
+	"app.export-modal.export-complete": {
+		"message": "Export complete"
+	},
+	"app.export-modal.export-complete-description": {
+		"message": "{name} was exported successfully."
+	},
+	"app.export-modal.exporting": {
+		"message": "Exporting instance…"
+	},
+	"app.export-modal.format-label": {
+		"message": "Export format"
+	},
+	"app.export-modal.format.mrpack": {
+		"message": "Modpack (.mrpack)"
+	},
+	"app.export-modal.format.mrpack-description": {
+		"message": "A portable modpack with a manifest and selected configuration files."
+	},
+	"app.export-modal.format.prism": {
+		"message": "Prism Instance (.zip)"
+	},
+	"app.export-modal.format.prism-description": {
+		"message": "A complete copy of the instance folder — mods, configs, worlds, saves and settings — plus instance.cfg and mmc-pack.json, exactly like Prism Launcher exports an instance. It can be imported straight back into Prism Launcher or this launcher."
+	},
+	"app.export-modal.header": {
+		"message": "Export modpack"
+	},
+	"app.export-modal.modpack-name-label": {
+		"message": "Modpack name"
+	},
+	"app.export-modal.modpack-name-placeholder": {
+		"message": "Modpack name"
+	},
+	"app.export-modal.prism-clean-hint": {
+		"message": "Strips everything that belongs to the player, not to the modpack: logs, crash reports, Minecraft sessions, worlds (saves), screenshots, minimap waypoints, saved servers and local account caches. Mods, resource packs, configs, keybinds and all instance settings stay exactly as they are, so the pack is ready to play for whoever receives it."
+	},
+	"app.export-modal.prism-clean-label": {
+		"message": "Export as a clean instance"
+	},
+	"app.export-modal.prism-header": {
+		"message": "Export Prism instance"
+	},
+	"app.export-modal.version-number-label": {
+		"message": "Version number"
+	},
+	"app.export-modal.version-number-placeholder": {
+		"message": "1.0.0"
+	},
+	"app.features-settings.show-jump-in.description": {
+		"message": "Show recently played worlds and instances at the top of the Play page."
+	},
+	"app.features-settings.show-jump-in.title": {
+		"message": "Show Jump in section"
+	},
+	"app.home.jump-back-in.actions.label": {
+		"message": "Instance actions"
+	},
+	"app.home.jump-back-in.edit-instance": {
+		"message": "Edit instance"
+	},
+	"app.home.jump-back-in.instance-locked": {
+		"message": "This instance has been locked"
+	},
+	"app.home.jump-back-in.instance-open": {
+		"message": "Instance is already open"
+	},
+	"app.home.jump-back-in.more-options": {
+		"message": "More options"
+	},
+	"app.home.jump-back-in.never-played": {
+		"message": "Never played"
+	},
+	"app.home.jump-back-in.new-instance": {
+		"message": "New instance"
+	},
+	"app.home.jump-back-in.resize": {
+		"message": "Drag to resize"
+	},
+	"app.home.jump-back-in.title": {
+		"message": "Jump in"
+	},
+	"app.install.phase.downloading_content": {
+		"message": "Downloading content"
+	},
+	"app.install.phase.downloading_minecraft": {
+		"message": "Downloading Minecraft"
+	},
+	"app.install.phase.downloading_pack_file": {
+		"message": "Downloading pack file"
+	},
+	"app.install.phase.extracting_overrides": {
+		"message": "Extracting overrides"
+	},
+	"app.install.phase.finalizing": {
+		"message": "Finalizing"
+	},
+	"app.install.phase.preparing_instance": {
+		"message": "Queued to install"
+	},
+	"app.install.phase.preparing_java": {
+		"message": "Preparing Java"
+	},
+	"app.install.phase.preparing_java.downloading": {
+		"message": "Downloading Java {version}"
+	},
+	"app.install.phase.preparing_java.extracting": {
+		"message": "Extracting Java {version}"
+	},
+	"app.install.phase.preparing_java.fetching-metadata": {
+		"message": "Fetching Java {version}"
+	},
+	"app.install.phase.preparing_java.resolving": {
+		"message": "Preparing Java {version}"
+	},
+	"app.install.phase.preparing_java.validating": {
+		"message": "Validating Java {version}"
+	},
+	"app.install.phase.reading_pack_manifest": {
+		"message": "Reading pack manifest"
+	},
+	"app.install.phase.resolving_loader": {
+		"message": "Resolving loader"
+	},
+	"app.install.phase.resolving_minecraft": {
+		"message": "Resolving Minecraft"
+	},
+	"app.install.phase.resolving_pack": {
+		"message": "Resolving content"
+	},
+	"app.install.phase.rolling_back": {
+		"message": "Rolling back"
+	},
+	"app.install.phase.running_loader_processors": {
+		"message": "Running loader processors"
+	},
+	"app.instance.action.add-content": {
+		"message": "Add content"
+	},
+	"app.instance.action.copy-path": {
+		"message": "Copy path"
+	},
+	"app.instance.action.edit": {
+		"message": "Edit"
+	},
+	"app.instance.action.open-folder": {
+		"message": "Open folder"
+	},
+	"app.instance.action.play": {
+		"message": "Play"
+	},
+	"app.instance.action.stop": {
+		"message": "Stop"
+	},
+	"app.instance.actions.label": {
+		"message": "Instance actions"
+	},
+	"app.instance.add-server.add": {
+		"message": "Add"
+	},
+	"app.instance.add-server.added": {
+		"message": "Added"
+	},
+	"app.instance.add-server.adding": {
+		"message": "Adding..."
+	},
+	"app.instance.add-server.cancel": {
+		"message": "Cancel"
+	},
+	"app.instance.add-server.compatibility-warning": {
+		"message": "This server may not be compatible with all instances."
+	},
+	"app.instance.add-server.search-placeholder": {
+		"message": "Search for an instance"
+	},
+	"app.instance.add-server.title": {
+		"message": "Add server to instance"
+	},
+	"app.instance.card.icon-alt": {
+		"message": "Instance icon"
+	},
+	"app.instance.card.installing": {
+		"message": "Installing..."
+	},
+	"app.instance.card.loading": {
+		"message": "Instance is loading..."
+	},
+	"app.instance.card.never-played": {
+		"message": "Never played"
+	},
+	"app.instance.card.play": {
+		"message": "Play"
+	},
+	"app.instance.card.played": {
+		"message": "Played {relativeTime}"
+	},
+	"app.instance.card.repair": {
+		"message": "Repair"
+	},
+	"app.instance.card.stop": {
+		"message": "Stop"
+	},
+	"app.instance.confirm-delete.admonition-body": {
+		"message": "All data for your instance will be permanently deleted, including your worlds, configs, and all installed content."
+	},
+	"app.instance.confirm-delete.admonition-header": {
+		"message": "This action cannot be undone"
+	},
+	"app.instance.confirm-delete.bulk-admonition-body": {
+		"message": "All data for these {count} instances will be permanently deleted, including their worlds, configs, and all installed content."
+	},
+	"app.instance.confirm-delete.bulk-delete-button": {
+		"message": "Delete {count} instances"
+	},
+	"app.instance.confirm-delete.bulk-header": {
+		"message": "Delete {count} instances"
+	},
+	"app.instance.confirm-delete.delete-button": {
+		"message": "Delete instance"
+	},
+	"app.instance.confirm-delete.header": {
+		"message": "Delete instance"
+	},
+	"app.instance.confirm-delete.instances-label": {
+		"message": "{count, plural, one {Instance} other {Instances ({count})}}"
+	},
+	"app.instance.content.managed-content.modpack-header": {
+		"message": "Modpack content"
+	},
+	"app.instance.content.managed-content.server-header": {
+		"message": "Server content"
+	},
+	"app.instance.editor.back-to-home": {
+		"message": "Back to Home"
+	},
+	"app.instance.editor.game-options.edit": {
+		"message": "Edit game options"
+	},
+	"app.instance.editor.game-options.intro": {
+		"message": "Edit Minecraft video, audio, controls, language and accessibility options from this instance’s options.txt."
+	},
+	"app.instance.editor.game-options.no-options": {
+		"message": "No editable game options have been found yet. Launch Minecraft once to create options.txt, then refresh this page."
+	},
+	"app.instance.editor.group.content": {
+		"message": "Content"
+	},
+	"app.instance.editor.group.instance": {
+		"message": "Instance"
+	},
+	"app.instance.editor.group.settings": {
+		"message": "Settings"
+	},
+	"app.instance.editor.group.system": {
+		"message": "System"
+	},
+	"app.instance.editor.notes.placeholder": {
+		"message": "Write notes about this instance..."
+	},
+	"app.instance.editor.notes.save": {
+		"message": "Save notes"
+	},
+	"app.instance.editor.notes.saved": {
+		"message": "Notes saved"
+	},
+	"app.instance.editor.overview.copy-path": {
+		"message": "Copy path"
+	},
+	"app.instance.editor.overview.created": {
+		"message": "Created"
+	},
+	"app.instance.editor.overview.export": {
+		"message": "Export"
+	},
+	"app.instance.editor.overview.general": {
+		"message": "Name, icon and instance actions"
+	},
+	"app.instance.editor.overview.groups": {
+		"message": "Groups"
+	},
+	"app.instance.editor.overview.groups.description": {
+		"message": "Put this instance into groups to organise your library, just like in Prism."
+	},
+	"app.instance.editor.overview.groups.none": {
+		"message": "No groups yet. Create groups from the library page."
+	},
+	"app.instance.editor.overview.java": {
+		"message": "Java"
+	},
+	"app.instance.editor.overview.java.auto": {
+		"message": "Automatic (global)"
+	},
+	"app.instance.editor.overview.last-played": {
+		"message": "Last played"
+	},
+	"app.instance.editor.overview.loader": {
+		"message": "Loader"
+	},
+	"app.instance.editor.overview.memory": {
+		"message": "Memory"
+	},
+	"app.instance.editor.overview.memory.global": {
+		"message": "{maximum} MB (global)"
+	},
+	"app.instance.editor.overview.memory.instance": {
+		"message": "{maximum} MB"
+	},
+	"app.instance.editor.overview.memory.instance-min": {
+		"message": "{minimum}–{maximum} MB"
+	},
+	"app.instance.editor.overview.minecraft": {
+		"message": "Minecraft"
+	},
+	"app.instance.editor.overview.never-played": {
+		"message": "Never played"
+	},
+	"app.instance.editor.overview.open-folder": {
+		"message": "Open folder"
+	},
+	"app.instance.editor.overview.path": {
+		"message": "Instance folder"
+	},
+	"app.instance.editor.overview.path-copied": {
+		"message": "Instance path copied"
+	},
+	"app.instance.editor.overview.play": {
+		"message": "Play"
+	},
+	"app.instance.editor.overview.playtime": {
+		"message": "Time played"
+	},
+	"app.instance.editor.overview.playtime.value": {
+		"message": "{hours} h {minutes} min"
+	},
+	"app.instance.editor.overview.shortcut": {
+		"message": "Create shortcut"
+	},
+	"app.instance.editor.overview.shortcut.created": {
+		"message": "Shortcut created"
+	},
+	"app.instance.editor.overview.stop": {
+		"message": "Stop"
+	},
+	"app.instance.editor.overview.summary": {
+		"message": "Summary"
+	},
+	"app.instance.editor.overview.vanilla": {
+		"message": "Vanilla"
+	},
+	"app.instance.editor.play": {
+		"message": "Play"
+	},
+	"app.instance.editor.section.behavior": {
+		"message": "Interface"
+	},
+	"app.instance.editor.section.behavior.description": {
+		"message": "Choose which sections are shown on the instance page."
+	},
+	"app.instance.editor.section.datapacks": {
+		"message": "Data packs"
+	},
+	"app.instance.editor.section.datapacks.description": {
+		"message": "Manage the data packs installed in this instance."
+	},
+	"app.instance.editor.section.files": {
+		"message": "Files"
+	},
+	"app.instance.editor.section.files.description": {
+		"message": "Browse and edit the files inside this instance, like in a file manager."
+	},
+	"app.instance.editor.section.game-options": {
+		"message": "Game options"
+	},
+	"app.instance.editor.section.game-options.description": {
+		"message": "Edit Minecraft video, sound, controls and other options for this instance."
+	},
+	"app.instance.editor.section.hooks": {
+		"message": "Launch commands"
+	},
+	"app.instance.editor.section.hooks.description": {
+		"message": "Run custom commands before launch, wrap the game process, or after exit."
+	},
+	"app.instance.editor.section.java": {
+		"message": "Java & memory"
+	},
+	"app.instance.editor.section.java.description": {
+		"message": "Configure Java, minimum and maximum memory, launch arguments, and environment variables for this instance."
+	},
+	"app.instance.editor.section.logs": {
+		"message": "Logs & console"
+	},
+	"app.instance.editor.section.logs.description": {
+		"message": "Live console output and saved log files of this instance."
+	},
+	"app.instance.editor.section.mods": {
+		"message": "Mods"
+	},
+	"app.instance.editor.section.mods.description": {
+		"message": "Manage the mods installed in this instance."
+	},
+	"app.instance.editor.section.notes": {
+		"message": "Notes"
+	},
+	"app.instance.editor.section.notes.description": {
+		"message": "Keep private notes about this instance. Notes stay on this device."
+	},
+	"app.instance.editor.section.overview": {
+		"message": "Overview"
+	},
+	"app.instance.editor.section.overview.description": {
+		"message": "Summary, groups, name, icon and the main actions for this instance."
+	},
+	"app.instance.editor.section.resourcepacks": {
+		"message": "Resource packs"
+	},
+	"app.instance.editor.section.resourcepacks.description": {
+		"message": "Manage the resource packs installed in this instance."
+	},
+	"app.instance.editor.section.screenshots": {
+		"message": "Screenshots"
+	},
+	"app.instance.editor.section.screenshots.description": {
+		"message": "Browse the screenshots taken in this instance."
+	},
+	"app.instance.editor.section.shaders": {
+		"message": "Shader packs"
+	},
+	"app.instance.editor.section.shaders.description": {
+		"message": "Manage the shader packs installed in this instance."
+	},
+	"app.instance.editor.section.tools": {
+		"message": "Files & tools"
+	},
+	"app.instance.editor.section.tools.description": {
+		"message": "Open the instance folder, copy its path or inspect logs, worlds and files."
+	},
+	"app.instance.editor.section.version": {
+		"message": "Version"
+	},
+	"app.instance.editor.section.version.description": {
+		"message": "Minecraft version and mod loader of this local instance."
+	},
+	"app.instance.editor.section.window": {
+		"message": "Window"
+	},
+	"app.instance.editor.section.window.description": {
+		"message": "Set a per-instance resolution and fullscreen preference."
+	},
+	"app.instance.editor.section.worlds": {
+		"message": "Worlds & servers"
+	},
+	"app.instance.editor.section.worlds.description": {
+		"message": "Manage singleplayer worlds and multiplayer servers of this instance."
+	},
+	"app.instance.editor.stop": {
+		"message": "Stop"
+	},
+	"app.instance.editor.title": {
+		"message": "Edit instance"
+	},
+	"app.instance.editor.tools.copied": {
+		"message": "Instance path copied"
+	},
+	"app.instance.editor.tools.files": {
+		"message": "Manage files"
+	},
+	"app.instance.editor.tools.folder": {
+		"message": "Open instance folder"
+	},
+	"app.instance.editor.tools.logs": {
+		"message": "View console and logs"
+	},
+	"app.instance.editor.tools.path": {
+		"message": "Copy instance path"
+	},
+	"app.instance.editor.tools.screenshots": {
+		"message": "View screenshots"
+	},
+	"app.instance.editor.tools.worlds": {
+		"message": "Manage worlds"
+	},
+	"app.instance.editor.version.applied": {
+		"message": "Version changed"
+	},
+	"app.instance.editor.version.applied.description": {
+		"message": "The instance now uses Minecraft {gameVersion} with {loader}."
+	},
+	"app.instance.editor.version.apply": {
+		"message": "Apply and reinstall"
+	},
+	"app.instance.editor.version.applying": {
+		"message": "Applying…"
+	},
+	"app.instance.editor.version.change": {
+		"message": "Change version"
+	},
+	"app.instance.editor.version.component": {
+		"message": "Component"
+	},
+	"app.instance.editor.version.component-version": {
+		"message": "Version"
+	},
+	"app.instance.editor.version.components": {
+		"message": "Components"
+	},
+	"app.instance.editor.version.components.description": {
+		"message": "This instance is fully local. Changing the Minecraft version or loader reinstalls the game files in this instance only — your worlds and settings stay in place."
+	},
+	"app.instance.editor.version.game-version": {
+		"message": "Minecraft version"
+	},
+	"app.instance.editor.version.java": {
+		"message": "Recommended Java"
+	},
+	"app.instance.editor.version.linked.description": {
+		"message": "The link only records where the content originally came from. You can detach it and keep everything installed — the instance then behaves as a fully local Prism-style instance and will no longer be updated as a modpack."
+	},
+	"app.instance.editor.version.linked.title": {
+		"message": "This instance is still linked to a modpack"
+	},
+	"app.instance.editor.version.loader": {
+		"message": "Mod loader"
+	},
+	"app.instance.editor.version.loader-version": {
+		"message": "{loader} version"
+	},
+	"app.instance.editor.version.minecraft": {
+		"message": "Minecraft"
+	},
+	"app.instance.editor.version.platform": {
+		"message": "Loader"
+	},
+	"app.instance.editor.version.repair": {
+		"message": "Repair installation"
+	},
+	"app.instance.editor.version.repair.button": {
+		"message": "Repair"
+	},
+	"app.instance.editor.version.repair.description": {
+		"message": "Re-downloads and verifies the Minecraft and loader files of this instance without touching worlds, mods or settings."
+	},
+	"app.instance.editor.version.reset": {
+		"message": "Reset changes"
+	},
+	"app.instance.editor.version.search": {
+		"message": "Search versions…"
+	},
+	"app.instance.editor.version.show-snapshots": {
+		"message": "Show snapshots and pre-releases"
+	},
+	"app.instance.editor.version.unlink": {
+		"message": "Detach and keep content"
+	},
+	"app.instance.editor.version.unlinked": {
+		"message": "Instance detached"
+	},
+	"app.instance.editor.version.vanilla": {
+		"message": "None (Vanilla)"
+	},
+	"app.instance.editor.version.warning": {
+		"message": "Changing the Minecraft version or loader can make existing mods incompatible. Mods that do not support the new version will fail to load until you update or remove them in the Mods section."
+	},
+	"app.instance.info.close": {
+		"message": "Close"
+	},
+	"app.instance.info.edit": {
+		"message": "Edit instance"
+	},
+	"app.instance.info.last-played": {
+		"message": "Last played"
+	},
+	"app.instance.info.loader": {
+		"message": "Mod loader"
+	},
+	"app.instance.info.memory": {
+		"message": "Memory"
+	},
+	"app.instance.info.memory.global": {
+		"message": "{maximum} MB (global)"
+	},
+	"app.instance.info.memory.instance": {
+		"message": "{maximum} MB"
+	},
+	"app.instance.info.memory.instance-min": {
+		"message": "{minimum}–{maximum} MB"
+	},
+	"app.instance.info.minecraft": {
+		"message": "Minecraft"
+	},
+	"app.instance.info.never-played": {
+		"message": "Never"
+	},
+	"app.instance.info.playtime": {
+		"message": "Time played"
+	},
+	"app.instance.info.playtime.value": {
+		"message": "{hours} h {minutes} min"
+	},
+	"app.instance.info.title": {
+		"message": "Instance info"
+	},
+	"app.instance.logs.delete-running-log": {
+		"message": "latest.log can’t be deleted while the instance is running"
+	},
+	"app.instance.modpack-already-installed.body": {
+		"message": "This modpack is already installed in the <bold>{instanceName}</bold> instance. Are you sure you want to duplicate it?"
+	},
+	"app.instance.modpack-already-installed.create": {
+		"message": "Create"
+	},
+	"app.instance.modpack-already-installed.header": {
+		"message": "Modpack already installed"
+	},
+	"app.instance.modpack-already-installed.instance": {
+		"message": "Instance"
+	},
+	"app.instance.mods.bulk-update.downloading-projects": {
+		"message": "Downloading {current, number}/{total, number} projects..."
+	},
+	"app.instance.mods.bulk-update.finishing": {
+		"message": "Finishing update..."
+	},
+	"app.instance.mods.bulk-update.resolving-versions": {
+		"message": "Resolving versions..."
+	},
+	"app.instance.mods.content-type-project": {
+		"message": "project"
+	},
+	"app.instance.mods.freeze-content": {
+		"message": "Freeze version"
+	},
+	"app.instance.mods.locked-content": {
+		"message": "Content in locked instances cannot be changed."
+	},
+	"app.instance.mods.project-was-added": {
+		"message": "\"{name}\" was added"
+	},
+	"app.instance.mods.projects-were-added": {
+		"message": "{count} projects were added"
+	},
+	"app.instance.mods.share-text": {
+		"message": "Check out the projects I'm using in my modpack!"
+	},
+	"app.instance.mods.share-title": {
+		"message": "Sharing modpack content"
+	},
+	"app.instance.mods.successfully-uploaded": {
+		"message": "Successfully uploaded"
+	},
+	"app.instance.mods.unfreeze-content": {
+		"message": "Unfreeze version"
+	},
+	"app.instance.navigation.back-to-home": {
+		"message": "Back to Home"
+	},
+	"app.instance.shortcut.created": {
+		"message": "Shortcut created"
+	},
+	"app.instance.shortcut.creation-error": {
+		"message": "Error creating shortcut"
+	},
+	"app.instance.tab.content": {
+		"message": "Content"
+	},
+	"app.instance.tab.files": {
+		"message": "Files"
+	},
+	"app.instance.tab.logs": {
+		"message": "Logs"
+	},
+	"app.instance.tab.screenshots": {
+		"message": "Screenshots"
+	},
+	"app.instance.tab.worlds": {
+		"message": "Worlds"
+	},
+	"app.instance.worlds.add-server": {
+		"message": "Add server"
+	},
+	"app.instance.worlds.browse-servers": {
+		"message": "Browse servers"
+	},
+	"app.instance.worlds.delete-world-modal.delete-button": {
+		"message": "Delete world"
+	},
+	"app.instance.worlds.delete-world-modal.title": {
+		"message": "Delete world"
+	},
+	"app.instance.worlds.delete-world-modal.warning-body": {
+		"message": "This world will be permanently deleted from this instance. This action cannot be undone."
+	},
+	"app.instance.worlds.delete-world-modal.warning-header": {
+		"message": "Deleting {name}"
+	},
+	"app.instance.worlds.filter-modded": {
+		"message": "Modded"
+	},
+	"app.instance.worlds.filter-offline": {
+		"message": "Offline"
+	},
+	"app.instance.worlds.filter-online": {
+		"message": "Online"
+	},
+	"app.instance.worlds.filter-vanilla": {
+		"message": "Vanilla"
+	},
+	"app.instance.worlds.no-worlds-description": {
+		"message": "Add a server or browse to get started"
+	},
+	"app.instance.worlds.no-worlds-heading": {
+		"message": "No servers or worlds added"
+	},
+	"app.instance.worlds.refreshing": {
+		"message": "Refreshing..."
+	},
+	"app.instance.worlds.remove-server-modal.remove-button": {
+		"message": "Remove server"
+	},
+	"app.instance.worlds.remove-server-modal.remove-everywhere": {
+		"message": "Remove everywhere"
+	},
+	"app.instance.worlds.remove-server-modal.remove-here": {
+		"message": "Remove here"
+	},
+	"app.instance.worlds.remove-server-modal.synced-description": {
+		"message": "You can remove it from just this instance or from all synced instances. Removing it from only this instance will enable overrides, and this instance will no longer receive synced server changes."
+	},
+	"app.instance.worlds.remove-server-modal.synced-header": {
+		"message": "This server is synced"
+	},
+	"app.instance.worlds.remove-server-modal.title": {
+		"message": "Remove server"
+	},
+	"app.instance.worlds.remove-server-modal.warning-body": {
+		"message": "This server will be removed from your server list and from the in-game server list. You can add it again later if you know the address."
+	},
+	"app.instance.worlds.remove-server-modal.warning-header": {
+		"message": "Removing {name}"
+	},
+	"app.instance.worlds.search-worlds-placeholder": {
+		"message": "Search {count} worlds..."
+	},
+	"app.java-detection.cancel": {
+		"message": "Cancel"
+	},
+	"app.java-detection.columns.actions": {
+		"message": "Actions"
+	},
+	"app.java-detection.columns.path": {
+		"message": "Path"
+	},
+	"app.java-detection.columns.version": {
+		"message": "Version"
+	},
+	"app.java-detection.no-installations-found": {
+		"message": "No Java installations found."
+	},
+	"app.java-detection.select": {
+		"message": "Select"
+	},
+	"app.java-detection.selected": {
+		"message": "Selected"
+	},
+	"app.java-detection.title": {
+		"message": "Select Java installation"
+	},
+	"app.java-selector.already-installed": {
+		"message": "Already installed"
+	},
+	"app.java-selector.browse": {
+		"message": "Browse"
+	},
+	"app.java-selector.detect": {
+		"message": "Detect"
+	},
+	"app.java-selector.install-recommended": {
+		"message": "Install recommended"
+	},
+	"app.java-selector.installing": {
+		"message": "Installing..."
+	},
+	"app.java-selector.path.placeholder": {
+		"message": "/path/to/java"
+	},
+	"app.java-selector.test-installation": {
+		"message": "Test Java installation"
+	},
+	"app.launch-overlay.aria": {
+		"message": "Minecraft is starting"
+	},
+	"app.launch-overlay.hint": {
+		"message": "Keep the launcher open until the game starts"
+	},
+	"app.launch-overlay.stage.assembling": {
+		"message": "Assembling"
+	},
+	"app.launch-overlay.stage.launching": {
+		"message": "Launching"
+	},
+	"app.launch-overlay.stage.loading": {
+		"message": "Loading"
+	},
+	"app.launch-overlay.stage.preparing": {
+		"message": "Preparing"
+	},
+	"app.launch-overlay.starting": {
+		"message": "Starting Minecraft"
+	},
+	"app.launch-overlay.status": {
+		"message": "{stage} — {percent}% complete"
+	},
+	"app.launch-overlay.tip.account": {
+		"message": "Signing in to Minecraft…"
+	},
+	"app.launch-overlay.tip.environment": {
+		"message": "Preparing environment…"
+	},
+	"app.launch-overlay.tip.finish": {
+		"message": "Finishing start-up…"
+	},
+	"app.launch-overlay.tip.jvm": {
+		"message": "Booting the JVM…"
+	},
+	"app.launch-overlay.tip.mods": {
+		"message": "Loading mods…"
+	},
+	"app.launch-overlay.tip.shaders": {
+		"message": "Configuring shaders…"
+	},
+	"app.launch-overlay.tip.terrain": {
+		"message": "Generating terrain…"
+	},
+	"app.launch-overlay.tip.textures": {
+		"message": "Uploading textures…"
+	},
+	"app.launch-overlay.tip.window": {
+		"message": "Opening the game window…"
+	},
+	"app.launch-overlay.tip.world": {
+		"message": "Preparing the world…"
+	},
+	"app.library.actions.label": {
+		"message": "Library actions"
+	},
+	"app.library.context-menu.create-instance": {
+		"message": "New instance"
+	},
+	"app.library.filter.add": {
+		"message": "Add filter"
+	},
+	"app.library.filter.clear": {
+		"message": "Clear filters"
+	},
+	"app.library.filter.game-version": {
+		"message": "Game version"
+	},
+	"app.library.filter.instance-type": {
+		"message": "Instance type"
+	},
+	"app.library.filter.instance-type.custom": {
+		"message": "Custom"
+	},
+	"app.library.filter.instance-type.modpack": {
+		"message": "Modpack"
+	},
+	"app.library.filter.instance-type.server": {
+		"message": "Server"
+	},
+	"app.library.filter.label": {
+		"message": "Filter by"
+	},
+	"app.library.filter.loader": {
+		"message": "Loader"
+	},
+	"app.library.group-by.custom-group": {
+		"message": "Custom group"
+	},
+	"app.library.group-by.game-version": {
+		"message": "Game version"
+	},
+	"app.library.group-by.instance-type": {
+		"message": "Instance type"
+	},
+	"app.library.group-by.label": {
+		"message": "Group by"
+	},
+	"app.library.group-by.loader": {
+		"message": "Loader"
+	},
+	"app.library.group-by.none": {
+		"message": "No grouping"
+	},
+	"app.library.group.actions.label": {
+		"message": "Group actions"
+	},
+	"app.library.group.collapse": {
+		"message": "Collapse group"
+	},
+	"app.library.group.context-menu.add-to-group": {
+		"message": "Add to group"
+	},
+	"app.library.group.create": {
+		"message": "Create group"
+	},
+	"app.library.group.create.cancel": {
+		"message": "Cancel"
+	},
+	"app.library.group.delete": {
+		"message": "Delete group"
+	},
+	"app.library.group.delete-description": {
+		"message": "Instances in this group will be ungrouped."
+	},
+	"app.library.group.edit-name": {
+		"message": "Edit group name"
+	},
+	"app.library.group.empty": {
+		"message": "Drag and drop to add instances."
+	},
+	"app.library.group.expand": {
+		"message": "Expand group"
+	},
+	"app.library.group.favorites": {
+		"message": "Favorites"
+	},
+	"app.library.group.instance.add": {
+		"message": "Add"
+	},
+	"app.library.group.instance.added": {
+		"message": "Added"
+	},
+	"app.library.group.instances-modal.add": {
+		"message": "Add"
+	},
+	"app.library.group.instances-modal.added": {
+		"message": "Added"
+	},
+	"app.library.group.instances-modal.no-instances-found": {
+		"message": "No instances found"
+	},
+	"app.library.group.instances-modal.search-placeholder": {
+		"message": "Search instance"
+	},
+	"app.library.group.instances-modal.title": {
+		"message": "Add instances to \"{groupName}\""
+	},
+	"app.library.group.move-down": {
+		"message": "Move group down"
+	},
+	"app.library.group.move-up": {
+		"message": "Move group up"
+	},
+	"app.library.group.name": {
+		"message": "Group name"
+	},
+	"app.library.group.name-empty": {
+		"message": "Group names cannot be empty."
+	},
+	"app.library.group.name-placeholder": {
+		"message": "Enter group name"
+	},
+	"app.library.group.name-reserved": {
+		"message": "\"None\" is reserved and cannot be used as a group name."
+	},
+	"app.library.group.name-too-long": {
+		"message": "Group names cannot be longer than {maxLength} characters."
+	},
+	"app.library.group.new": {
+		"message": "New group"
+	},
+	"app.library.group.no-instances-found": {
+		"message": "No instances found"
+	},
+	"app.library.group.rename-failed": {
+		"message": "Unable to rename group"
+	},
+	"app.library.group.search-instance": {
+		"message": "Search instance"
+	},
+	"app.library.group.ungrouped": {
+		"message": "Ungrouped"
+	},
+	"app.library.group.unknown": {
+		"message": "Unknown group"
+	},
+	"app.library.instance.action.add-content": {
+		"message": "Add content"
+	},
+	"app.library.instance.action.add-to-favorites": {
+		"message": "Add to favorites"
+	},
+	"app.library.instance.action.copy-path": {
+		"message": "Copy path"
+	},
+	"app.library.instance.action.delete": {
+		"message": "Delete"
+	},
+	"app.library.instance.action.duplicate": {
+		"message": "Duplicate instance"
+	},
+	"app.library.instance.action.edit-instance": {
+		"message": "Edit instance"
+	},
+	"app.library.instance.action.open-folder": {
+		"message": "Open folder"
+	},
+	"app.library.instance.action.play": {
+		"message": "Play"
+	},
+	"app.library.instance.action.remove-from-favorites": {
+		"message": "Remove from favorites"
+	},
+	"app.library.instance.action.remove-from-group": {
+		"message": "Remove from group"
+	},
+	"app.library.instance.action.stop": {
+		"message": "Stop"
+	},
+	"app.library.instance.actions.label": {
+		"message": "Instance actions"
+	},
+	"app.library.instance.deselect": {
+		"message": "Deselect instance"
+	},
+	"app.library.instance.deselect-with-name": {
+		"message": "Deselect {name}"
+	},
+	"app.library.instance.installing": {
+		"message": "Installing..."
+	},
+	"app.library.instance.loading": {
+		"message": "Instance is loading..."
+	},
+	"app.library.instance.new": {
+		"message": "New instance"
+	},
+	"app.library.instance.play": {
+		"message": "Play"
+	},
+	"app.library.instance.repair": {
+		"message": "Repair"
+	},
+	"app.library.instance.select": {
+		"message": "Select instance"
+	},
+	"app.library.instance.select-with-name": {
+		"message": "Select {name}"
+	},
+	"app.library.instance.stop": {
+		"message": "Stop"
+	},
+	"app.library.search.no-results.title": {
+		"message": "No instances match your search."
+	},
+	"app.library.search.placeholder": {
+		"message": "Search"
+	},
+	"app.library.selection.aria-label": {
+		"message": "Selected instances"
+	},
+	"app.library.selection.deleting": {
+		"message": "Deleting selected instances"
+	},
+	"app.library.selection.new-group": {
+		"message": "New group"
+	},
+	"app.library.selection.remove-from-group": {
+		"message": "Remove from group"
+	},
+	"app.library.selection.selected-count": {
+		"message": "{count} selected"
+	},
+	"app.library.sort.date-created": {
+		"message": "Date created"
+	},
+	"app.library.sort.date-modified": {
+		"message": "Date modified"
+	},
+	"app.library.sort.game-version": {
+		"message": "Game version"
+	},
+	"app.library.sort.hours-played": {
+		"message": "Hours played"
+	},
+	"app.library.sort.label": {
+		"message": "Sort by"
+	},
+	"app.library.sort.last-played": {
+		"message": "Last played"
+	},
+	"app.library.sort.loader": {
+		"message": "Loader"
+	},
+	"app.library.sort.name": {
+		"message": "Name"
+	},
+	"app.library.title": {
+		"message": "Library"
+	},
+	"app.link-confirm.cancel": {
+		"message": "Cancel"
+	},
+	"app.link-confirm.from": {
+		"message": "This request came from outside the launcher — a link or a file you opened."
+	},
+	"app.link-confirm.install": {
+		"message": "Install"
+	},
+	"app.link-confirm.pack.text": {
+		"message": "“{name}” will be installed as a new instance."
+	},
+	"app.link-confirm.pack.title": {
+		"message": "Install this modpack?"
+	},
+	"app.link-confirm.play": {
+		"message": "Play"
+	},
+	"app.link-confirm.server.text": {
+		"message": "A link asks to join {name}. Its content will be installed if needed, then the game starts."
+	},
+	"app.link-confirm.server.title": {
+		"message": "Play on this server?"
+	},
+	"app.link-confirm.unsupported.text": {
+		"message": "Shared instance invites are not available in Minekube Launcher."
+	},
+	"app.link-confirm.unsupported.title": {
+		"message": "Link not supported"
+	},
+	"app.mod-scan.advice": {
+		"message": "If you did not download these mods from a source you trust, delete them from the instance’s mods folder and change your Microsoft password. Suspicious does not always mean harmful — some legitimate mods do similar things."
+	},
+	"app.mod-scan.cancel": {
+		"message": "Don’t start"
+	},
+	"app.mod-scan.danger": {
+		"message": "Dangerous"
+	},
+	"app.mod-scan.header": {
+		"message": "Minekube Shield found risky mods"
+	},
+	"app.mod-scan.intro": {
+		"message": "Before starting the game, the mods in this instance were checked for known malware. These files look risky:"
+	},
+	"app.mod-scan.launch-anyway": {
+		"message": "Start anyway"
+	},
+	"app.mod-scan.open-folder": {
+		"message": "Open mods folder"
+	},
+	"app.mod-scan.reason.credential-theft": {
+		"message": "Reads saved logins or tokens and can send them to a webhook or bot"
+	},
+	"app.mod-scan.reason.embedded-executable": {
+		"message": "Carries a Windows program or script inside the mod"
+	},
+	"app.mod-scan.reason.exfiltration": {
+		"message": "Can send data to a Discord webhook or Telegram bot"
+	},
+	"app.mod-scan.reason.hidden-commands": {
+		"message": "Runs hidden PowerShell or command-line scripts"
+	},
+	"app.mod-scan.reason.known-malware": {
+		"message": "Contains code of known Minecraft malware (Fractureiser)"
+	},
+	"app.mod-scan.reason.reads-credentials": {
+		"message": "Reads saved logins, browser data or launcher accounts"
+	},
+	"app.mod-scan.suspicious": {
+		"message": "Suspicious"
+	},
+	"app.modal.install-to-play.external-files-dont-install": {
+		"message": "Don't install"
+	},
+	"app.modal.install-to-play.header": {
+		"message": "Install to play"
+	},
+	"app.modal.install-to-play.install-anyway": {
+		"message": "Install anyway"
+	},
+	"app.modal.install-to-play.install-button": {
+		"message": "Install"
+	},
+	"app.modal.install-to-play.managed-content.modpack-header": {
+		"message": "Modpack content"
+	},
+	"app.modal.install-to-play.mod-count": {
+		"message": "{count, plural, one {# mod} other {# mods}}"
+	},
+	"app.modal.install-to-play.required-content": {
+		"message": "Required content"
+	},
+	"app.modal.install-to-play.required-content-warning": {
+		"message": "This server needs extra content to run. It will be downloaded from the online library and installed into a new instance."
+	},
+	"app.modal.install-to-play.reviewed-files": {
+		"message": "Files that aren't published to the online library aren't reviewed."
+	},
+	"app.modal.install-to-play.unknown-files-description": {
+		"message": "This server modpack contains files that aren’t published in the online library. We strongly recommend only installing files from sources you trust."
+	},
+	"app.modal.install-to-play.unknown-files-warning": {
+		"message": "Unknown files warning"
+	},
+	"app.modal.install-to-play.unrecognized-files": {
+		"message": "Unrecognized files"
+	},
+	"app.modal.install-to-play.view-contents": {
+		"message": "View contents"
+	},
+	"app.modal.update-to-play.header": {
+		"message": "Update to play"
+	},
+	"app.modal.update-to-play.removed": {
+		"message": "Removed"
+	},
+	"app.modal.update-to-play.server-modpack-unknown-files-description": {
+		"message": "This server modpack update contains files that aren’t published in the online library. We strongly recommend only installing files from sources you trust."
+	},
+	"app.modal.update-to-play.update-required-description": {
+		"message": "An update is required to play {name}. Please update to latest version to launch the game."
+	},
+	"app.nav.create-new-instance": {
+		"message": "Create new instance"
+	},
+	"app.nav.home": {
+		"message": "Home"
+	},
+	"app.nav.screenshots": {
+		"message": "Screenshots"
+	},
+	"app.navigation.go-back": {
+		"message": "Go back"
+	},
+	"app.navigation.go-forward": {
+		"message": "Go forward"
+	},
+	"app.notification.warning": {
+		"message": "Warning"
+	},
+	"app.project.actions.label": {
+		"message": "Project actions"
+	},
+	"app.project.coming-soon": {
+		"message": "Coming soon"
+	},
+	"app.project.install-button.already-installed": {
+		"message": "This project is already installed"
+	},
+	"app.project.install-button.switch-version": {
+		"message": "Switch version"
+	},
+	"app.project.install-context.back-to-browse": {
+		"message": "Back to discover"
+	},
+	"app.project.install-context.back-to-home": {
+		"message": "Back to Home"
+	},
+	"app.project.load-error": {
+		"message": "Project data could not be loaded."
+	},
+	"app.project.more-options": {
+		"message": "More options"
+	},
+	"app.project.tab.description": {
+		"message": "Description"
+	},
+	"app.project.tab.gallery": {
+		"message": "Gallery"
+	},
+	"app.project.tab.versions": {
+		"message": "Versions"
+	},
+	"app.project.version.all-versions": {
+		"message": "All versions"
+	},
+	"app.project.version.download-in-browser": {
+		"message": "Download in browser"
+	},
+	"app.project.version.installing": {
+		"message": "Installing"
+	},
+	"app.project.versions.already-installed": {
+		"message": "Already installed"
+	},
+	"app.restarting": {
+		"message": "Restarting..."
+	},
+	"app.route-view.error.body": {
+		"message": "The page failed to load. Going back or retrying usually fixes it; the rest of the launcher keeps working."
+	},
+	"app.route-view.error.header": {
+		"message": "This page could not be displayed"
+	},
+	"app.route-view.error.retry": {
+		"message": "Try again"
+	},
+	"app.screenshots.copied": {
+		"message": "Copied"
+	},
+	"app.screenshots.copy": {
+		"message": "Copy image"
+	},
+	"app.screenshots.delete-description": {
+		"message": "Permanently delete {name}? This action cannot be undone."
+	},
+	"app.screenshots.delete-success": {
+		"message": "Screenshot deleted"
+	},
+	"app.screenshots.delete-title": {
+		"message": "Delete screenshot"
+	},
+	"app.screenshots.deselect": {
+		"message": "Deselect {name}"
+	},
+	"app.screenshots.edit": {
+		"message": "Edit screenshot"
+	},
+	"app.screenshots.empty-description": {
+		"message": "Screenshots you take in-game will appear here."
+	},
+	"app.screenshots.empty-heading": {
+		"message": "No screenshots yet"
+	},
+	"app.screenshots.error-heading": {
+		"message": "Failed to load screenshots"
+	},
+	"app.screenshots.group-by": {
+		"message": "Group by"
+	},
+	"app.screenshots.group.all-screenshots": {
+		"message": "All screenshots"
+	},
+	"app.screenshots.group.collapse": {
+		"message": "Collapse group"
+	},
+	"app.screenshots.group.custom": {
+		"message": "Custom group"
+	},
+	"app.screenshots.group.date": {
+		"message": "Date"
+	},
+	"app.screenshots.group.delete": {
+		"message": "Delete group"
+	},
+	"app.screenshots.group.delete-description": {
+		"message": "Screenshots in this group will become ungrouped."
+	},
+	"app.screenshots.group.edit": {
+		"message": "Edit group name"
+	},
+	"app.screenshots.group.empty": {
+		"message": "Drag and drop to add screenshots."
+	},
+	"app.screenshots.group.expand": {
+		"message": "Expand group"
+	},
+	"app.screenshots.group.instance": {
+		"message": "Instance"
+	},
+	"app.screenshots.group.new": {
+		"message": "New group"
+	},
+	"app.screenshots.group.none": {
+		"message": "No grouping"
+	},
+	"app.screenshots.group.this-month": {
+		"message": "This month"
+	},
+	"app.screenshots.group.this-week": {
+		"message": "This week"
+	},
+	"app.screenshots.group.today": {
+		"message": "Today"
+	},
+	"app.screenshots.group.ungrouped": {
+		"message": "Ungrouped"
+	},
+	"app.screenshots.group.yesterday": {
+		"message": "Yesterday"
+	},
+	"app.screenshots.heading": {
+		"message": "Screenshots"
+	},
+	"app.screenshots.more-actions": {
+		"message": "More actions"
+	},
+	"app.screenshots.no-results-description": {
+		"message": "Try a different search or filter."
+	},
+	"app.screenshots.no-results-heading": {
+		"message": "No matching screenshots"
+	},
+	"app.screenshots.preview.instance-and-date": {
+		"message": "{instance} · {date}"
+	},
+	"app.screenshots.search": {
+		"message": "Search"
+	},
+	"app.screenshots.select": {
+		"message": "Select {name}"
+	},
+	"app.screenshots.selection.aria-label": {
+		"message": "Selected screenshots"
+	},
+	"app.screenshots.selection.delete-description": {
+		"message": "Delete {count, plural, one {# screenshot} other {# screenshots}}? This action cannot be undone."
+	},
+	"app.screenshots.selection.delete-success": {
+		"message": "{count, plural, one {# screenshot deleted} other {# screenshots deleted}}"
+	},
+	"app.screenshots.selection.delete-title": {
+		"message": "Delete selected screenshots"
+	},
+	"app.screenshots.selection.export-zip": {
+		"message": "Export ZIP"
+	},
+	"app.screenshots.selection.global-export-filename": {
+		"message": "Minekube screenshots.zip"
+	},
+	"app.screenshots.selection.instance-export-filename": {
+		"message": "{instance} screenshots.zip"
+	},
+	"app.screenshots.selection.remove-from-group": {
+		"message": "Remove from group"
+	},
+	"app.screenshots.selection.selected-count": {
+		"message": "{count} selected"
+	},
+	"app.screenshots.selection.zip-archive": {
+		"message": "ZIP archive"
+	},
+	"app.screenshots.show-in-folder": {
+		"message": "Show in folder"
+	},
+	"app.screenshots.sort-by": {
+		"message": "Sort by"
+	},
+	"app.screenshots.sort.name": {
+		"message": "Name"
+	},
+	"app.screenshots.sort.newest": {
+		"message": "Newest"
+	},
+	"app.screenshots.sort.oldest": {
+		"message": "Oldest"
+	},
+	"app.settings.default-instance-options.environment-variables.description": {
+		"message": "Environment variables set when launching an instance."
+	},
+	"app.settings.default-instance-options.environment-variables.placeholder": {
+		"message": "Enter environment variables..."
+	},
+	"app.settings.default-instance-options.environment-variables.title": {
+		"message": "Environment variables"
+	},
+	"app.settings.default-instance-options.fullscreen.description": {
+		"message": "Start instances in fullscreen by updating their options.txt file."
+	},
+	"app.settings.default-instance-options.fullscreen.title": {
+		"message": "Fullscreen"
+	},
+	"app.settings.default-instance-options.height.description": {
+		"message": "The height of the game window when launched."
+	},
+	"app.settings.default-instance-options.height.placeholder": {
+		"message": "Enter height..."
+	},
+	"app.settings.default-instance-options.height.title": {
+		"message": "Height"
+	},
+	"app.settings.default-instance-options.java-and-memory.title": {
+		"message": "Java and memory"
+	},
+	"app.settings.default-instance-options.java-arguments.description": {
+		"message": "Arguments passed to Java when launching an instance."
+	},
+	"app.settings.default-instance-options.java-arguments.placeholder": {
+		"message": "Enter Java arguments..."
+	},
+	"app.settings.default-instance-options.java-arguments.title": {
+		"message": "Java arguments"
+	},
+	"app.settings.default-instance-options.launch-hooks.title": {
+		"message": "Launch hooks"
+	},
+	"app.settings.default-instance-options.memory-allocation.description": {
+		"message": "Maximum memory available to each instance."
+	},
+	"app.settings.default-instance-options.memory-allocation.title": {
+		"message": "Memory allocation"
+	},
+	"app.settings.default-instance-options.post-exit-hook.description": {
+		"message": "Runs after the game closes."
+	},
+	"app.settings.default-instance-options.post-exit-hook.placeholder": {
+		"message": "Enter post-exit command..."
+	},
+	"app.settings.default-instance-options.post-exit-hook.title": {
+		"message": "Post-exit hook"
+	},
+	"app.settings.default-instance-options.pre-launch-hook.description": {
+		"message": "Runs before the instance starts."
+	},
+	"app.settings.default-instance-options.pre-launch-hook.placeholder": {
+		"message": "Enter pre-launch command..."
+	},
+	"app.settings.default-instance-options.pre-launch-hook.title": {
+		"message": "Pre-launch hook"
+	},
+	"app.settings.default-instance-options.width.description": {
+		"message": "The width of the game window when launched."
+	},
+	"app.settings.default-instance-options.width.placeholder": {
+		"message": "Enter width..."
+	},
+	"app.settings.default-instance-options.width.title": {
+		"message": "Width"
+	},
+	"app.settings.default-instance-options.window.title": {
+		"message": "Window"
+	},
+	"app.settings.default-instance-options.wrapper-hook.description": {
+		"message": "Command used to wrap the Minecraft launch process."
+	},
+	"app.settings.default-instance-options.wrapper-hook.placeholder": {
+		"message": "Enter wrapper command..."
+	},
+	"app.settings.default-instance-options.wrapper-hook.title": {
+		"message": "Wrapper hook"
+	},
+	"app.settings.developer-mode-button.label": {
+		"message": "Toggle developer mode"
+	},
+	"app.settings.developer-mode-enabled": {
+		"message": "Developer mode enabled."
+	},
+	"app.settings.downloading": {
+		"message": "Downloading v{version}"
+	},
+	"app.settings.game-options.category.accessibility.description": {
+		"message": "Accessibility preferences"
+	},
+	"app.settings.game-options.category.accessibility.label": {
+		"message": "Accessibility"
+	},
+	"app.settings.game-options.category.chat.description": {
+		"message": "Chat visibility and appearance"
+	},
+	"app.settings.game-options.category.chat.label": {
+		"message": "Chat"
+	},
+	"app.settings.game-options.category.controls.description": {
+		"message": "Mouse, movement, and key bindings"
+	},
+	"app.settings.game-options.category.controls.label": {
+		"message": "Controls"
+	},
+	"app.settings.game-options.category.custom.description": {
+		"message": "Settings added by mods"
+	},
+	"app.settings.game-options.category.custom.label": {
+		"message": "Custom settings"
+	},
+	"app.settings.game-options.category.language.description": {
+		"message": "Game language"
+	},
+	"app.settings.game-options.category.language.label": {
+		"message": "Language"
+	},
+	"app.settings.game-options.category.music-and-sound.description": {
+		"message": "Volume and audio preferences"
+	},
+	"app.settings.game-options.category.music-and-sound.label": {
+		"message": "Music and sound"
+	},
+	"app.settings.game-options.category.online.description": {
+		"message": "Online and Realms preferences"
+	},
+	"app.settings.game-options.category.online.label": {
+		"message": "Online"
+	},
+	"app.settings.game-options.category.skin-customization.description": {
+		"message": "Skin layers and main hand"
+	},
+	"app.settings.game-options.category.skin-customization.label": {
+		"message": "Skin customization"
+	},
+	"app.settings.game-options.category.video.description": {
+		"message": "Camera and display settings"
+	},
+	"app.settings.game-options.category.video.label": {
+		"message": "Video"
+	},
+	"app.settings.game-options.choice.all": {
+		"message": "All"
+	},
+	"app.settings.game-options.choice.balanced": {
+		"message": "Balanced"
+	},
+	"app.settings.game-options.choice.by-player": {
+		"message": "By player"
+	},
+	"app.settings.game-options.choice.chat": {
+		"message": "Chat"
+	},
+	"app.settings.game-options.choice.commands-only": {
+		"message": "Commands only"
+	},
+	"app.settings.game-options.choice.constant": {
+		"message": "Constant"
+	},
+	"app.settings.game-options.choice.crosshair": {
+		"message": "Crosshair"
+	},
+	"app.settings.game-options.choice.custom": {
+		"message": "Custom"
+	},
+	"app.settings.game-options.choice.decreased": {
+		"message": "Decreased"
+	},
+	"app.settings.game-options.choice.default": {
+		"message": "Default"
+	},
+	"app.settings.game-options.choice.fabulous": {
+		"message": "Fabulous"
+	},
+	"app.settings.game-options.choice.fancy": {
+		"message": "Fancy"
+	},
+	"app.settings.game-options.choice.far": {
+		"message": "Far"
+	},
+	"app.settings.game-options.choice.fast": {
+		"message": "Fast"
+	},
+	"app.settings.game-options.choice.frequent": {
+		"message": "Frequent"
+	},
+	"app.settings.game-options.choice.hidden": {
+		"message": "Hidden"
+	},
+	"app.settings.game-options.choice.hotbar": {
+		"message": "Hotbar"
+	},
+	"app.settings.game-options.choice.left": {
+		"message": "Left"
+	},
+	"app.settings.game-options.choice.limited": {
+		"message": "Limited"
+	},
+	"app.settings.game-options.choice.max-fps": {
+		"message": "Max FPS"
+	},
+	"app.settings.game-options.choice.maximum": {
+		"message": "Maximum"
+	},
+	"app.settings.game-options.choice.minimal": {
+		"message": "Minimal"
+	},
+	"app.settings.game-options.choice.minimum": {
+		"message": "Minimum"
+	},
+	"app.settings.game-options.choice.nearby": {
+		"message": "Nearby"
+	},
+	"app.settings.game-options.choice.never": {
+		"message": "Never"
+	},
+	"app.settings.game-options.choice.none": {
+		"message": "None"
+	},
+	"app.settings.game-options.choice.normal": {
+		"message": "Normal"
+	},
+	"app.settings.game-options.choice.off": {
+		"message": "Off"
+	},
+	"app.settings.game-options.choice.on": {
+		"message": "On"
+	},
+	"app.settings.game-options.choice.opengl": {
+		"message": "OpenGL"
+	},
+	"app.settings.game-options.choice.pause": {
+		"message": "Pause menu"
+	},
+	"app.settings.game-options.choice.pause-and-toast": {
+		"message": "Pause menu and toast"
+	},
+	"app.settings.game-options.choice.power-saver": {
+		"message": "Power saver"
+	},
+	"app.settings.game-options.choice.right": {
+		"message": "Right"
+	},
+	"app.settings.game-options.choice.short": {
+		"message": "Short"
+	},
+	"app.settings.game-options.choice.shown": {
+		"message": "Shown"
+	},
+	"app.settings.game-options.choice.system": {
+		"message": "System"
+	},
+	"app.settings.game-options.choice.tiny": {
+		"message": "Tiny"
+	},
+	"app.settings.game-options.choice.vulkan": {
+		"message": "Vulkan"
+	},
+	"app.settings.game-options.choice.when-minimized": {
+		"message": "When minimized"
+	},
+	"app.settings.game-options.choice.while-afk": {
+		"message": "While AFK"
+	},
+	"app.settings.game-options.compatibility.none": {
+		"message": "Some of your instances cannot use this setting"
+	},
+	"app.settings.game-options.compatibility.reason.launcher-controlled": {
+		"message": "This setting is managed by Minekube Launcher’s launch settings."
+	},
+	"app.settings.game-options.custom-value.placeholder": {
+		"message": "Enter a value"
+	},
+	"app.settings.game-options.keybind.assigned-status": {
+		"message": "{setting} is now bound to {binding}."
+	},
+	"app.settings.game-options.keybind.cancelled-status": {
+		"message": "Key binding change cancelled."
+	},
+	"app.settings.game-options.keybind.change": {
+		"message": "{setting}: {binding}. Activate to change the binding."
+	},
+	"app.settings.game-options.keybind.choose": {
+		"message": "Choose a key"
+	},
+	"app.settings.game-options.keybind.conflict-description": {
+		"message": "This is already used by {settings}."
+	},
+	"app.settings.game-options.keybind.key.arrow-down": {
+		"message": "Down Arrow"
+	},
+	"app.settings.game-options.keybind.key.arrow-left": {
+		"message": "Left Arrow"
+	},
+	"app.settings.game-options.keybind.key.arrow-right": {
+		"message": "Right Arrow"
+	},
+	"app.settings.game-options.keybind.key.arrow-up": {
+		"message": "Up Arrow"
+	},
+	"app.settings.game-options.keybind.key.backspace": {
+		"message": "Backspace"
+	},
+	"app.settings.game-options.keybind.key.caps-lock": {
+		"message": "Caps Lock"
+	},
+	"app.settings.game-options.keybind.key.delete": {
+		"message": "Delete"
+	},
+	"app.settings.game-options.keybind.key.end": {
+		"message": "End"
+	},
+	"app.settings.game-options.keybind.key.enter": {
+		"message": "Enter"
+	},
+	"app.settings.game-options.keybind.key.escape": {
+		"message": "Escape"
+	},
+	"app.settings.game-options.keybind.key.home": {
+		"message": "Home"
+	},
+	"app.settings.game-options.keybind.key.insert": {
+		"message": "Insert"
+	},
+	"app.settings.game-options.keybind.key.keypad-key": {
+		"message": "Numpad {key}"
+	},
+	"app.settings.game-options.keybind.key.left-alt": {
+		"message": "Left Alt"
+	},
+	"app.settings.game-options.keybind.key.left-command": {
+		"message": "Left Command"
+	},
+	"app.settings.game-options.keybind.key.left-control": {
+		"message": "Left Ctrl"
+	},
+	"app.settings.game-options.keybind.key.left-shift": {
+		"message": "Left Shift"
+	},
+	"app.settings.game-options.keybind.key.left-super": {
+		"message": "Left Super"
+	},
+	"app.settings.game-options.keybind.key.menu": {
+		"message": "Menu"
+	},
+	"app.settings.game-options.keybind.key.num-lock": {
+		"message": "Num Lock"
+	},
+	"app.settings.game-options.keybind.key.page-down": {
+		"message": "Page Down"
+	},
+	"app.settings.game-options.keybind.key.page-up": {
+		"message": "Page Up"
+	},
+	"app.settings.game-options.keybind.key.pause": {
+		"message": "Pause"
+	},
+	"app.settings.game-options.keybind.key.print-screen": {
+		"message": "Print Screen"
+	},
+	"app.settings.game-options.keybind.key.right-alt": {
+		"message": "Right Alt"
+	},
+	"app.settings.game-options.keybind.key.right-command": {
+		"message": "Right Command"
+	},
+	"app.settings.game-options.keybind.key.right-control": {
+		"message": "Right Ctrl"
+	},
+	"app.settings.game-options.keybind.key.right-shift": {
+		"message": "Right Shift"
+	},
+	"app.settings.game-options.keybind.key.right-super": {
+		"message": "Right Super"
+	},
+	"app.settings.game-options.keybind.key.scroll-lock": {
+		"message": "Scroll Lock"
+	},
+	"app.settings.game-options.keybind.key.space": {
+		"message": "Space"
+	},
+	"app.settings.game-options.keybind.key.tab": {
+		"message": "Tab"
+	},
+	"app.settings.game-options.keybind.key.unbound": {
+		"message": "Unbound"
+	},
+	"app.settings.game-options.keybind.key.unknown": {
+		"message": "Unknown key"
+	},
+	"app.settings.game-options.keybind.listen": {
+		"message": "Press a key…"
+	},
+	"app.settings.game-options.keybind.listening-status": {
+		"message": "Listening for a key or mouse button. Press Escape to clear this binding."
+	},
+	"app.settings.game-options.keybind.mixed": {
+		"message": "Different across instances"
+	},
+	"app.settings.game-options.keybind.modifier.alt": {
+		"message": "Alt"
+	},
+	"app.settings.game-options.keybind.modifier.command": {
+		"message": "Command"
+	},
+	"app.settings.game-options.keybind.modifier.control": {
+		"message": "Ctrl"
+	},
+	"app.settings.game-options.keybind.modifier.shift": {
+		"message": "Shift"
+	},
+	"app.settings.game-options.keybind.modifier.super": {
+		"message": "Super"
+	},
+	"app.settings.game-options.keybind.mouse.button": {
+		"message": "Mouse {button}"
+	},
+	"app.settings.game-options.keybind.mouse.left": {
+		"message": "Left Mouse"
+	},
+	"app.settings.game-options.keybind.mouse.middle": {
+		"message": "Middle Mouse"
+	},
+	"app.settings.game-options.keybind.mouse.right": {
+		"message": "Right Mouse"
+	},
+	"app.settings.game-options.keybind.recording-label": {
+		"message": "{setting}: listening for a key or mouse button. Press Escape to clear this binding."
+	},
+	"app.settings.game-options.keybind.scancode": {
+		"message": "Scancode {code}"
+	},
+	"app.settings.game-options.keybind.unsupported-status": {
+		"message": "That input cannot be used by Minecraft. Press another key."
+	},
+	"app.settings.game-options.setting.advanced-opengl.label": {
+		"message": "Advanced OpenGL"
+	},
+	"app.settings.game-options.setting.allow-cursor-changes.label": {
+		"message": "Allow cursor changes"
+	},
+	"app.settings.game-options.setting.allow-server-listing.description": {
+		"message": "Allow the player's name to appear in server listings."
+	},
+	"app.settings.game-options.setting.allow-server-listing.label": {
+		"message": "Server listings"
+	},
+	"app.settings.game-options.setting.alternate-blocks.label": {
+		"message": "Alternate blocks"
+	},
+	"app.settings.game-options.setting.ambient-occlusion.label": {
+		"message": "Smooth lighting"
+	},
+	"app.settings.game-options.setting.ambient-volume.label": {
+		"message": "Ambient/Environment"
+	},
+	"app.settings.game-options.setting.anaglyph-3d.label": {
+		"message": "3D anaglyph"
+	},
+	"app.settings.game-options.setting.anisotropic-filtering.label": {
+		"message": "Anisotropic filtering"
+	},
+	"app.settings.game-options.setting.anisotropy.label": {
+		"message": "Anisotropy"
+	},
+	"app.settings.game-options.setting.attack-indicator.label": {
+		"message": "Attack indicator"
+	},
+	"app.settings.game-options.setting.auto-jump.description": {
+		"message": "Automatically jump up one-block-high obstacles."
+	},
+	"app.settings.game-options.setting.auto-jump.label": {
+		"message": "Auto-jump"
+	},
+	"app.settings.game-options.setting.auto-suggestions.label": {
+		"message": "Command suggestions"
+	},
+	"app.settings.game-options.setting.autosave-indicator.label": {
+		"message": "Autosave indicator"
+	},
+	"app.settings.game-options.setting.biome-blend-radius.description": {
+		"message": "The distance over which biome colors transition."
+	},
+	"app.settings.game-options.setting.biome-blend-radius.label": {
+		"message": "Biome blend"
+	},
+	"app.settings.game-options.setting.blocks-volume.label": {
+		"message": "Blocks"
+	},
+	"app.settings.game-options.setting.brightness.label": {
+		"message": "Brightness"
+	},
+	"app.settings.game-options.setting.cape.description": {
+		"message": "Show the player's cape, including its elytra texture."
+	},
+	"app.settings.game-options.setting.cape.label": {
+		"message": "Cape"
+	},
+	"app.settings.game-options.setting.chat-background-only.label": {
+		"message": "Chat background only"
+	},
+	"app.settings.game-options.setting.chat-colors.label": {
+		"message": "Chat colors"
+	},
+	"app.settings.game-options.setting.chat-delay.label": {
+		"message": "Chat delay"
+	},
+	"app.settings.game-options.setting.chat-line-spacing.label": {
+		"message": "Chat line spacing"
+	},
+	"app.settings.game-options.setting.chat-links-prompt.description": {
+		"message": "Ask before opening links from chat."
+	},
+	"app.settings.game-options.setting.chat-links-prompt.label": {
+		"message": "Prompt on links"
+	},
+	"app.settings.game-options.setting.chat-links.description": {
+		"message": "Allow web links in chat to be opened."
+	},
+	"app.settings.game-options.setting.chat-links.label": {
+		"message": "Web links"
+	},
+	"app.settings.game-options.setting.chat-opacity.description": {
+		"message": "The opacity of chat text."
+	},
+	"app.settings.game-options.setting.chat-opacity.label": {
+		"message": "Chat opacity"
+	},
+	"app.settings.game-options.setting.chat-preview.label": {
+		"message": "Chat preview"
+	},
+	"app.settings.game-options.setting.chat-scale.label": {
+		"message": "Chat scale"
+	},
+	"app.settings.game-options.setting.chat-visibility.label": {
+		"message": "Chat visibility"
+	},
+	"app.settings.game-options.setting.chat-width.label": {
+		"message": "Chat width"
+	},
+	"app.settings.game-options.setting.chunk-fade-time.label": {
+		"message": "Chunk fade time"
+	},
+	"app.settings.game-options.setting.cloud-range.label": {
+		"message": "Cloud distance"
+	},
+	"app.settings.game-options.setting.clouds.label": {
+		"message": "Clouds"
+	},
+	"app.settings.game-options.setting.ctrl-click-right-click.label": {
+		"message": "Control-click as right-click"
+	},
+	"app.settings.game-options.setting.cutout-leaves.label": {
+		"message": "Cutout leaves"
+	},
+	"app.settings.game-options.setting.damage-tilt.label": {
+		"message": "Damage tilt"
+	},
+	"app.settings.game-options.setting.dark-splash.description": {
+		"message": "Change the Mojang Studios loading screen from red to black."
+	},
+	"app.settings.game-options.setting.dark-splash.label": {
+		"message": "Monochrome logo"
+	},
+	"app.settings.game-options.setting.darkness-pulsing.label": {
+		"message": "Darkness pulsing"
+	},
+	"app.settings.game-options.setting.debug-gui-scale.label": {
+		"message": "Debug GUI scale"
+	},
+	"app.settings.game-options.setting.directional-audio.label": {
+		"message": "Directional audio"
+	},
+	"app.settings.game-options.setting.discrete-mouse-scroll.description": {
+		"message": "Treat each mouse-wheel input as a single scroll step."
+	},
+	"app.settings.game-options.setting.discrete-mouse-scroll.label": {
+		"message": "Discrete scrolling"
+	},
+	"app.settings.game-options.setting.entity-distance.label": {
+		"message": "Entity distance"
+	},
+	"app.settings.game-options.setting.entity-shadows.label": {
+		"message": "Entity shadows"
+	},
+	"app.settings.game-options.setting.exclusive-fullscreen.label": {
+		"message": "Exclusive fullscreen"
+	},
+	"app.settings.game-options.setting.extra-telemetry.label": {
+		"message": "Optional telemetry"
+	},
+	"app.settings.game-options.setting.focused-chat-height.label": {
+		"message": "Focused chat height"
+	},
+	"app.settings.game-options.setting.force-unicode-font.label": {
+		"message": "Force Unicode font"
+	},
+	"app.settings.game-options.setting.fov-effects.label": {
+		"message": "FOV effects"
+	},
+	"app.settings.game-options.setting.fov.label": {
+		"message": "Field of view"
+	},
+	"app.settings.game-options.setting.fullscreen.label": {
+		"message": "Fullscreen"
+	},
+	"app.settings.game-options.setting.glint-speed.label": {
+		"message": "Glint speed"
+	},
+	"app.settings.game-options.setting.glint-strength.label": {
+		"message": "Glint strength"
+	},
+	"app.settings.game-options.setting.graphics-backend.label": {
+		"message": "Graphics backend"
+	},
+	"app.settings.game-options.setting.graphics.description": {
+		"message": "Controls visual quality and performance."
+	},
+	"app.settings.game-options.setting.graphics.label": {
+		"message": "Graphics"
+	},
+	"app.settings.game-options.setting.gui-scale.description": {
+		"message": "The size of the game interface and HUD."
+	},
+	"app.settings.game-options.setting.gui-scale.label": {
+		"message": "GUI scale"
+	},
+	"app.settings.game-options.setting.hat.description": {
+		"message": "Show the hat skin layer."
+	},
+	"app.settings.game-options.setting.hat.label": {
+		"message": "Hat"
+	},
+	"app.settings.game-options.setting.held-item-tooltips.label": {
+		"message": "Held item tooltips"
+	},
+	"app.settings.game-options.setting.hide-lightning-flashes.label": {
+		"message": "Hide lightning flashes"
+	},
+	"app.settings.game-options.setting.hide-matched-names.label": {
+		"message": "Hide matched names"
+	},
+	"app.settings.game-options.setting.hide-server-address.label": {
+		"message": "Hide server address"
+	},
+	"app.settings.game-options.setting.hide-splash-texts.label": {
+		"message": "Hide splash texts"
+	},
+	"app.settings.game-options.setting.high-contrast-outline.label": {
+		"message": "High contrast block outline"
+	},
+	"app.settings.game-options.setting.high-contrast.description": {
+		"message": "Enhance the contrast of interface elements."
+	},
+	"app.settings.game-options.setting.high-contrast.label": {
+		"message": "High contrast"
+	},
+	"app.settings.game-options.setting.hostile-volume.label": {
+		"message": "Hostile creatures"
+	},
+	"app.settings.game-options.setting.improved-transparency.label": {
+		"message": "Improved transparency"
+	},
+	"app.settings.game-options.setting.in-game-notifications.label": {
+		"message": "In-game notifications"
+	},
+	"app.settings.game-options.setting.inactivity-framerate-limit.label": {
+		"message": "Reduced framerate"
+	},
+	"app.settings.game-options.setting.invert-horizontal-mouse.label": {
+		"message": "Invert horizontal mouse"
+	},
+	"app.settings.game-options.setting.invert-mouse.description": {
+		"message": "Invert vertical mouse movement."
+	},
+	"app.settings.game-options.setting.invert-mouse.label": {
+		"message": "Invert mouse"
+	},
+	"app.settings.game-options.setting.jacket.description": {
+		"message": "Show the jacket skin layer."
+	},
+	"app.settings.game-options.setting.jacket.label": {
+		"message": "Jacket"
+	},
+	"app.settings.game-options.setting.japanese-glyph-variants.label": {
+		"message": "Japanese glyph variants"
+	},
+	"app.settings.game-options.setting.key-advancements.label": {
+		"message": "Advancements"
+	},
+	"app.settings.game-options.setting.key-attack.label": {
+		"message": "Attack"
+	},
+	"app.settings.game-options.setting.key-back.label": {
+		"message": "Move backward"
+	},
+	"app.settings.game-options.setting.key-chat.label": {
+		"message": "Open chat"
+	},
+	"app.settings.game-options.setting.key-command.label": {
+		"message": "Command"
+	},
+	"app.settings.game-options.setting.key-debug-advanced-tooltips.label": {
+		"message": "Show advanced tooltips"
+	},
+	"app.settings.game-options.setting.key-debug-chunk-borders.label": {
+		"message": "Show chunk borders"
+	},
+	"app.settings.game-options.setting.key-debug-clear-chat.label": {
+		"message": "Clear chat"
+	},
+	"app.settings.game-options.setting.key-debug-copy-location.label": {
+		"message": "Copy location"
+	},
+	"app.settings.game-options.setting.key-debug-copy-recreate-command.label": {
+		"message": "Copy recreate command"
+	},
+	"app.settings.game-options.setting.key-debug-crash.label": {
+		"message": "Trigger debug crash"
+	},
+	"app.settings.game-options.setting.key-debug-dump-dynamic-textures.label": {
+		"message": "Dump dynamic textures"
+	},
+	"app.settings.game-options.setting.key-debug-dump-version.label": {
+		"message": "Dump version"
+	},
+	"app.settings.game-options.setting.key-debug-focus-pause.label": {
+		"message": "Pause on lost focus"
+	},
+	"app.settings.game-options.setting.key-debug-fps-charts.label": {
+		"message": "FPS charts"
+	},
+	"app.settings.game-options.setting.key-debug-hitboxes.label": {
+		"message": "Show hitboxes"
+	},
+	"app.settings.game-options.setting.key-debug-improved-transparency.label": {
+		"message": "Improved transparency debug view"
+	},
+	"app.settings.game-options.setting.key-debug-lightmap-texture.label": {
+		"message": "Lightmap texture"
+	},
+	"app.settings.game-options.setting.key-debug-modifier.label": {
+		"message": "Debug modifier"
+	},
+	"app.settings.game-options.setting.key-debug-network-charts.label": {
+		"message": "Network charts"
+	},
+	"app.settings.game-options.setting.key-debug-options.label": {
+		"message": "Debug options"
+	},
+	"app.settings.game-options.setting.key-debug-overlay.label": {
+		"message": "Debug overlay"
+	},
+	"app.settings.game-options.setting.key-debug-profiling-chart.label": {
+		"message": "Profiling chart"
+	},
+	"app.settings.game-options.setting.key-debug-profiling.label": {
+		"message": "Start profiling"
+	},
+	"app.settings.game-options.setting.key-debug-reload-chunks.label": {
+		"message": "Reload chunks"
+	},
+	"app.settings.game-options.setting.key-debug-reload-resource-packs.label": {
+		"message": "Reload resource packs"
+	},
+	"app.settings.game-options.setting.key-debug-spectate.label": {
+		"message": "Spectate entity"
+	},
+	"app.settings.game-options.setting.key-debug-switch-game-mode.label": {
+		"message": "Switch game mode"
+	},
+	"app.settings.game-options.setting.key-drop.label": {
+		"message": "Drop item"
+	},
+	"app.settings.game-options.setting.key-forward.label": {
+		"message": "Move forward"
+	},
+	"app.settings.game-options.setting.key-friends.label": {
+		"message": "Friends"
+	},
+	"app.settings.game-options.setting.key-fullscreen.label": {
+		"message": "Toggle fullscreen"
+	},
+	"app.settings.game-options.setting.key-hotbar-1.label": {
+		"message": "Hotbar 1"
+	},
+	"app.settings.game-options.setting.key-hotbar-2.label": {
+		"message": "Hotbar 2"
+	},
+	"app.settings.game-options.setting.key-hotbar-3.label": {
+		"message": "Hotbar 3"
+	},
+	"app.settings.game-options.setting.key-hotbar-4.label": {
+		"message": "Hotbar 4"
+	},
+	"app.settings.game-options.setting.key-hotbar-5.label": {
+		"message": "Hotbar 5"
+	},
+	"app.settings.game-options.setting.key-hotbar-6.label": {
+		"message": "Hotbar 6"
+	},
+	"app.settings.game-options.setting.key-hotbar-7.label": {
+		"message": "Hotbar 7"
+	},
+	"app.settings.game-options.setting.key-hotbar-8.label": {
+		"message": "Hotbar 8"
+	},
+	"app.settings.game-options.setting.key-hotbar-9.label": {
+		"message": "Hotbar 9"
+	},
+	"app.settings.game-options.setting.key-inventory.label": {
+		"message": "Inventory"
+	},
+	"app.settings.game-options.setting.key-jump.label": {
+		"message": "Jump"
+	},
+	"app.settings.game-options.setting.key-left.label": {
+		"message": "Strafe left"
+	},
+	"app.settings.game-options.setting.key-load-toolbar.label": {
+		"message": "Load toolbar"
+	},
+	"app.settings.game-options.setting.key-perspective.label": {
+		"message": "Change perspective"
+	},
+	"app.settings.game-options.setting.key-pick-item.label": {
+		"message": "Pick block"
+	},
+	"app.settings.game-options.setting.key-player-list.label": {
+		"message": "Player list"
+	},
+	"app.settings.game-options.setting.key-quick-actions.label": {
+		"message": "Quick actions"
+	},
+	"app.settings.game-options.setting.key-right.label": {
+		"message": "Strafe right"
+	},
+	"app.settings.game-options.setting.key-save-toolbar.label": {
+		"message": "Save toolbar"
+	},
+	"app.settings.game-options.setting.key-screenshot.label": {
+		"message": "Screenshot"
+	},
+	"app.settings.game-options.setting.key-smooth-camera.label": {
+		"message": "Toggle cinematic camera"
+	},
+	"app.settings.game-options.setting.key-sneak.label": {
+		"message": "Sneak"
+	},
+	"app.settings.game-options.setting.key-social-interactions.label": {
+		"message": "Social interactions"
+	},
+	"app.settings.game-options.setting.key-spectator-hotbar.label": {
+		"message": "Spectator hotbar"
+	},
+	"app.settings.game-options.setting.key-spectator-outlines.label": {
+		"message": "Highlight spectators"
+	},
+	"app.settings.game-options.setting.key-sprint.label": {
+		"message": "Sprint"
+	},
+	"app.settings.game-options.setting.key-swap-offhand.label": {
+		"message": "Swap offhand"
+	},
+	"app.settings.game-options.setting.key-toggle-gui.label": {
+		"message": "Toggle HUD"
+	},
+	"app.settings.game-options.setting.key-toggle-spectator-shader.label": {
+		"message": "Toggle spectator shader"
+	},
+	"app.settings.game-options.setting.key-use.label": {
+		"message": "Use item"
+	},
+	"app.settings.game-options.setting.language.label": {
+		"message": "Language"
+	},
+	"app.settings.game-options.setting.left-pants-leg.label": {
+		"message": "Left pants leg"
+	},
+	"app.settings.game-options.setting.left-sleeve.label": {
+		"message": "Left sleeve"
+	},
+	"app.settings.game-options.setting.legacy-framerate-limit.label": {
+		"message": "Framerate limit"
+	},
+	"app.settings.game-options.setting.legacy-view-distance.label": {
+		"message": "View distance"
+	},
+	"app.settings.game-options.setting.mac-fullscreen-menu.label": {
+		"message": "Show macOS menu in fullscreen"
+	},
+	"app.settings.game-options.setting.main-hand.description": {
+		"message": "Choose whether the main hand is left or right."
+	},
+	"app.settings.game-options.setting.main-hand.label": {
+		"message": "Main hand"
+	},
+	"app.settings.game-options.setting.master-volume.label": {
+		"message": "Master volume"
+	},
+	"app.settings.game-options.setting.max-framerate.label": {
+		"message": "Maximum framerate"
+	},
+	"app.settings.game-options.setting.menu-background-blur.label": {
+		"message": "Menu background blur"
+	},
+	"app.settings.game-options.setting.mipmap-levels.description": {
+		"message": "Texture smoothing at a distance."
+	},
+	"app.settings.game-options.setting.mipmap-levels.label": {
+		"message": "Mipmap levels"
+	},
+	"app.settings.game-options.setting.mouse-wheel-sensitivity.label": {
+		"message": "Mouse wheel sensitivity"
+	},
+	"app.settings.game-options.setting.music-frequency.label": {
+		"message": "Music frequency"
+	},
+	"app.settings.game-options.setting.music-toast.description": {
+		"message": "Choose whether music titles appear in the pause menu and as toasts."
+	},
+	"app.settings.game-options.setting.music-toast.label": {
+		"message": "Music notification"
+	},
+	"app.settings.game-options.setting.music-volume.label": {
+		"message": "Music"
+	},
+	"app.settings.game-options.setting.narrator-hotkey.label": {
+		"message": "Narrator hotkey"
+	},
+	"app.settings.game-options.setting.narrator.description": {
+		"message": "Choose what the narrator reads."
+	},
+	"app.settings.game-options.setting.narrator.label": {
+		"message": "Narrator"
+	},
+	"app.settings.game-options.setting.neutral-volume.label": {
+		"message": "Friendly creatures"
+	},
+	"app.settings.game-options.setting.notification-time.description": {
+		"message": "How long toast notifications remain visible."
+	},
+	"app.settings.game-options.setting.notification-time.label": {
+		"message": "Notification time"
+	},
+	"app.settings.game-options.setting.operator-items-tab.label": {
+		"message": "Operator items tab"
+	},
+	"app.settings.game-options.setting.panorama-speed.label": {
+		"message": "Panorama speed"
+	},
+	"app.settings.game-options.setting.particles.label": {
+		"message": "Particles"
+	},
+	"app.settings.game-options.setting.players-volume.label": {
+		"message": "Players"
+	},
+	"app.settings.game-options.setting.prioritize-chunk-updates.label": {
+		"message": "Prioritize chunk updates"
+	},
+	"app.settings.game-options.setting.quit-shortcuts.label": {
+		"message": "Quit shortcuts"
+	},
+	"app.settings.game-options.setting.raw-mouse-input.label": {
+		"message": "Raw mouse input"
+	},
+	"app.settings.game-options.setting.realms-notifications.label": {
+		"message": "Realms notifications"
+	},
+	"app.settings.game-options.setting.record-volume.label": {
+		"message": "Jukebox/Note Blocks"
+	},
+	"app.settings.game-options.setting.reduced-debug-info.label": {
+		"message": "Reduced debug information"
+	},
+	"app.settings.game-options.setting.render-distance.label": {
+		"message": "Render distance"
+	},
+	"app.settings.game-options.setting.right-pants-leg.label": {
+		"message": "Right pants leg"
+	},
+	"app.settings.game-options.setting.right-sleeve.label": {
+		"message": "Right sleeve"
+	},
+	"app.settings.game-options.setting.rotate-with-minecart.label": {
+		"message": "Rotate with minecart"
+	},
+	"app.settings.game-options.setting.save-chat-drafts.label": {
+		"message": "Save chat drafts"
+	},
+	"app.settings.game-options.setting.screen-effects.label": {
+		"message": "Screen effects"
+	},
+	"app.settings.game-options.setting.secure-chat-only.label": {
+		"message": "Only show secure chat"
+	},
+	"app.settings.game-options.setting.sensitivity.label": {
+		"message": "Mouse sensitivity"
+	},
+	"app.settings.game-options.setting.server-textures.label": {
+		"message": "Server textures"
+	},
+	"app.settings.game-options.setting.share-presence.label": {
+		"message": "Share presence"
+	},
+	"app.settings.game-options.setting.simulation-distance.description": {
+		"message": "How far away entities update and blocks and fluids tick."
+	},
+	"app.settings.game-options.setting.simulation-distance.label": {
+		"message": "Simulation distance"
+	},
+	"app.settings.game-options.setting.snooper.label": {
+		"message": "Snooper"
+	},
+	"app.settings.game-options.setting.sprint-window.label": {
+		"message": "Sprint window"
+	},
+	"app.settings.game-options.setting.subtitles.description": {
+		"message": "Show captions for sounds played in the game."
+	},
+	"app.settings.game-options.setting.subtitles.label": {
+		"message": "Subtitles"
+	},
+	"app.settings.game-options.setting.text-background-opacity.label": {
+		"message": "Text background opacity"
+	},
+	"app.settings.game-options.setting.texture-filtering.label": {
+		"message": "Texture filtering"
+	},
+	"app.settings.game-options.setting.toggle-attack.label": {
+		"message": "Toggle attack"
+	},
+	"app.settings.game-options.setting.toggle-crouch.description": {
+		"message": "Press once to remain crouched."
+	},
+	"app.settings.game-options.setting.toggle-crouch.label": {
+		"message": "Toggle crouch"
+	},
+	"app.settings.game-options.setting.toggle-sprint.description": {
+		"message": "Press once to remain sprinting."
+	},
+	"app.settings.game-options.setting.toggle-sprint.label": {
+		"message": "Toggle sprint"
+	},
+	"app.settings.game-options.setting.toggle-use.label": {
+		"message": "Toggle use"
+	},
+	"app.settings.game-options.setting.touchscreen.label": {
+		"message": "Touchscreen mode"
+	},
+	"app.settings.game-options.setting.ui-volume.label": {
+		"message": "UI"
+	},
+	"app.settings.game-options.setting.unfocused-chat-height.label": {
+		"message": "Unfocused chat height"
+	},
+	"app.settings.game-options.setting.use-vbo.label": {
+		"message": "Use VBOs"
+	},
+	"app.settings.game-options.setting.view-bobbing.description": {
+		"message": "Add a bobbing motion to the camera while walking."
+	},
+	"app.settings.game-options.setting.view-bobbing.label": {
+		"message": "View bobbing"
+	},
+	"app.settings.game-options.setting.vignette.label": {
+		"message": "Vignette"
+	},
+	"app.settings.game-options.setting.voice-volume.label": {
+		"message": "Voice and speech"
+	},
+	"app.settings.game-options.setting.vsync.description": {
+		"message": "Limit the frame rate to the display refresh rate to prevent screen tearing."
+	},
+	"app.settings.game-options.setting.vsync.label": {
+		"message": "VSync"
+	},
+	"app.settings.game-options.setting.weather-radius.label": {
+		"message": "Weather radius"
+	},
+	"app.settings.game-options.setting.weather-volume.label": {
+		"message": "Weather"
+	},
+	"app.settings.game-options.validation.changed-since-opened": {
+		"message": "This setting changed elsewhere. Check it and try again."
+	},
+	"app.settings.game-options.validation.invalid-value": {
+		"message": "Choose a valid value."
+	},
+	"app.settings.game-options.validation.missing-value": {
+		"message": "Choose a value first."
+	},
+	"app.settings.game-options.validation.no-compatible-instances": {
+		"message": "Some of your instances cannot use this setting"
+	},
+	"app.settings.java-installations.location.title": {
+		"message": "Java {version, number} location"
+	},
+	"app.settings.page.appearance.text": {
+		"message": "Theme, colors, background, icons and the window style — every change previews instantly."
+	},
+	"app.settings.page.appearance.title": {
+		"message": "Make the launcher yours"
+	},
+	"app.settings.page.behavior.text": {
+		"message": "Startup, your library, the download manager and which confirmations you want to see."
+	},
+	"app.settings.page.behavior.title": {
+		"message": "How the launcher behaves"
+	},
+	"app.settings.page.java.text": {
+		"message": "Each Minecraft version needs its own Java. The launcher finds or installs the right one automatically — or point it to your own here."
+	},
+	"app.settings.page.java.title": {
+		"message": "The right Java for every version"
+	},
+	"app.settings.page.language.text": {
+		"message": "Choose the language of the whole launcher. The change applies right away."
+	},
+	"app.settings.page.language.title": {
+		"message": "Your language"
+	},
+	"app.settings.page.resources.text": {
+		"message": "See what takes up space, clean up caches and backups, and tune how many downloads and writes run at once."
+	},
+	"app.settings.page.resources.title": {
+		"message": "Storage and downloads"
+	},
+	"app.settings.page.synced-options.text": {
+		"message": "Share game options, servers, packs and more between instances, so a change in one shows up in all of them."
+	},
+	"app.settings.page.synced-options.title": {
+		"message": "One setup for every instance"
+	},
+	"app.settings.performance.fast-loading.description": {
+		"message": "Makes navigating the launcher feel much faster. Loaded data is kept fresh for several minutes instead of being refetched every time, cached results live far longer, the launcher stops reloading everything when the window regains focus, and pages you have already visited stay in memory so going back to them is instant."
+	},
+	"app.settings.performance.fast-loading.title": {
+		"message": "Fast loading"
+	},
+	"app.settings.performance.fast-loading.tradeoff": {
+		"message": "It uses more RAM (visited pages and cached data stay loaded) and content such as mod lists can be up to a few minutes out of date until you refresh. It does not speed up starting the launcher or launching Minecraft itself — those are handled outside the interface."
+	},
+	"app.settings.performance.fast-loading.tradeoff-title": {
+		"message": "What it costs"
+	},
+	"app.settings.performance.free-memory.button": {
+		"message": "Free memory now"
+	},
+	"app.settings.performance.free-memory.description": {
+		"message": "Immediately drops everything the launcher has cached from the network — mod lists, search results, project pages. The memory is released right away and anything still on screen loads again when needed."
+	},
+	"app.settings.performance.free-memory.done": {
+		"message": "Cache cleared."
+	},
+	"app.settings.performance.free-memory.title": {
+		"message": "Free up memory"
+	},
+	"app.settings.performance.hero.description": {
+		"message": "Decide how the launcher spends memory, graphics power and background time. Every switch takes effect immediately."
+	},
+	"app.settings.performance.hero.eyebrow": {
+		"message": "Minekube performance"
+	},
+	"app.settings.performance.hero.title": {
+		"message": "Fast, light and quiet"
+	},
+	"app.settings.performance.pause-hidden.description": {
+		"message": "While the launcher window is minimised or hidden, stop the timers that poll for running instances and pause the particle effects. Nothing you can see is affected, and everything resumes the moment you come back."
+	},
+	"app.settings.performance.pause-hidden.title": {
+		"message": "Pause background activity"
+	},
+	"app.settings.performance.skin-quality.balanced": {
+		"message": "Balanced"
+	},
+	"app.settings.performance.skin-quality.current": {
+		"message": "Currently rendering at {ratio}x resolution."
+	},
+	"app.settings.performance.skin-quality.description": {
+		"message": "How sharply the 3D skin preview is rendered in the Skin selector and the skin editor. Higher settings render the model at several times the screen resolution and scale it back down (supersampling), which makes even single skin pixels crisp — at the cost of GPU work while a preview is on screen."
+	},
+	"app.settings.performance.skin-quality.high": {
+		"message": "High"
+	},
+	"app.settings.performance.skin-quality.static-note": {
+		"message": "Ultra 4x draws 16x the pixels, so instead of redrawing that every frame the preview switches to on-demand rendering: a frame is produced only when something changes — while you drag to rotate, or when the skin or cape changes. You get the sharpest possible model for almost no continuous GPU load; in exchange the idle sway animation holds still."
+	},
+	"app.settings.performance.skin-quality.title": {
+		"message": "Skin render quality"
+	},
+	"app.settings.performance.skin-quality.ultra": {
+		"message": "Ultra"
+	},
+	"app.settings.performance.skin-quality.ultra-static": {
+		"message": "Ultra 4x (still)"
+	},
+	"app.settings.privacy.discord-rich-presence.title": {
+		"message": "Discord Rich Presence"
+	},
+	"app.settings.privacy.shield.always-title": {
+		"message": "Always on"
+	},
+	"app.settings.privacy.shield.always.analytics": {
+		"message": "No download, play time or server-join reporting"
+	},
+	"app.settings.privacy.shield.always.geo": {
+		"message": "No location lookup from your IP address"
+	},
+	"app.settings.privacy.shield.always.identity": {
+		"message": "Anonymous identity: no system, e-mail or install ID is sent"
+	},
+	"app.settings.privacy.shield.always.jvm": {
+		"message": "Game hardened against Log4Shell-style exploits"
+	},
+	"app.settings.privacy.shield.always.links": {
+		"message": "Links and files from outside never install or start anything without asking"
+	},
+	"app.settings.privacy.shield.always.logs": {
+		"message": "Shared logs anonymized: IP addresses, player names, account IDs, tokens and your user folder are hidden"
+	},
+	"app.settings.privacy.shield.always.no-history": {
+		"message": "No connection history is kept — blocked requests are simply dropped"
+	},
+	"app.settings.privacy.shield.always.scanner": {
+		"message": "Mods checked for known malware before every launch"
+	},
+	"app.settings.privacy.shield.always.tokens": {
+		"message": "Sign-in tokens stored encrypted on your system"
+	},
+	"app.settings.privacy.shield.always.trackers": {
+		"message": "Trackers, analytics, ads and telemetry blocked"
+	},
+	"app.settings.privacy.shield.always.updates": {
+		"message": "Updates only from Minekube, checked against its signature"
+	},
+	"app.settings.privacy.shield.eyebrow": {
+		"message": "Minekube Shield"
+	},
+	"app.settings.privacy.shield.logs-cleanup-text": {
+		"message": "Game logs and crash reports keep server addresses, chat and player names. Older ones are deleted automatically shortly after the launcher starts."
+	},
+	"app.settings.privacy.shield.logs-cleanup-title": {
+		"message": "Delete old game logs"
+	},
+	"app.settings.privacy.shield.logs-cleanup.days": {
+		"message": "{days} days"
+	},
+	"app.settings.privacy.shield.logs-cleanup.never": {
+		"message": "Keep"
+	},
+	"app.settings.privacy.shield.logs-delete-all": {
+		"message": "Delete all logs now"
+	},
+	"app.settings.privacy.shield.logs-delete-confirm": {
+		"message": "Click again to delete"
+	},
+	"app.settings.privacy.shield.logs-deleted": {
+		"message": "{count, plural, =0 {No logs to delete} one {Deleted # file} other {Deleted # files}}"
+	},
+	"app.settings.privacy.shield.mods-note": {
+		"message": "Needs Fabric, Quilt, Forge or NeoForge. On servers that require signed chat, No Chat Reports may keep you from chatting."
+	},
+	"app.settings.privacy.shield.mods-text": {
+		"message": "Before each launch, adds the open-source mods No Telemetry (stops Minecraft’s telemetry to Microsoft) and No Chat Reports (makes your chat messages unreportable) to modded instances, and removes them again when you turn this off. A copy you installed yourself is left alone."
+	},
+	"app.settings.privacy.shield.mods-title": {
+		"message": "Privacy mods in game"
+	},
+	"app.settings.privacy.shield.strict-text": {
+		"message": "Also cuts the launcher off from the online library (browsing, search, updates), log analysis and third-party image services. Microsoft sign-in and the game files keep working. Add mods yourself from files while it is on."
+	},
+	"app.settings.privacy.shield.strict-title": {
+		"message": "Strict mode"
+	},
+	"app.settings.privacy.shield.text": {
+		"message": "Every connection the launcher makes is checked before it leaves your computer. Analytics, error reporting, ads and telemetry never get through — not even a DNS lookup."
+	},
+	"app.settings.privacy.shield.title": {
+		"message": "Built-in tracker and telemetry blocker"
+	},
+	"app.settings.privacy.v2.data-text": {
+		"message": "Instances, worlds, settings and accounts are kept in the launcher folder. Automatic database backups sit next to it, in case something ever goes wrong."
+	},
+	"app.settings.privacy.v2.data-title": {
+		"message": "Where your data lives"
+	},
+	"app.settings.privacy.v2.discord-text": {
+		"message": "Shows on your Discord profile that you are playing Minecraft through Minekube Launcher. Off means Discord sees nothing from the launcher. Takes effect after a restart."
+	},
+	"app.settings.privacy.v2.eyebrow": {
+		"message": "Privacy"
+	},
+	"app.settings.privacy.v2.fact.ads": {
+		"message": "No ads"
+	},
+	"app.settings.privacy.v2.fact.licences": {
+		"message": "No licences"
+	},
+	"app.settings.privacy.v2.fact.local": {
+		"message": "Stored locally"
+	},
+	"app.settings.privacy.v2.fact.open": {
+		"message": "Open source"
+	},
+	"app.settings.privacy.v2.fact.shield": {
+		"message": "Tracker blocker"
+	},
+	"app.settings.privacy.v2.fact.subscription": {
+		"message": "No subscription"
+	},
+	"app.settings.privacy.v2.fact.telemetry": {
+		"message": "Zero telemetry"
+	},
+	"app.settings.privacy.v2.open-backups": {
+		"message": "Open backups"
+	},
+	"app.settings.privacy.v2.open-folder": {
+		"message": "Open launcher folder"
+	},
+	"app.settings.privacy.v2.open-source-text": {
+		"message": "Every line of the launcher is public under the GNU GPL-3.0 licence, so anyone can verify these promises — and the launcher can never be closed off."
+	},
+	"app.settings.privacy.v2.open-source-title": {
+		"message": "Open for everyone to check"
+	},
+	"app.settings.privacy.v2.sign-in-text": {
+		"message": "Microsoft sign-in happens directly between you and Microsoft; the launcher never sees your password. The sign-in tokens it keeps are stored encrypted on your system and never handed to the launcher’s interface. Local accounts never sign in anywhere."
+	},
+	"app.settings.privacy.v2.sign-in-title": {
+		"message": "Sign-in and passwords"
+	},
+	"app.settings.privacy.v2.text": {
+		"message": "No tracking, no ads and no account of our own. What the launcher knows about you lives on this computer, and you decide what leaves it."
+	},
+	"app.settings.privacy.v2.title": {
+		"message": "Your data stays yours"
+	},
+	"app.settings.privacy.v2.view-license": {
+		"message": "Read the licence"
+	},
+	"app.settings.privacy.v2.view-source": {
+		"message": "View source code"
+	},
+	"app.settings.profile.v2.accounts-text": {
+		"message": "The active account is the one every game starts with. Switch with one click; adding and removing accounts lives in the sidebar."
+	},
+	"app.settings.profile.v2.accounts-title": {
+		"message": "Your accounts"
+	},
+	"app.settings.profile.v2.active": {
+		"message": "Active"
+	},
+	"app.settings.profile.v2.change-skin": {
+		"message": "Change skin"
+	},
+	"app.settings.profile.v2.eyebrow": {
+		"message": "Your profile"
+	},
+	"app.settings.profile.v2.local-note": {
+		"message": "Minekube Launcher has no account of its own and no cloud profile. Your profile is simply your Minecraft accounts plus the settings and instances stored on this device."
+	},
+	"app.settings.profile.v2.local-note-title": {
+		"message": "Everything stays on this computer"
+	},
+	"app.settings.profile.v2.nothing-played": {
+		"message": "Not yet"
+	},
+	"app.settings.profile.v2.open-folder": {
+		"message": "Open launcher folder"
+	},
+	"app.settings.profile.v2.playtime-value": {
+		"message": "{hours} h {minutes} min"
+	},
+	"app.settings.profile.v2.signed-out-text": {
+		"message": "Add a Microsoft or local account in the sidebar under “Playing as” to start playing."
+	},
+	"app.settings.profile.v2.signed-out-title": {
+		"message": "No account yet"
+	},
+	"app.settings.profile.v2.stat.accounts": {
+		"message": "Accounts"
+	},
+	"app.settings.profile.v2.stat.instances": {
+		"message": "Instances"
+	},
+	"app.settings.profile.v2.stat.last-played": {
+		"message": "Last played"
+	},
+	"app.settings.profile.v2.stat.playtime": {
+		"message": "Time played"
+	},
+	"app.settings.profile.v2.stats-title": {
+		"message": "At a glance"
+	},
+	"app.settings.profile.v2.type.local": {
+		"message": "Local account"
+	},
+	"app.settings.profile.v2.type.microsoft": {
+		"message": "Microsoft account"
+	},
+	"app.settings.profile.v2.use": {
+		"message": "Use"
+	},
+	"app.settings.pvp.coming-soon": {
+		"message": "Coming soon"
+	},
+	"app.settings.pvp.eyebrow": {
+		"message": "PvP OverLay Client"
+	},
+	"app.settings.pvp.fact.automatic": {
+		"message": "Fully automatic"
+	},
+	"app.settings.pvp.fact.everywhere": {
+		"message": "Every instance"
+	},
+	"app.settings.pvp.fact.fair": {
+		"message": "Server-safe"
+	},
+	"app.settings.pvp.fact.free": {
+		"message": "Free forever"
+	},
+	"app.settings.pvp.fair-text": {
+		"message": "Only quality-of-life and visual improvements that large PvP servers allow. No reach, no aim assist, no X-ray — nothing that could get your account banned."
+	},
+	"app.settings.pvp.fair-title": {
+		"message": "Fair play first"
+	},
+	"app.settings.pvp.feature.combat.text": {
+		"message": "Hit colors, cleaner particles, low fire, toggle sprint and sneak, and zoom — the small things that decide close fights."
+	},
+	"app.settings.pvp.feature.combat.title": {
+		"message": "Clearer combat feedback"
+	},
+	"app.settings.pvp.feature.hud.text": {
+		"message": "Keystrokes, CPS, FPS and ping, armor durability, potion timers and a custom crosshair — each one movable and resizable."
+	},
+	"app.settings.pvp.feature.hud.title": {
+		"message": "Competitive HUD"
+	},
+	"app.settings.pvp.feature.performance.text": {
+		"message": "A tuned set of optimization mods for steady frame times during fights, even on modest PCs."
+	},
+	"app.settings.pvp.feature.performance.title": {
+		"message": "Maximum FPS, minimum input lag"
+	},
+	"app.settings.pvp.feature.profiles.text": {
+		"message": "Separate layouts for Bedwars, Skywars, duels or UHC, switched with one click and synced across all your instances."
+	},
+	"app.settings.pvp.feature.profiles.title": {
+		"message": "Profiles per game mode"
+	},
+	"app.settings.pvp.features-title": {
+		"message": "What’s coming"
+	},
+	"app.settings.pvp.how-title": {
+		"message": "How it will work"
+	},
+	"app.settings.pvp.step.one.text": {
+		"message": "One switch, here in Settings. Nothing to install by hand."
+	},
+	"app.settings.pvp.step.one.title": {
+		"message": "Turn it on"
+	},
+	"app.settings.pvp.step.three.text": {
+		"message": "Open the overlay in game with a single key and arrange your HUD. Turning the client off removes everything again."
+	},
+	"app.settings.pvp.step.three.title": {
+		"message": "Play"
+	},
+	"app.settings.pvp.step.two.text": {
+		"message": "Before each launch it adds the PvP mods that match the instance’s game version and loader, and keeps them up to date. Vanilla instances get a loader automatically."
+	},
+	"app.settings.pvp.step.two.title": {
+		"message": "The launcher prepares every instance"
+	},
+	"app.settings.pvp.text": {
+		"message": "In the spirit of Lunar Client and Feather Client — but as a Minekube extension that lives inside your own instances. Turn it on once and the launcher downloads, configures and keeps up to date everything a serious PvP player needs. No separate client, no account, no subscription."
+	},
+	"app.settings.pvp.title": {
+		"message": "A competitive client, built right into the launcher"
+	},
+	"app.settings.replay-introduction.description": {
+		"message": "Revisit the two-step introduction to launcher language and the features that help you get into your next world."
+	},
+	"app.settings.replay-introduction.title": {
+		"message": "Meet Minekube again"
+	},
+	"app.settings.resource-management.always-show-copy-details.description": {
+		"message": "Show the Copy details action while an install is queued or running. It is always available for failed or interrupted installs."
+	},
+	"app.settings.resource-management.always-show-copy-details.title": {
+		"message": "Always show copy details"
+	},
+	"app.settings.resource-management.app-cache.confirm.description": {
+		"message": "The app may load more slowly until the cache is rebuilt."
+	},
+	"app.settings.resource-management.app-cache.confirm.title": {
+		"message": "Purge the app cache?"
+	},
+	"app.settings.resource-management.app-cache.description": {
+		"message": "Clear cached data and download it again from the internet. The app may load more slowly until the cache is rebuilt."
+	},
+	"app.settings.resource-management.app-cache.purge": {
+		"message": "Purge cache"
+	},
+	"app.settings.resource-management.app-cache.title": {
+		"message": "App cache"
+	},
+	"app.settings.resource-management.app-database-backups.description": {
+		"message": "Backups of important app data are stored here in case you need to recover them later."
+	},
+	"app.settings.resource-management.app-database-backups.open-folder": {
+		"message": "Open backups folder"
+	},
+	"app.settings.resource-management.app-database-backups.title": {
+		"message": "App database backups"
+	},
+	"app.settings.resource-management.app-directory.browse": {
+		"message": "Browse for an app directory"
+	},
+	"app.settings.resource-management.app-directory.description": {
+		"message": "Where Minekube Launcher stores instances and other files. Changes take effect after restarting the app."
+	},
+	"app.settings.resource-management.app-directory.select": {
+		"message": "Select a new app directory"
+	},
+	"app.settings.resource-management.app-directory.title": {
+		"message": "App directory"
+	},
+	"app.settings.resource-management.maximum-concurrent-downloads.description": {
+		"message": "Number of files the app can download at once. Lower this if downloads are unreliable on your connection. Requires an app restart."
+	},
+	"app.settings.resource-management.maximum-concurrent-downloads.title": {
+		"message": "Maximum concurrent downloads"
+	},
+	"app.settings.resource-management.maximum-concurrent-writes.description": {
+		"message": "Number of files the app can write to disk at once. Lower this if you frequently encounter I/O errors. Requires an app restart."
+	},
+	"app.settings.resource-management.maximum-concurrent-writes.title": {
+		"message": "Maximum concurrent writes"
+	},
+	"app.settings.resource-management.store.attention": {
+		"message": "Some files still need attention"
+	},
+	"app.settings.resource-management.store.cache-limit.description": {
+		"message": "Keep up to this much unused content for future installs. Keeping more can save download time."
+	},
+	"app.settings.resource-management.store.cache-limit.label": {
+		"message": "Keep unused downloads"
+	},
+	"app.settings.resource-management.store.cache-limit.unit": {
+		"message": "GiB"
+	},
+	"app.settings.resource-management.store.calculating": {
+		"message": "Calculating"
+	},
+	"app.settings.resource-management.store.clear": {
+		"message": "Clear unused"
+	},
+	"app.settings.resource-management.store.clear.description": {
+		"message": "Delete unused downloaded content"
+	},
+	"app.settings.resource-management.store.cleared": {
+		"message": "Freed {size} of disk space."
+	},
+	"app.settings.resource-management.store.clearing": {
+		"message": "Clearing…"
+	},
+	"app.settings.resource-management.store.description": {
+		"message": "Save space by reusing game installs, mods and packs across your instances."
+	},
+	"app.settings.resource-management.store.empty": {
+		"message": "Install mods or packs to see your storage usage here."
+	},
+	"app.settings.resource-management.store.issues": {
+		"message": "View {count, plural, one {# issue} other {# issues}}"
+	},
+	"app.settings.resource-management.store.nothing-to-clear": {
+		"message": "No unused content to clear."
+	},
+	"app.settings.resource-management.store.repair": {
+		"message": "Verify and repair"
+	},
+	"app.settings.resource-management.store.repair.running-description": {
+		"message": "This will close any running instances."
+	},
+	"app.settings.resource-management.store.repair.verify-description": {
+		"message": "Check for missing or damaged files and repair them."
+	},
+	"app.settings.resource-management.store.repairing": {
+		"message": "Verifying and repairing…"
+	},
+	"app.settings.resource-management.store.shared.label": {
+		"message": "Shared"
+	},
+	"app.settings.resource-management.store.title": {
+		"message": "Content storage"
+	},
+	"app.settings.resource-management.store.total": {
+		"message": "{size} stored"
+	},
+	"app.settings.resource-management.store.unique.label": {
+		"message": "Unique"
+	},
+	"app.settings.resource-management.store.unused.label": {
+		"message": "Orphaned"
+	},
+	"app.settings.resource-management.store.verification-result": {
+		"message": "Checked {checked, plural, one {# file} other {# files}} and made {repaired, plural, one {# repair} other {# repairs}}."
+	},
+	"app.settings.resource-management.store.verified": {
+		"message": "Verification complete"
+	},
+	"app.settings.sidebar.label.other-options": {
+		"message": "Other options"
+	},
+	"app.settings.synced-options.choose-sync-source.command-history-description": {
+		"message": "Choose which instance to copy your command history from. This history is only used for the initial sync, and you can edit it from any instance afterward."
+	},
+	"app.settings.synced-options.choose-sync-source.command-history-title": {
+		"message": "Choose command history source"
+	},
+	"app.settings.synced-options.choose-sync-source.creative-hotbars-description": {
+		"message": "Choose which instance to copy your saved creative hotbars from. These hotbars are only used for the initial sync, and you can edit them from any instance afterward."
+	},
+	"app.settings.synced-options.choose-sync-source.creative-hotbars-title": {
+		"message": "Choose creative hotbars source"
+	},
+	"app.settings.synced-options.choose-sync-source.data-packs-title": {
+		"message": "Choose data packs source"
+	},
+	"app.settings.synced-options.choose-sync-source.game-settings-description": {
+		"message": "Choose which instance to copy your game settings from. These settings are only used for the initial sync, and you can edit them from any instance afterward."
+	},
+	"app.settings.synced-options.choose-sync-source.game-settings-title": {
+		"message": "Choose game settings source"
+	},
+	"app.settings.synced-options.choose-sync-source.ineligible": {
+		"message": "You cannot choose this instance as a sync source"
+	},
+	"app.settings.synced-options.choose-sync-source.load-error": {
+		"message": "Could not load sync sources. Please try again."
+	},
+	"app.settings.synced-options.choose-sync-source.multiplayer-servers-description": {
+		"message": "Choose which instance to copy your multiplayer servers from. These servers are only used for the initial sync, and you can edit them from any instance afterward."
+	},
+	"app.settings.synced-options.choose-sync-source.multiplayer-servers-title": {
+		"message": "Choose multiplayer servers source"
+	},
+	"app.settings.synced-options.choose-sync-source.no-instances-found": {
+		"message": "No instances found"
+	},
+	"app.settings.synced-options.choose-sync-source.resource-packs-title": {
+		"message": "Choose resource packs source"
+	},
+	"app.settings.synced-options.choose-sync-source.retry": {
+		"message": "Try again"
+	},
+	"app.settings.synced-options.choose-sync-source.search-placeholder": {
+		"message": "Search instance"
+	},
+	"app.settings.synced-options.choose-sync-source.sync": {
+		"message": "Sync"
+	},
+	"app.settings.synced-options.command-history": {
+		"message": "Sync command history"
+	},
+	"app.settings.synced-options.command-history.description": {
+		"message": "Use the same command history across your instances."
+	},
+	"app.settings.synced-options.command-history.editor-title": {
+		"message": "Edit command history"
+	},
+	"app.settings.synced-options.creative-hotbars": {
+		"message": "Sync saved creative hotbars"
+	},
+	"app.settings.synced-options.creative-hotbars.description": {
+		"message": "Use the same saved creative hotbars across your instances."
+	},
+	"app.settings.synced-options.data-packs": {
+		"message": "Sync data packs"
+	},
+	"app.settings.synced-options.data-packs.description": {
+		"message": "Use the same datapacks across your instances"
+	},
+	"app.settings.synced-options.data-packs.none-synced-yet": {
+		"message": "You haven't synced any data packs yet"
+	},
+	"app.settings.synced-options.edit.no-instances": {
+		"message": "Add an instance before editing synced data."
+	},
+	"app.settings.synced-options.edit.no-synced-data": {
+		"message": "Choose a sync source before editing this setting."
+	},
+	"app.settings.synced-options.game-settings": {
+		"message": "Sync game options"
+	},
+	"app.settings.synced-options.game-settings.button": {
+		"message": "Edit game settings"
+	},
+	"app.settings.synced-options.game-settings.conflict-text": {
+		"message": "We loaded the latest settings. Check your changes, then save again."
+	},
+	"app.settings.synced-options.game-settings.conflict-title": {
+		"message": "These settings changed elsewhere"
+	},
+	"app.settings.synced-options.game-settings.custom-empty": {
+		"message": "Settings added by mods will appear here after the launcher finds them in one of your instances."
+	},
+	"app.settings.synced-options.game-settings.description": {
+		"message": "Use the same game options across your instances."
+	},
+	"app.settings.synced-options.game-settings.disable-all": {
+		"message": "Unsync all"
+	},
+	"app.settings.synced-options.game-settings.disabled-tooltip": {
+		"message": "Enable game settings sync before choosing individual settings."
+	},
+	"app.settings.synced-options.game-settings.empty": {
+		"message": "No settings match your search or filter."
+	},
+	"app.settings.synced-options.game-settings.enable-all": {
+		"message": "Sync all"
+	},
+	"app.settings.synced-options.game-settings.load-failed": {
+		"message": "We couldn’t load your game settings."
+	},
+	"app.settings.synced-options.game-settings.loading": {
+		"message": "Loading settings..."
+	},
+	"app.settings.synced-options.game-settings.no-options-to-edit": {
+		"message": "You haven't got any options yet to edit"
+	},
+	"app.settings.synced-options.game-settings.not-being-synced": {
+		"message": "Not being synced"
+	},
+	"app.settings.synced-options.game-settings.retry": {
+		"message": "Retry"
+	},
+	"app.settings.synced-options.game-settings.save": {
+		"message": "Save settings"
+	},
+	"app.settings.synced-options.game-settings.search": {
+		"message": "Search settings..."
+	},
+	"app.settings.synced-options.game-settings.sync-description": {
+		"message": "Synced options are applied to every instance and override the values included with a modpack."
+	},
+	"app.settings.synced-options.game-settings.sync-setting": {
+		"message": "Sync {setting} across instances"
+	},
+	"app.settings.synced-options.game-settings.sync-title": {
+		"message": "Sync game settings"
+	},
+	"app.settings.synced-options.game-settings.synced-across-instances": {
+		"message": "Synced across instances"
+	},
+	"app.settings.synced-options.game-settings.title": {
+		"message": "Game settings"
+	},
+	"app.settings.synced-options.game-settings.unsaved-changes": {
+		"message": "You have unsaved changes."
+	},
+	"app.settings.synced-options.game-settings.unsync-setting": {
+		"message": "Stop syncing {setting} across instances"
+	},
+	"app.settings.synced-options.game-settings.value-mixed": {
+		"message": "Different across instances"
+	},
+	"app.settings.synced-options.game-settings.value-off": {
+		"message": "Off"
+	},
+	"app.settings.synced-options.game-settings.value-on": {
+		"message": "On"
+	},
+	"app.settings.synced-options.game-settings.value-unset": {
+		"message": "Choose a value"
+	},
+	"app.settings.synced-options.multiplayer-servers": {
+		"message": "Sync multiplayer servers"
+	},
+	"app.settings.synced-options.multiplayer-servers.address": {
+		"message": "Server address"
+	},
+	"app.settings.synced-options.multiplayer-servers.copy-address": {
+		"message": "Copy address"
+	},
+	"app.settings.synced-options.multiplayer-servers.count": {
+		"message": "{count, plural, one {# server} other {# servers}}"
+	},
+	"app.settings.synced-options.multiplayer-servers.description": {
+		"message": "Use the same multiplayer servers across your instances."
+	},
+	"app.settings.synced-options.multiplayer-servers.editor-title": {
+		"message": "Edit synced servers"
+	},
+	"app.settings.synced-options.multiplayer-servers.empty": {
+		"message": "No user-added servers are currently synced."
+	},
+	"app.settings.synced-options.multiplayer-servers.filter-offline": {
+		"message": "Offline"
+	},
+	"app.settings.synced-options.multiplayer-servers.filter-online": {
+		"message": "Online"
+	},
+	"app.settings.synced-options.multiplayer-servers.more-options": {
+		"message": "More server options"
+	},
+	"app.settings.synced-options.multiplayer-servers.name": {
+		"message": "Server name"
+	},
+	"app.settings.synced-options.multiplayer-servers.no-results": {
+		"message": "No synced servers match your search or filters."
+	},
+	"app.settings.synced-options.multiplayer-servers.none-synced-yet": {
+		"message": "You haven't synced any servers yet"
+	},
+	"app.settings.synced-options.multiplayer-servers.players-online": {
+		"message": "{count, number} online"
+	},
+	"app.settings.synced-options.multiplayer-servers.search": {
+		"message": "Search {count, number} {count, plural, one {synced server} other {synced servers}}..."
+	},
+	"app.settings.synced-options.multiplayer-servers.status": {
+		"message": "Status"
+	},
+	"app.settings.synced-options.packs.disabled": {
+		"message": "Enable syncing before editing shared packs."
+	},
+	"app.settings.synced-options.resource-packs": {
+		"message": "Sync resource packs"
+	},
+	"app.settings.synced-options.resource-packs.description": {
+		"message": "Use the same resource packs across your instances."
+	},
+	"app.settings.synced-options.resource-packs.none-synced-yet": {
+		"message": "You haven't synced any resource packs yet"
+	},
+	"app.settings.tabs.appearance": {
+		"message": "Appearance"
+	},
+	"app.settings.tabs.behavior": {
+		"message": "Behavior"
+	},
+	"app.settings.tabs.features": {
+		"message": "Features"
+	},
+	"app.settings.tabs.java-installations": {
+		"message": "Java installations"
+	},
+	"app.settings.tabs.language": {
+		"message": "Language"
+	},
+	"app.settings.tabs.performance": {
+		"message": "Performance"
+	},
+	"app.settings.tabs.privacy": {
+		"message": "Privacy"
+	},
+	"app.settings.tabs.profile": {
+		"message": "Profile"
+	},
+	"app.settings.tabs.resource-management": {
+		"message": "Resource management"
+	},
+	"app.settings.tabs.synced-options": {
+		"message": "Synced settings"
+	},
+	"app.settings.tabs.visual": {
+		"message": "Visual"
+	},
+	"app.settings.visual.advanced-animations.description": {
+		"message": "Full control over the animated loading screen: the wordmark and how it moves, the progress indicator, the starfield and nebulae around it, the particles drifting in the background and the timing of the whole sequence."
+	},
+	"app.settings.visual.advanced-animations.title": {
+		"message": "Advanced animations options"
+	},
+	"app.settings.visual.animations.description": {
+		"message": "Enable or disable all animations and transitions in the launcher. Turning them off can help on very weak hardware."
+	},
+	"app.settings.visual.animations.title": {
+		"message": "Launcher animations"
+	},
+	"app.settings.visual.character.cost": {
+		"message": "It is a real 3D view, so a small WebGL canvas keeps drawing while the launcher is visible. It is rendered small at a modest resolution and stops completely while the window is hidden. On a weak GPU it is the first thing worth turning off."
+	},
+	"app.settings.visual.character.cost-title": {
+		"message": "What it costs"
+	},
+	"app.settings.visual.character.description": {
+		"message": "Shows your own Minecraft character in the bottom right corner once you are signed in. It waves hello, follows your mouse pointer with its whole body and wanders around its corner. Nothing is shown while no account is signed in."
+	},
+	"app.settings.visual.character.reactions-description": {
+		"message": "The character answers what you do: it carries a gear while this window is open, hops with a tick when you switch something on and shakes its head when you switch it off, cheers when a game launches and reads along on project pages. In quiet moments it has a repertoire of its own, keeps still while you are busy and gets sleepy late at night."
+	},
+	"app.settings.visual.character.reactions-title": {
+		"message": "Let the character react to you"
+	},
+	"app.settings.visual.character.title": {
+		"message": "Sidebar player character (Beta)"
+	},
+	"app.settings.visual.effect-style.aurora": {
+		"message": "Aurora"
+	},
+	"app.settings.visual.effect-style.aurora-desc": {
+		"message": "Slow ribbons of luminous colour flow beneath the interface."
+	},
+	"app.settings.visual.effect-style.cubes": {
+		"message": "3D cubes"
+	},
+	"app.settings.visual.effect-style.cubes-desc": {
+		"message": "Glowing Minekube blocks drift through a soft three-dimensional space."
+	},
+	"app.settings.visual.effect-style.description": {
+		"message": "Every effect is drawn in a lightweight canvas layer with depth, soft lighting and carefully limited particle counts. Select a scene to preview it across the launcher."
+	},
+	"app.settings.visual.effect-style.embers": {
+		"message": "Embers"
+	},
+	"app.settings.visual.effect-style.embers-desc": {
+		"message": "Warm sparks rise and flicker like a quiet portal flame."
+	},
+	"app.settings.visual.effect-style.fireflies": {
+		"message": "Fireflies"
+	},
+	"app.settings.visual.effect-style.fireflies-desc": {
+		"message": "Quiet, floating lights pulse softly in the distance."
+	},
+	"app.settings.visual.effect-style.galaxy": {
+		"message": "Galaxy"
+	},
+	"app.settings.visual.effect-style.galaxy-desc": {
+		"message": "A spiralling starfield with layered parallax and a glowing nebula."
+	},
+	"app.settings.visual.effect-style.lightning": {
+		"message": "Lightning"
+	},
+	"app.settings.visual.effect-style.lightning-desc": {
+		"message": "Brief, branching bolts light up a stormy sky without obscuring text."
+	},
+	"app.settings.visual.effect-style.snow": {
+		"message": "Snowfall"
+	},
+	"app.settings.visual.effect-style.snow-desc": {
+		"message": "Fine winter flakes drift at different depths across the scene."
+	},
+	"app.settings.visual.effect-style.title": {
+		"message": "Choose your atmosphere"
+	},
+	"app.settings.visual.effects.description": {
+		"message": "An animated atmosphere behind every screen. The scene is drawn on one lightweight canvas that thins itself out on slower hardware, never covers text and pauses whenever the launcher is hidden."
+	},
+	"app.settings.visual.effects.title": {
+		"message": "Enhanced Optimized Effects"
+	},
+	"app.settings.visual.enhanced.description": {
+		"message": "One motion system for the whole launcher: page changes, dialogs, menus, hover and press feedback all share the same timing, built only from smooth, GPU-friendly movement."
+	},
+	"app.settings.visual.enhanced.title": {
+		"message": "Enhanced Optimized Animations"
+	},
+	"app.settings.visual.glow.description": {
+		"message": "Lights up headings, labels, buttons and switches with a soft Minekube glow. It is static light, so it costs nothing while the launcher runs."
+	},
+	"app.settings.visual.glow.galaxy-description": {
+		"message": "Wraps every button and switch in a slowly turning ring of galaxy colours. Works with or without the glow and holds still when animations are off."
+	},
+	"app.settings.visual.glow.galaxy-title": {
+		"message": "Galaxy outline"
+	},
+	"app.settings.visual.glow.gold": {
+		"message": "Gold"
+	},
+	"app.settings.visual.glow.magenta": {
+		"message": "Magenta"
+	},
+	"app.settings.visual.glow.off": {
+		"message": "Off"
+	},
+	"app.settings.visual.glow.title": {
+		"message": "Glow on text and controls"
+	},
+	"app.settings.visual.kicker.3d-companion": {
+		"message": "04 · 3D companion"
+	},
+	"app.settings.visual.kicker.ambient-effects": {
+		"message": "03 · Ambient effects"
+	},
+	"app.settings.visual.kicker.interface-glow": {
+		"message": "05 · Interface glow"
+	},
+	"app.settings.visual.kicker.motion-foundation": {
+		"message": "01 · Motion foundation"
+	},
+	"app.settings.visual.kicker.motion-system": {
+		"message": "02 · Motion system"
+	},
+	"app.settings.visual.option.selected": {
+		"message": "Selected"
+	},
+	"app.settings.visual.splash.animation-speed": {
+		"message": "Animation speed"
+	},
+	"app.settings.visual.splash.animation-speed-hint": {
+		"message": "Multiplies every loading screen animation, from the drifting nebulae to the shine."
+	},
+	"app.settings.visual.splash.background-effects": {
+		"message": "Background particles"
+	},
+	"app.settings.visual.splash.background-effects-hint": {
+		"message": "Drift the particle effect you picked in Visual behind the loading screen, so both share one atmosphere."
+	},
+	"app.settings.visual.splash.background-effects-off": {
+		"message": "The background only shows the starfield and the nebulae."
+	},
+	"app.settings.visual.splash.background-effects-using": {
+		"message": "The background uses the “{style}” effect from Visual."
+	},
+	"app.settings.visual.splash.fade-out": {
+		"message": "Fade-out duration"
+	},
+	"app.settings.visual.splash.grid-floor": {
+		"message": "Perspective grid floor"
+	},
+	"app.settings.visual.splash.grid-floor-hint": {
+		"message": "The retro floor grid stretching out below the logo."
+	},
+	"app.settings.visual.splash.grid-intensity": {
+		"message": "Grid brightness"
+	},
+	"app.settings.visual.splash.group.background": {
+		"message": "Background scene"
+	},
+	"app.settings.visual.splash.group.logo": {
+		"message": "Loading screen logo"
+	},
+	"app.settings.visual.splash.group.preview": {
+		"message": "Preview"
+	},
+	"app.settings.visual.splash.group.progress": {
+		"message": "Progress indicator"
+	},
+	"app.settings.visual.splash.group.timing": {
+		"message": "Timing and motion"
+	},
+	"app.settings.visual.splash.logo-animation": {
+		"message": "Logo animation"
+	},
+	"app.settings.visual.splash.logo-animation-hint": {
+		"message": "How the Minekube wordmark moves while the launcher loads."
+	},
+	"app.settings.visual.splash.logo-animation.breathe": {
+		"message": "Breathe"
+	},
+	"app.settings.visual.splash.logo-animation.breathe-hint": {
+		"message": "The wordmark slowly swells and settles again."
+	},
+	"app.settings.visual.splash.logo-animation.float": {
+		"message": "Float"
+	},
+	"app.settings.visual.splash.logo-animation.float-hint": {
+		"message": "The wordmark drifts gently up and down."
+	},
+	"app.settings.visual.splash.logo-animation.none": {
+		"message": "None"
+	},
+	"app.settings.visual.splash.logo-animation.none-hint": {
+		"message": "The wordmark stays perfectly still."
+	},
+	"app.settings.visual.splash.logo-animation.pulse": {
+		"message": "Pulse"
+	},
+	"app.settings.visual.splash.logo-animation.pulse-hint": {
+		"message": "The wordmark softly pulses with light."
+	},
+	"app.settings.visual.splash.logo-animation.shimmer": {
+		"message": "Shimmer"
+	},
+	"app.settings.visual.splash.logo-animation.shimmer-hint": {
+		"message": "A band of light sweeps across the wordmark."
+	},
+	"app.settings.visual.splash.logo-animation.tilt": {
+		"message": "Tilt"
+	},
+	"app.settings.visual.splash.logo-animation.tilt-hint": {
+		"message": "The wordmark turns slowly in three dimensions."
+	},
+	"app.settings.visual.splash.logo-glow": {
+		"message": "Glow"
+	},
+	"app.settings.visual.splash.logo-glow-hint": {
+		"message": "The halo and the light that surrounds the wordmark."
+	},
+	"app.settings.visual.splash.logo-intensity": {
+		"message": "Animation intensity"
+	},
+	"app.settings.visual.splash.logo-intensity-hint": {
+		"message": "How far the wordmark travels and how strongly it reacts."
+	},
+	"app.settings.visual.splash.logo-size": {
+		"message": "Logo size"
+	},
+	"app.settings.visual.splash.logo-size-hint": {
+		"message": "Scales the wordmark and the glow behind it."
+	},
+	"app.settings.visual.splash.min-display": {
+		"message": "Minimum display time"
+	},
+	"app.settings.visual.splash.min-display-hint": {
+		"message": "Keeps the loading screen up for at least this long so it never just flashes by."
+	},
+	"app.settings.visual.splash.nebula-intensity": {
+		"message": "Nebula intensity"
+	},
+	"app.settings.visual.splash.preview-hint": {
+		"message": "Everything below is drawn live, exactly as the launcher will show it."
+	},
+	"app.settings.visual.splash.preview-status": {
+		"message": "Loading worlds…"
+	},
+	"app.settings.visual.splash.progress-height": {
+		"message": "Indicator thickness"
+	},
+	"app.settings.visual.splash.progress-style": {
+		"message": "Indicator style"
+	},
+	"app.settings.visual.splash.progress-style-hint": {
+		"message": "How loading progress is drawn underneath the logo."
+	},
+	"app.settings.visual.splash.progress-width": {
+		"message": "Indicator width"
+	},
+	"app.settings.visual.splash.replay": {
+		"message": "Play loading screen preview"
+	},
+	"app.settings.visual.splash.replay-hint": {
+		"message": "Shows the real loading screen with your current settings for a few seconds. Click anywhere or press Escape to skip it."
+	},
+	"app.settings.visual.splash.reset": {
+		"message": "Reset loading screen"
+	},
+	"app.settings.visual.splash.show-message": {
+		"message": "Show loading status text"
+	},
+	"app.settings.visual.splash.show-message-hint": {
+		"message": "Prints what the launcher is doing right now under the indicator."
+	},
+	"app.settings.visual.splash.star-density": {
+		"message": "Starfield density"
+	},
+	"app.settings.visual.splash.star-speed": {
+		"message": "Starfield speed"
+	},
+	"app.settings.visual.splash.style.bar": {
+		"message": "Bar"
+	},
+	"app.settings.visual.splash.style.bar-hint": {
+		"message": "A glowing gradient bar with a travelling shine."
+	},
+	"app.settings.visual.splash.style.dots": {
+		"message": "Dots"
+	},
+	"app.settings.visual.splash.style.dots-hint": {
+		"message": "A quiet row of lights that fill up as work completes."
+	},
+	"app.settings.visual.splash.style.minimal": {
+		"message": "Minimal"
+	},
+	"app.settings.visual.splash.style.minimal-hint": {
+		"message": "A hairline that grows across the middle of the screen."
+	},
+	"app.settings.visual.splash.style.ring": {
+		"message": "Ring"
+	},
+	"app.settings.visual.splash.style.ring-hint": {
+		"message": "A circular dial with the exact percentage in the middle."
+	},
+	"app.settings.visual.splash.style.segments": {
+		"message": "Segments"
+	},
+	"app.settings.visual.splash.style.segments-hint": {
+		"message": "Blocky Minecraft-style chunks that light up one by one."
+	},
+	"app.settings.visual.studio.description": {
+		"message": "Shape the atmosphere with fluid motion, dimensional light and crisp, readable surfaces. Your choices preview instantly and stay in sync across the launcher."
+	},
+	"app.settings.visual.studio.eyebrow": {
+		"message": "Minekube visual studio"
+	},
+	"app.settings.visual.studio.title": {
+		"message": "A launcher that feels alive"
+	},
+	"app.settings.visual.style.arcade": {
+		"message": "Arcade"
+	},
+	"app.settings.visual.style.arcade-desc": {
+		"message": "Bold, blocky steps inspired by the worlds you play."
+	},
+	"app.settings.visual.style.cinematic": {
+		"message": "Cinematic"
+	},
+	"app.settings.visual.style.cinematic-desc": {
+		"message": "Dramatic entrances with layered depth and a gentle glow."
+	},
+	"app.settings.visual.style.description": {
+		"message": "Choose the character of the launcher’s movement. Every profile updates the live preview and shared interface transitions."
+	},
+	"app.settings.visual.style.playful": {
+		"message": "Playful"
+	},
+	"app.settings.visual.style.playful-desc": {
+		"message": "Springy feedback, lively icons and satisfying little rebounds."
+	},
+	"app.settings.visual.style.preview-button": {
+		"message": "Play"
+	},
+	"app.settings.visual.style.preview-card": {
+		"message": "A world of your own"
+	},
+	"app.settings.visual.style.preview-label": {
+		"message": "Live motion preview"
+	},
+	"app.settings.visual.style.preview-mark": {
+		"message": "MINEKUBE · WORLD SELECTED"
+	},
+	"app.settings.visual.style.smooth": {
+		"message": "Smooth"
+	},
+	"app.settings.visual.style.smooth-desc": {
+		"message": "Silky, balanced motion with gentle depth and a soft landing."
+	},
+	"app.settings.visual.style.snappy": {
+		"message": "Snappy"
+	},
+	"app.settings.visual.style.snappy-desc": {
+		"message": "Quick, precise transitions that get out of your way."
+	},
+	"app.settings.visual.style.title": {
+		"message": "Motion profile"
+	},
+	"app.shield.strict-blocked.text": {
+		"message": "Strict mode is on, so the launcher does not connect to the online library. You can turn it off in Settings → Privacy."
+	},
+	"app.shield.strict-blocked.title": {
+		"message": "Blocked by Minekube Shield"
+	},
+	"app.sidebar.instance-toolbar.change-group": {
+		"message": "Change group"
+	},
+	"app.sidebar.instance-toolbar.change-icon": {
+		"message": "Change icon"
+	},
+	"app.sidebar.instance-toolbar.create-instance": {
+		"message": "Create instance"
+	},
+	"app.sidebar.instance-toolbar.create-shortcut": {
+		"message": "Create shortcut"
+	},
+	"app.sidebar.instance-toolbar.delete": {
+		"message": "Delete"
+	},
+	"app.sidebar.instance-toolbar.duplicate": {
+		"message": "Duplicate"
+	},
+	"app.sidebar.instance-toolbar.edit": {
+		"message": "Edit"
+	},
+	"app.sidebar.instance-toolbar.export": {
+		"message": "Export"
+	},
+	"app.sidebar.instance-toolbar.kill": {
+		"message": "Stop"
+	},
+	"app.sidebar.instance-toolbar.launch": {
+		"message": "Play"
+	},
+	"app.sidebar.instance-toolbar.launching": {
+		"message": "Starting…"
+	},
+	"app.sidebar.instance-toolbar.no-instance": {
+		"message": "No instance selected"
+	},
+	"app.sidebar.instance-toolbar.rename": {
+		"message": "Rename"
+	},
+	"app.sidebar.instance-toolbar.stopping": {
+		"message": "Stopping…"
+	},
+	"app.sidebar.instance-toolbar.title": {
+		"message": "Instance"
+	},
+	"app.sidebar.instance-toolbar.view-folder": {
+		"message": "Open folder"
+	},
+	"app.sidebar.playing-as": {
+		"message": "Playing as"
+	},
+	"app.sidebar.status.game-title": {
+		"message": "Game status"
+	},
+	"app.sidebar.status.last-played": {
+		"message": "Last played"
+	},
+	"app.sidebar.status.never-played": {
+		"message": "Never"
+	},
+	"app.sidebar.status.nothing-running": {
+		"message": "Nothing running"
+	},
+	"app.sidebar.status.total-playtime": {
+		"message": "Total playtime"
+	},
+	"app.skins.add-button": {
+		"message": "Add skin"
+	},
+	"app.skins.add-button.drag-and-drop": {
+		"message": "Drag and drop"
+	},
+	"app.skins.apply-button": {
+		"message": "Apply"
+	},
+	"app.skins.delete-button": {
+		"message": "Delete skin"
+	},
+	"app.skins.delete-modal.description": {
+		"message": "This will permanently delete the selected skin. This action cannot be undone."
+	},
+	"app.skins.delete-modal.title": {
+		"message": "Are you sure you want to delete this skin?"
+	},
+	"app.skins.demo.apply-tooltip": {
+		"message": "Sign in to apply skins."
+	},
+	"app.skins.demo.description": {
+		"message": "Sign in to your Minecraft account to save and apply skins!"
+	},
+	"app.skins.demo.title": {
+		"message": "Editing with a demo account"
+	},
+	"app.skins.dropped-file-error.text": {
+		"message": "Failed to read the dropped file."
+	},
+	"app.skins.dropped-file-error.title": {
+		"message": "Error processing file"
+	},
+	"app.skins.ears-feature-notice": {
+		"message": "This skin uses features from the {ears} mod"
+	},
+	"app.skins.edit-button": {
+		"message": "Edit skin"
+	},
+	"app.skins.local-account.apply-tooltip": {
+		"message": "Skins cannot be applied to local accounts."
+	},
+	"app.skins.local-account.description": {
+		"message": "Local accounts have no online profile, so the game uses the default skin. Sign in with a Microsoft account that owns Minecraft to change skins and capes."
+	},
+	"app.skins.local-account.title": {
+		"message": "Skins are not available for local accounts"
+	},
+	"app.skins.modal.add-skin-button": {
+		"message": "Add skin"
+	},
+	"app.skins.modal.add-title": {
+		"message": "Adding a skin"
+	},
+	"app.skins.modal.arm-style-section": {
+		"message": "Arm style"
+	},
+	"app.skins.modal.arm-style-slim": {
+		"message": "Slim"
+	},
+	"app.skins.modal.arm-style-wide": {
+		"message": "Wide"
+	},
+	"app.skins.modal.cape-fallback-name": {
+		"message": "Cape"
+	},
+	"app.skins.modal.cape-section": {
+		"message": "Cape"
+	},
+	"app.skins.modal.demo-save-tooltip": {
+		"message": "Sign in to save skins."
+	},
+	"app.skins.modal.edit-title": {
+		"message": "Editing skin"
+	},
+	"app.skins.modal.make-edit-first-tooltip": {
+		"message": "Make an edit to the skin first!"
+	},
+	"app.skins.modal.no-cape-tooltip": {
+		"message": "No cape"
+	},
+	"app.skins.modal.none-cape-option": {
+		"message": "None"
+	},
+	"app.skins.modal.replace-texture-button": {
+		"message": "Replace texture"
+	},
+	"app.skins.modal.save-skin-button": {
+		"message": "Save skin"
+	},
+	"app.skins.modal.saving-tooltip": {
+		"message": "Saving..."
+	},
+	"app.skins.modal.texture-section": {
+		"message": "Texture"
+	},
+	"app.skins.modal.upload-skin-first-tooltip": {
+		"message": "Upload a skin first!"
+	},
+	"app.skins.preview.edit-button": {
+		"message": "Edit skin"
+	},
+	"app.skins.previewing-badge": {
+		"message": "Previewing"
+	},
+	"app.skins.rate-limit.text": {
+		"message": "You're changing your skin too frequently. Mojang's servers have temporarily blocked further requests. Please wait a moment before trying again."
+	},
+	"app.skins.rate-limit.title": {
+		"message": "Slow down!"
+	},
+	"app.skins.reorder-error.text": {
+		"message": "Your skin order could not be saved."
+	},
+	"app.skins.reorder-error.title": {
+		"message": "Failed to reorder skins"
+	},
+	"app.skins.section.builders-and-biomes": {
+		"message": "Builders & Biomes"
+	},
+	"app.skins.section.chaos-cubed": {
+		"message": "Chaos Cubed"
+	},
+	"app.skins.section.chase-the-skies": {
+		"message": "Chase the Skies"
+	},
+	"app.skins.section.default-skins": {
+		"message": "Default skins"
+	},
+	"app.skins.section.minecon-earth-2017": {
+		"message": "MINECON Earth 2017"
+	},
+	"app.skins.section.modrinth": {
+		"message": "Classic"
+	},
+	"app.skins.section.modrinth-pride": {
+		"message": "Pride"
+	},
+	"app.skins.section.modrinth-pride.tooltip": {
+		"message": "You received these skins for donating to a Pride fundraiser during Pride Month."
+	},
+	"app.skins.section.mounts-of-mayhem": {
+		"message": "Mounts of Mayhem"
+	},
+	"app.skins.section.saved-skins": {
+		"message": "Saved skins"
+	},
+	"app.skins.section.striding-hero": {
+		"message": "Striding Hero"
+	},
+	"app.skins.section.the-copper-age": {
+		"message": "The Copper Age"
+	},
+	"app.skins.section.the-garden-awakens": {
+		"message": "The Garden Awakens"
+	},
+	"app.skins.section.tiny-takeover": {
+		"message": "Tiny Takeover"
+	},
+	"app.skins.sign-in.button": {
+		"message": "Sign in to Microsoft"
+	},
+	"app.skins.title": {
+		"message": "Skin selector"
+	},
+	"app.skins.toggle-ears-features-off": {
+		"message": "Toggle off"
+	},
+	"app.skins.toggle-ears-features-on": {
+		"message": "Toggle on"
+	},
+	"app.support-window.eyebrow": {
+		"message": "MADE FOR PLAYERS, WITH PLAYERS"
+	},
+	"app.support-window.feedback-action": {
+		"message": "Open issues"
+	},
+	"app.support-window.feedback-description": {
+		"message": "Report a bug or suggest an idea. Your feedback matters just as much."
+	},
+	"app.support-window.feedback-title": {
+		"message": "Make it better"
+	},
+	"app.support-window.github-action": {
+		"message": "View on GitHub"
+	},
+	"app.support-window.github-description": {
+		"message": "Explore the source, contribute code or help improve translations."
+	},
+	"app.support-window.github-title": {
+		"message": "Build with us"
+	},
+	"app.support-window.hero": {
+		"message": "Every adventure starts together."
+	},
+	"app.support-window.intro": {
+		"message": "Minekube Launcher is free and open source. If it makes your time in Minecraft a little better, there are several ways to help it grow. Supporting us is always optional."
+	},
+	"app.support-window.kofi-action": {
+		"message": "Visit Ko-fi"
+	},
+	"app.support-window.kofi-description": {
+		"message": "Voluntary contributions help cover infrastructure and ongoing development. Explore our Ko-fi support option in your browser."
+	},
+	"app.support-window.kofi-title": {
+		"message": "Give the project a boost"
+	},
+	"app.support-window.thank-you": {
+		"message": "Thank you for being part of Minekube. No payment is needed to enjoy the launcher."
+	},
+	"app.support-window.title": {
+		"message": "Support the project"
+	},
+	"app.sync-instances-update.choose-source.data-packs": {
+		"message": "Choose which instance to copy your data packs from. These packs are only used for the initial sync, and you can edit them from any instance afterward."
+	},
+	"app.sync-instances-update.choose-source.resource-packs": {
+		"message": "Choose which instance to copy your resource packs from. These packs are only used for the initial sync, and you can edit them from any instance afterward."
+	},
+	"app.synced-content.change.disable-description": {
+		"message": "Disable it across all synced instances, or only in this instance. Disabling it only here will turn on overrides for this instance."
+	},
+	"app.synced-content.change.disable-everywhere": {
+		"message": "Disable everywhere"
+	},
+	"app.synced-content.change.disable-everywhere-description": {
+		"message": "Disable this content across all synced instances."
+	},
+	"app.synced-content.change.disable-here": {
+		"message": "Disable here"
+	},
+	"app.synced-content.change.disable-title": {
+		"message": "Disable content?"
+	},
+	"app.synced-content.change.enable-description": {
+		"message": "Enable it across all synced instances, or only in this instance. Enabling it only here will turn on overrides for this instance."
+	},
+	"app.synced-content.change.enable-everywhere": {
+		"message": "Enable everywhere"
+	},
+	"app.synced-content.change.enable-everywhere-description": {
+		"message": "Enable this content across all synced instances."
+	},
+	"app.synced-content.change.enable-here": {
+		"message": "Enable here"
+	},
+	"app.synced-content.change.enable-title": {
+		"message": "Enable content?"
+	},
+	"app.synced-content.delete.delete-everywhere": {
+		"message": "Delete everywhere"
+	},
+	"app.synced-content.delete.delete-here": {
+		"message": "Delete here"
+	},
+	"app.synced-content.delete.description": {
+		"message": "Deleting this content will delete it across all your instances"
+	},
+	"app.synced-content.delete.mixed": {
+		"message": "Selected content that is not synced will only be deleted from this instance."
+	},
+	"app.synced-content.delete.override-description": {
+		"message": "You can remove it from just this instance or from all synced instances. Removing it from only this instance will enable overrides, and this instance will no longer receive synced changes for these content types."
+	},
+	"app.synced-content.delete.resource-pack-description": {
+		"message": "You can remove {count, plural, one {it} other {them}} from just this instance or from all synced instances. Removing {count, plural, one {it} other {them}} from only this instance will enable overrides, and this instance will no longer receive synced resource pack changes."
+	},
+	"app.synced-content.delete.resource-pack-header": {
+		"message": "{count, plural, one {This resource pack is synced} other {These resource packs are synced}}"
+	},
+	"app.synced-content.desync.description": {
+		"message": "This instance will keep its own copy. Do you want to keep this content synced in other instances, or remove it from them?"
+	},
+	"app.synced-content.desync.keep": {
+		"message": "Keep"
+	},
+	"app.synced-content.desync.remove": {
+		"message": "Remove"
+	},
+	"app.synced-content.desync.title": {
+		"message": "Desync content"
+	},
+	"app.synced-content.warning.title": {
+		"message": "This content is synced"
+	},
+	"app.synced-packs.data-packs.title": {
+		"message": "Synced data packs"
+	},
+	"app.synced-packs.empty": {
+		"message": "Add packs from an instance’s content page to start syncing."
+	},
+	"app.synced-packs.load-failed": {
+		"message": "Packs could not be loaded. Try refreshing."
+	},
+	"app.synced-packs.resource-packs.title": {
+		"message": "Synced resource packs"
+	},
+	"app.toolbar.add-instance": {
+		"message": "Add instance"
+	},
+	"app.toolbar.folder.icons": {
+		"message": "Icons folder"
+	},
+	"app.toolbar.folder.instances": {
+		"message": "Instances folder"
+	},
+	"app.toolbar.folder.java": {
+		"message": "Java folder"
+	},
+	"app.toolbar.folder.launcher-root": {
+		"message": "Launcher root folder"
+	},
+	"app.toolbar.folder.synced-settings": {
+		"message": "Synced settings"
+	},
+	"app.toolbar.folders": {
+		"message": "Folders"
+	},
+	"app.toolbar.help": {
+		"message": "Help"
+	},
+	"app.toolbar.help.report-bug": {
+		"message": "Report a bug"
+	},
+	"app.toolbar.help.support-project": {
+		"message": "Support the project"
+	},
+	"app.update-popup.body.download-complete": {
+		"message": "Minekube Launcher v{version} has finished downloading. Reload to update now, or automatically when you close Minekube Launcher."
+	},
+	"app.update-popup.body.linux": {
+		"message": "Minekube Launcher v{version} is available. Use your package manager to update for the latest features and fixes!"
+	},
+	"app.update-popup.body.metered": {
+		"message": "Minekube Launcher v{version} is available now! Since you're on a metered network, we didn't automatically download it."
+	},
+	"app.update-popup.changelog": {
+		"message": "Changelog"
+	},
+	"app.update-popup.download": {
+		"message": "Download ({size})"
+	},
+	"app.update-popup.download-complete": {
+		"message": "Download complete"
+	},
+	"app.update-popup.reload": {
+		"message": "Reload to update"
+	},
+	"app.update-popup.title": {
+		"message": "Update available"
+	},
+	"app.update.complete-toast.text": {
+		"message": "Click here to view the changelog."
+	},
+	"app.update.complete-toast.title": {
+		"message": "Version {version} was successfully installed!"
+	},
+	"app.update.download-error.missing-version": {
+		"message": "Failed to download update: no version available"
+	},
+	"app.url-confirm-modal.header": {
+		"message": "Install {name}"
+	},
+	"app.url-confirm-modal.install": {
+		"message": "Install"
+	},
+	"app.url-confirm-modal.installing": {
+		"message": "Version to install:"
+	},
+	"app.welcome-screen.create-instance": {
+		"message": "Create an instance"
+	},
+	"app.welcome-screen.description": {
+		"message": "Ready to start playing?"
+	},
+	"app.welcome-screen.import-from-launcher": {
+		"message": "Import from launcher"
+	},
+	"app.welcome-screen.import-prompt": {
+		"message": "Escaping another launcher?"
+	},
+	"app.welcome-screen.quick-create-hint": {
+		"message": "Press <shortcut>N</shortcut> to quick create an instance"
+	},
+	"app.welcome-screen.title": {
+		"message": "Welcome to Minekube Launcher"
+	},
+	"app.welcome-tour.back": {
+		"message": "Back"
+	},
+	"app.welcome-tour.contentDescription": {
+		"message": "Browse mods, modpacks, resource packs and shaders right inside the launcher."
+	},
+	"app.welcome-tour.contentTitle": {
+		"message": "Discover something new"
+	},
+	"app.welcome-tour.eyebrow": {
+		"message": "YOUR NEXT ADVENTURE STARTS HERE"
+	},
+	"app.welcome-tour.finish": {
+		"message": "Finish"
+	},
+	"app.welcome-tour.importDescription": {
+		"message": "Import supported instances from another launcher instead of starting over."
+	},
+	"app.welcome-tour.importTitle": {
+		"message": "Bring your adventures along"
+	},
+	"app.welcome-tour.instancesDescription": {
+		"message": "Separate instances keep game versions, mods and worlds organised. Play vanilla or choose Fabric, Forge, NeoForge or Quilt."
+	},
+	"app.welcome-tour.instancesTitle": {
+		"message": "A home for every playstyle"
+	},
+	"app.welcome-tour.introDescription": {
+		"message": "Welcome to Minekube Launcher. Your home for Minecraft worlds and modpacks."
+	},
+	"app.welcome-tour.introLabel": {
+		"message": "Welcome"
+	},
+	"app.welcome-tour.languageDescription": {
+		"message": "First, choose the language you want to use in Minekube Launcher."
+	},
+	"app.welcome-tour.languageError": {
+		"message": "Could not save your language. Please try again."
+	},
+	"app.welcome-tour.languageLabel": {
+		"message": "Language"
+	},
+	"app.welcome-tour.languageTitle": {
+		"message": "Make yourself at home."
+	},
+	"app.welcome-tour.navigation": {
+		"message": "Introduction steps"
+	},
+	"app.welcome-tour.next": {
+		"message": "Continue"
+	},
+	"app.welcome-tour.overviewDescription": {
+		"message": "Start with vanilla Minecraft or build your own modded adventure. Everything stays in one place."
+	},
+	"app.welcome-tour.overviewLabel": {
+		"message": "Discover Minekube"
+	},
+	"app.welcome-tour.overviewTitle": {
+		"message": "One launcher. Your way to play."
+	},
+	"app.welcome-tour.personalDescription": {
+		"message": "Customise the launcher’s theme, visual effects and skins. Your library, your style."
+	},
+	"app.welcome-tour.personalTitle": {
+		"message": "Make yourself at home"
+	},
+	"app.welcome-tour.playerDescription": {
+		"message": "Create a local account named Player when you finish, or reuse one if it already exists."
+	},
+	"app.welcome-tour.playerError": {
+		"message": "Could not create the local Player account. Try again, or switch this option off to finish."
+	},
+	"app.welcome-tour.playerNote": {
+		"message": "Local accounts stay on this device. They do not include a Minecraft license or access to authenticated servers."
+	},
+	"app.welcome-tour.playerOptional": {
+		"message": "(Optional)"
+	},
+	"app.welcome-tour.playerTitle": {
+		"message": "Create a local Player account"
+	},
+	"app.welcome-tour.progress": {
+		"message": "Step {current} of {total}"
+	},
+	"app.welcome-tour.replay": {
+		"message": "Replay introduction"
+	},
+	"app.welcome-tour.replayHint": {
+		"message": "You can revisit this introduction in Settings."
+	},
+	"app.welcome-tour.saveError": {
+		"message": "The introduction could not be saved as completed. It may appear again after restarting the launcher."
+	},
+	"app.welcome-tour.version": {
+		"message": "Launcher version {version}"
+	},
+	"app.welcome-tour.versionUnknown": {
+		"message": "Version unavailable"
+	},
+	"app.world.server-modal.placeholder-address": {
+		"message": "play.example.com"
+	},
+	"app.world.server-modal.select-an-option": {
+		"message": "Select an option"
+	},
+	"app.world.world-item.incompatible-version": {
+		"message": "Incompatible version {version}"
+	},
+	"app.world.world-item.not-played-yet": {
+		"message": "Not played yet"
+	},
+	"app.world.world-item.offline": {
+		"message": "Offline"
+	},
+	"app.world.world-item.players-online": {
+		"message": "{count} online"
+	},
+	"content.locked-instance.change-version-body": {
+		"message": "Locked instances cannot be changed."
+	},
+	"content.locked-instance.delete-bulk-body": {
+		"message": "This instance is locked, so none of its content can be removed. Delete the whole instance instead."
+	},
+	"content.locked-instance.delete-button": {
+		"message": "Delete anyway"
+	},
+	"content.locked-instance.delete-many-button": {
+		"message": "Delete {count, number} projects anyway"
+	},
+	"content.locked-instance.delete-single-body": {
+		"message": "This instance is locked, so its content cannot be removed. Delete the whole instance instead."
+	},
+	"content.locked-instance.disable-bulk-body": {
+		"message": "This instance is locked, so none of its content can be disabled."
+	},
+	"content.locked-instance.disable-button": {
+		"message": "Disable anyway"
+	},
+	"content.locked-instance.disable-many-button": {
+		"message": "Disable {count, number} projects anyway"
+	},
+	"content.locked-instance.disable-single-body": {
+		"message": "This instance is locked, so its content cannot be disabled."
+	},
+	"content.locked-instance.unlink-body": {
+		"message": "Locked instances cannot be unlinked from the content they came from."
+	},
+	"content.locked-instance.warning-header": {
+		"message": "This instance is locked"
+	},
+	"instance.action.create-shortcut": {
+		"message": "Create shortcut"
+	},
+	"instance.action.export-modpack": {
+		"message": "Export modpack"
+	},
+	"instance.action.launch-instance": {
+		"message": "Launch instance"
+	},
+	"instance.action.more-actions": {
+		"message": "More actions"
+	},
+	"instance.action.open-folder": {
+		"message": "Open folder"
+	},
+	"instance.action.repair": {
+		"message": "Repair"
+	},
+	"instance.action.settings": {
+		"message": "Instance settings"
+	},
+	"instance.action.starting": {
+		"message": "Starting..."
+	},
+	"instance.action.stopping": {
+		"message": "Stopping..."
+	},
+	"instance.add-server.add-and-play": {
+		"message": "Add and play"
+	},
+	"instance.add-server.add-server": {
+		"message": "Add server"
+	},
+	"instance.add-server.resource-pack.disabled": {
+		"message": "Disabled"
+	},
+	"instance.add-server.resource-pack.enabled": {
+		"message": "Enabled"
+	},
+	"instance.add-server.resource-pack.prompt": {
+		"message": "Prompt"
+	},
+	"instance.add-server.title": {
+		"message": "Add a server"
+	},
+	"instance.edit-server.title": {
+		"message": "Edit server"
+	},
+	"instance.edit-world.hide-from-home": {
+		"message": "Hide from the Home page"
+	},
+	"instance.edit-world.name": {
+		"message": "Name"
+	},
+	"instance.edit-world.placeholder-name": {
+		"message": "Minecraft World"
+	},
+	"instance.edit-world.reset-icon": {
+		"message": "Reset icon"
+	},
+	"instance.edit-world.title": {
+		"message": "Edit world"
+	},
+	"instance.files.adding-files": {
+		"message": "Adding files ({completed}/{total})"
+	},
+	"instance.files.managed-content-read-only": {
+		"message": "Manage your installed content via the Content tab"
+	},
+	"instance.files.save-as": {
+		"message": "Save as..."
+	},
+	"instance.icon-editor.background": {
+		"message": "Background"
+	},
+	"instance.icon-editor.background.blue": {
+		"message": "Blue"
+	},
+	"instance.icon-editor.background.dark-gray": {
+		"message": "Dark gray"
+	},
+	"instance.icon-editor.background.dark-green": {
+		"message": "Dark green"
+	},
+	"instance.icon-editor.background.gray": {
+		"message": "Gray"
+	},
+	"instance.icon-editor.background.green": {
+		"message": "Green"
+	},
+	"instance.icon-editor.background.indigo": {
+		"message": "Indigo"
+	},
+	"instance.icon-editor.background.lavender": {
+		"message": "Lavender"
+	},
+	"instance.icon-editor.background.light-gray": {
+		"message": "Light gray"
+	},
+	"instance.icon-editor.background.lime": {
+		"message": "Lime"
+	},
+	"instance.icon-editor.background.orange": {
+		"message": "Orange"
+	},
+	"instance.icon-editor.background.pink": {
+		"message": "Pink"
+	},
+	"instance.icon-editor.background.purple": {
+		"message": "Purple"
+	},
+	"instance.icon-editor.background.red": {
+		"message": "Red"
+	},
+	"instance.icon-editor.background.rose": {
+		"message": "Rose"
+	},
+	"instance.icon-editor.background.yellow": {
+		"message": "Yellow"
+	},
+	"instance.icon-editor.description": {
+		"message": "Mix and match elements to create a custom icon."
+	},
+	"instance.icon-editor.recents": {
+		"message": "Recents"
+	},
+	"instance.icon-editor.save": {
+		"message": "Save icon"
+	},
+	"instance.icon-editor.surprise-me": {
+		"message": "Randomize"
+	},
+	"instance.icon-editor.symbol": {
+		"message": "Symbol"
+	},
+	"instance.icon-editor.symbol.backpack": {
+		"message": "Backpack"
+	},
+	"instance.icon-editor.symbol.beacon": {
+		"message": "Beacon"
+	},
+	"instance.icon-editor.symbol.blue-shark": {
+		"message": "Blue Shark"
+	},
+	"instance.icon-editor.symbol.bookshelf": {
+		"message": "Bookshelf"
+	},
+	"instance.icon-editor.symbol.brown-bear": {
+		"message": "Brown Bear"
+	},
+	"instance.icon-editor.symbol.cake": {
+		"message": "Cake"
+	},
+	"instance.icon-editor.symbol.campfire": {
+		"message": "Campfire"
+	},
+	"instance.icon-editor.symbol.chest": {
+		"message": "Chest"
+	},
+	"instance.icon-editor.symbol.cogwheel": {
+		"message": "Cogwheel"
+	},
+	"instance.icon-editor.symbol.command-block": {
+		"message": "Command Block"
+	},
+	"instance.icon-editor.symbol.cooking-pot": {
+		"message": "Cooking Pot"
+	},
+	"instance.icon-editor.symbol.couch": {
+		"message": "Couch"
+	},
+	"instance.icon-editor.symbol.crafting-table": {
+		"message": "Crafting Table"
+	},
+	"instance.icon-editor.symbol.create-wrench": {
+		"message": "Wrench"
+	},
+	"instance.icon-editor.symbol.creeper": {
+		"message": "Creeper"
+	},
+	"instance.icon-editor.symbol.enchanting-table": {
+		"message": "Enchanting Table"
+	},
+	"instance.icon-editor.symbol.ender-chest": {
+		"message": "Ender Chest"
+	},
+	"instance.icon-editor.symbol.ender-dragon": {
+		"message": "Ender Dragon"
+	},
+	"instance.icon-editor.symbol.engine": {
+		"message": "Engine"
+	},
+	"instance.icon-editor.symbol.fabric": {
+		"message": "Fabric"
+	},
+	"instance.icon-editor.symbol.forge": {
+		"message": "Forge"
+	},
+	"instance.icon-editor.symbol.furnace": {
+		"message": "Furnace"
+	},
+	"instance.icon-editor.symbol.gizmo": {
+		"message": "Gizmo"
+	},
+	"instance.icon-editor.symbol.globe": {
+		"message": "Globe"
+	},
+	"instance.icon-editor.symbol.grass-block": {
+		"message": "Grass Block"
+	},
+	"instance.icon-editor.symbol.lantern": {
+		"message": "Lantern"
+	},
+	"instance.icon-editor.symbol.moobloom": {
+		"message": "Moobloom"
+	},
+	"instance.icon-editor.symbol.mr-pack": {
+		"message": "Mr Pack"
+	},
+	"instance.icon-editor.symbol.neoforge": {
+		"message": "NeoForge"
+	},
+	"instance.icon-editor.symbol.orb": {
+		"message": "Orb"
+	},
+	"instance.icon-editor.symbol.oxygen-distributor": {
+		"message": "Oxygen Distributor"
+	},
+	"instance.icon-editor.symbol.pancakes": {
+		"message": "Pancakes"
+	},
+	"instance.icon-editor.symbol.pickaxe": {
+		"message": "Pickaxe"
+	},
+	"instance.icon-editor.symbol.poke-ball": {
+		"message": "Poke Ball"
+	},
+	"instance.icon-editor.symbol.quilt": {
+		"message": "Quilt"
+	},
+	"instance.icon-editor.symbol.redstone-block": {
+		"message": "Redstone Block"
+	},
+	"instance.icon-editor.symbol.sculk-sensor": {
+		"message": "Sculk Sensor"
+	},
+	"instance.icon-editor.symbol.skeleton": {
+		"message": "Skeleton"
+	},
+	"instance.icon-editor.symbol.skillet": {
+		"message": "Skillet"
+	},
+	"instance.icon-editor.symbol.slime-block": {
+		"message": "Slime Block"
+	},
+	"instance.icon-editor.symbol.space-helmet": {
+		"message": "Space Helmet"
+	},
+	"instance.icon-editor.symbol.sticky-piston": {
+		"message": "Sticky Piston"
+	},
+	"instance.icon-editor.symbol.sword": {
+		"message": "Sword"
+	},
+	"instance.icon-editor.symbol.terminal": {
+		"message": "Terminal"
+	},
+	"instance.icon-editor.symbol.tiny-potato": {
+		"message": "Tiny Potato"
+	},
+	"instance.icon-editor.symbol.tire": {
+		"message": "Tire"
+	},
+	"instance.icon-editor.symbol.tnt": {
+		"message": "TNT"
+	},
+	"instance.icon-editor.symbol.zombie": {
+		"message": "Zombie"
+	},
+	"instance.icon-editor.title": {
+		"message": "Icon editor"
+	},
+	"instance.last-played": {
+		"message": "Last played"
+	},
+	"instance.locked.delete-button": {
+		"message": "Delete instance"
+	},
+	"instance.locked.play-tooltip": {
+		"message": "This instance has been locked"
+	},
+	"instance.locked.text": {
+		"message": "This instance was locked and can no longer be played or updated. Deleting it frees up the space it uses."
+	},
+	"instance.locked.title": {
+		"message": "Instance locked"
+	},
+	"instance.playtime.never-played": {
+		"message": "Never played"
+	},
+	"instance.server-modal.address": {
+		"message": "Address"
+	},
+	"instance.server-modal.name": {
+		"message": "Name"
+	},
+	"instance.server-modal.placeholder-name": {
+		"message": "Minecraft Server"
+	},
+	"instance.server-modal.resource-pack": {
+		"message": "Resource pack"
+	},
+	"instance.settings.sharing.revoke-invite.admonition-body": {
+		"message": "The invite link <monospace>{code}</monospace> will stop working immediately. People who already joined will keep access."
+	},
+	"instance.settings.sharing.revoke-invite.admonition-header": {
+		"message": "This action cannot be undone"
+	},
+	"instance.settings.sharing.revoke-invite.confirm": {
+		"message": "Revoke invite"
+	},
+	"instance.settings.sharing.revoke-invite.header": {
+		"message": "Revoke invite"
+	},
+	"instance.settings.tabs.behavior.description": {
+		"message": "Choose which tabs appear on this instance."
+	},
+	"instance.settings.tabs.behavior.files": {
+		"message": "Show Files tab"
+	},
+	"instance.settings.tabs.behavior.screenshots": {
+		"message": "Show Screenshots tab"
+	},
+	"instance.settings.tabs.behavior.screenshots.required": {
+		"message": "The Screenshots tab cannot be hidden while the global Screenshots page is turned off."
+	},
+	"instance.settings.tabs.behavior.worlds": {
+		"message": "Show Worlds tab"
+	},
+	"instance.settings.tabs.general.delete": {
+		"message": "Delete instance"
+	},
+	"instance.settings.tabs.general.delete.button": {
+		"message": "Delete instance"
+	},
+	"instance.settings.tabs.general.delete.description": {
+		"message": "Permanently deletes an instance from your device, including your worlds, configs, and all installed content. Be careful, as once you delete a instance there is no way to recover it."
+	},
+	"instance.settings.tabs.general.deleting.button": {
+		"message": "Deleting..."
+	},
+	"instance.settings.tabs.general.duplicate-button": {
+		"message": "Duplicate"
+	},
+	"instance.settings.tabs.general.duplicate-button.tooltip.installing": {
+		"message": "Cannot duplicate while installing."
+	},
+	"instance.settings.tabs.general.duplicate-instance": {
+		"message": "Duplicate instance"
+	},
+	"instance.settings.tabs.general.duplicate-instance.description": {
+		"message": "Creates a copy of this instance, including worlds, configs, mods, etc."
+	},
+	"instance.settings.tabs.general.edit-icon": {
+		"message": "Edit icon"
+	},
+	"instance.settings.tabs.general.edit-icon.create": {
+		"message": "Create an icon"
+	},
+	"instance.settings.tabs.general.edit-icon.edit-created": {
+		"message": "Edit icon"
+	},
+	"instance.settings.tabs.general.edit-icon.remove": {
+		"message": "Remove icon"
+	},
+	"instance.settings.tabs.general.edit-icon.replace": {
+		"message": "Replace icon"
+	},
+	"instance.settings.tabs.general.edit-icon.select": {
+		"message": "Select icon"
+	},
+	"instance.settings.tabs.general.icon": {
+		"message": "Icon"
+	},
+	"instance.settings.tabs.general.name": {
+		"message": "Name"
+	},
+	"instance.settings.tabs.general.name.invalid": {
+		"message": "Enter a name that is not empty."
+	},
+	"instance.settings.tabs.hooks.description": {
+		"message": "Run instance-specific system commands before and after launching the game."
+	},
+	"instance.settings.tabs.hooks.post-exit": {
+		"message": "Post-exit"
+	},
+	"instance.settings.tabs.hooks.post-exit.description": {
+		"message": "Ran after the game closes."
+	},
+	"instance.settings.tabs.hooks.post-exit.enter": {
+		"message": "Enter post-exit command..."
+	},
+	"instance.settings.tabs.hooks.pre-launch": {
+		"message": "Pre-launch"
+	},
+	"instance.settings.tabs.hooks.pre-launch.description": {
+		"message": "Ran before the instance is launched."
+	},
+	"instance.settings.tabs.hooks.pre-launch.enter": {
+		"message": "Enter pre-launch command..."
+	},
+	"instance.settings.tabs.hooks.title": {
+		"message": "Custom game launch hooks"
+	},
+	"instance.settings.tabs.hooks.variables.description": {
+		"message": "Hooks run in the working directory of the instance, with the following variables:"
+	},
+	"instance.settings.tabs.hooks.variables.inst-dir.description": {
+		"message": "$INST_DIR: The absolute path to the instance's folder"
+	},
+	"instance.settings.tabs.hooks.variables.inst-id.description": {
+		"message": "$INST_ID: The name of the instance's folder"
+	},
+	"instance.settings.tabs.hooks.variables.inst-java-args.description": {
+		"message": "$INST_JAVA_ARGS: The JVM Arguments provided to the game"
+	},
+	"instance.settings.tabs.hooks.variables.inst-java.description": {
+		"message": "$INST_JAVA: The absolute path to the java binary"
+	},
+	"instance.settings.tabs.hooks.variables.inst-mc-dir.description": {
+		"message": "$INST_MC_DIR: An alias for $INST_DIR"
+	},
+	"instance.settings.tabs.hooks.variables.inst-name.description": {
+		"message": "$INST_NAME: The name of the instance"
+	},
+	"instance.settings.tabs.hooks.wrapper": {
+		"message": "Wrapper"
+	},
+	"instance.settings.tabs.hooks.wrapper.description": {
+		"message": "Wrapper command for launching Minecraft."
+	},
+	"instance.settings.tabs.hooks.wrapper.enter": {
+		"message": "Enter wrapper command..."
+	},
+	"instance.settings.tabs.java.custom-environment-variables": {
+		"message": "Set environment variables separately for this instance."
+	},
+	"instance.settings.tabs.java.custom-java-arguments": {
+		"message": "Set Java arguments separately for this instance."
+	},
+	"instance.settings.tabs.java.custom-java-installation": {
+		"message": "Choose a different Java installation for this instance."
+	},
+	"instance.settings.tabs.java.custom-memory-allocation": {
+		"message": "Set the memory allocation separately for this instance."
+	},
+	"instance.settings.tabs.java.enter-environment-variables": {
+		"message": "Enter environmental variables..."
+	},
+	"instance.settings.tabs.java.enter-java-arguments": {
+		"message": "Enter Java arguments..."
+	},
+	"instance.settings.tabs.java.environment-variables": {
+		"message": "Custom environment variables"
+	},
+	"instance.settings.tabs.java.hooks": {
+		"message": "Hooks"
+	},
+	"instance.settings.tabs.java.java-arguments": {
+		"message": "Custom Java arguments"
+	},
+	"instance.settings.tabs.java.java-installation": {
+		"message": "Custom Java installation"
+	},
+	"instance.settings.tabs.java.java-memory": {
+		"message": "Custom memory allocation"
+	},
+	"instance.settings.tabs.java.java-path-placeholder": {
+		"message": "/path/to/java"
+	},
+	"instance.settings.tabs.java.maximum-memory": {
+		"message": "Maximum memory (-Xmx)"
+	},
+	"instance.settings.tabs.java.minimum-memory": {
+		"message": "Minimum memory (-Xms)"
+	},
+	"instance.settings.tabs.java.minimum-memory.description": {
+		"message": "Memory the Java virtual machine reserves right at startup. Leave at 0 to let Java decide."
+	},
+	"instance.settings.tabs.window": {
+		"message": "Custom window settings"
+	},
+	"instance.settings.tabs.window.custom-window-settings": {
+		"message": "Configure fullscreen and launch resolution separately for this instance."
+	},
+	"instance.settings.tabs.window.fullscreen": {
+		"message": "Fullscreen"
+	},
+	"instance.settings.tabs.window.fullscreen.description": {
+		"message": "Make the game start in full screen when launched (using options.txt)."
+	},
+	"instance.settings.tabs.window.height": {
+		"message": "Height"
+	},
+	"instance.settings.tabs.window.height.description": {
+		"message": "The height of the game window when launched."
+	},
+	"instance.settings.tabs.window.height.enter": {
+		"message": "Enter height..."
+	},
+	"instance.settings.tabs.window.presets": {
+		"message": "Common window sizes"
+	},
+	"instance.settings.tabs.window.resolution.invalid": {
+		"message": "Enter a width and height between 320 and 16384 pixels."
+	},
+	"instance.settings.tabs.window.width": {
+		"message": "Width"
+	},
+	"instance.settings.tabs.window.width.description": {
+		"message": "The width of the game window when launched."
+	},
+	"instance.settings.tabs.window.width.enter": {
+		"message": "Enter width..."
+	},
+	"instance.worlds.a_minecraft_server": {
+		"message": "A Minecraft Server"
+	},
+	"instance.worlds.actions.label": {
+		"message": "World actions"
+	},
+	"instance.worlds.cant_connect": {
+		"message": "Can't connect to server"
+	},
+	"instance.worlds.copy_address": {
+		"message": "Copy address"
+	},
+	"instance.worlds.create_shortcut": {
+		"message": "Create shortcut"
+	},
+	"instance.worlds.desync-server.description": {
+		"message": "Do you want to keep this server in other synced instances, or remove it from them?"
+	},
+	"instance.worlds.desync-server.keep": {
+		"message": "Keep"
+	},
+	"instance.worlds.desync-server.remove": {
+		"message": "Remove"
+	},
+	"instance.worlds.desync-server.title": {
+		"message": "Desync server"
+	},
+	"instance.worlds.desync_server": {
+		"message": "Desync"
+	},
+	"instance.worlds.dont_show_on_home": {
+		"message": "Don't show on Home"
+	},
+	"instance.worlds.game_already_open": {
+		"message": "Instance is already open"
+	},
+	"instance.worlds.hardcore": {
+		"message": "Hardcore mode"
+	},
+	"instance.worlds.incompatible_server": {
+		"message": "Server is incompatible"
+	},
+	"instance.worlds.instance-locked": {
+		"message": "This instance has been locked"
+	},
+	"instance.worlds.linked_server": {
+		"message": "Managed by server project"
+	},
+	"instance.worlds.more-options": {
+		"message": "More options"
+	},
+	"instance.worlds.no_contact": {
+		"message": "Server couldn't be contacted"
+	},
+	"instance.worlds.no_server_quick_play": {
+		"message": "You can only jump straight into servers on Minecraft Alpha 1.0.5+"
+	},
+	"instance.worlds.no_singleplayer_quick_play": {
+		"message": "You can only jump straight into singleplayer worlds on Minecraft 1.20+"
+	},
+	"instance.worlds.play_instance": {
+		"message": "Play instance"
+	},
+	"instance.worlds.play_world": {
+		"message": "Play world"
+	},
+	"instance.worlds.shortcut-created": {
+		"message": "Shortcut created"
+	},
+	"instance.worlds.shortcut-creation-failed": {
+		"message": "Failed to create shortcut"
+	},
+	"instance.worlds.synced_server": {
+		"message": "Synced across instances"
+	},
+	"instance.worlds.world_in_use": {
+		"message": "World is in use"
+	},
+	"local-account.create-button": {
+		"message": "Create local account"
+	},
+	"local-account.description": {
+		"message": "Play with a local account that lives only on this computer. No Microsoft account is needed."
+	},
+	"local-account.details-toggle": {
+		"message": "Show all information about local accounts"
+	},
+	"local-account.header": {
+		"message": "Local account"
+	},
+	"local-account.limitations": {
+		"message": "Local accounts can play singleplayer and on servers that allow offline players. Servers in online mode, Realms, and skin or cape changes require a Microsoft account that owns Minecraft."
+	},
+	"local-account.privacy-description": {
+		"message": "Your username is stored only in the launcher database on this device. Nothing is ever sent to Microsoft, Xbox Live, Mojang or any other cloud service for this account."
+	},
+	"local-account.privacy-header": {
+		"message": "Private by design"
+	},
+	"local-account.username-hint": {
+		"message": "{min} to {max} characters: letters, digits and underscores."
+	},
+	"local-account.username-invalid-characters": {
+		"message": "Only letters (A-Z, a-z), digits (0-9) and underscores are allowed."
+	},
+	"local-account.username-label": {
+		"message": "Username"
+	},
+	"local-account.username-placeholder": {
+		"message": "Steve"
+	},
+	"local-account.username-too-long": {
+		"message": "The username may be at most {max} characters long."
+	},
+	"local-account.username-too-short": {
+		"message": "The username must be at least {min} characters long."
+	},
+	"minecraft-account.add-local-account": {
+		"message": "Add local account"
+	},
+	"minecraft-account.add-microsoft-account": {
+		"message": "Add Microsoft account"
+	},
+	"minecraft-account.create-local-account": {
+		"message": "Create local account"
+	},
+	"minecraft-account.label": {
+		"message": "Minecraft account"
+	},
+	"minecraft-account.local-account": {
+		"message": "Local account"
+	},
+	"minecraft-account.local-account-hint": {
+		"message": "A local account needs no Microsoft account and never sends any data to the cloud."
+	},
+	"minecraft-account.local-account-tooltip": {
+		"message": "Local account: stored only on this device, no data is sent to the cloud."
+	},
+	"minecraft-account.local-badge": {
+		"message": "Local"
+	},
+	"minecraft-account.not-logged-in": {
+		"message": "Not logged in"
+	},
+	"minecraft-account.remove-account": {
+		"message": "Remove account"
+	},
+	"minecraft-account.remove-confirm.cancel": {
+		"message": "Not yet"
+	},
+	"minecraft-account.remove-confirm.description": {
+		"message": "This will remove {name} from the launcher. You can add a Microsoft account again by signing in, but a local account is stored only on this device and cannot be restored after it is removed."
+	},
+	"minecraft-account.remove-confirm.proceed": {
+		"message": "Yes, remove account"
+	},
+	"minecraft-account.remove-confirm.title": {
+		"message": "Remove this account?"
+	},
+	"minecraft-account.select-account": {
+		"message": "Select account"
+	},
+	"minecraft-account.sign-in-microsoft": {
+		"message": "Sign in with Microsoft"
+	},
+	"minecraft-required.description": {
+		"message": "Sign in with a Microsoft account that owns Minecraft, or create a local account that stays on this computer."
+	},
+	"minecraft-required.description-header": {
+		"message": "Choose how you want to play"
+	},
+	"minecraft-required.dont-have-account": {
+		"message": "Don’t have an account?"
+	},
+	"minecraft-required.get-minecraft": {
+		"message": "Get Minecraft"
+	},
+	"minecraft-required.header": {
+		"message": "Sign in to play"
+	},
+	"minecraft-required.local-account": {
+		"message": "Create local account"
+	},
+	"minecraft-required.local-account-description": {
+		"message": "No Microsoft account needed. Nothing is sent to the cloud."
+	},
+	"minecraft-required.sign-in": {
+		"message": "Sign in with Microsoft"
+	},
+	"minecraft-required.sign-in-description": {
+		"message": "Full access: online servers, Realms, skins and capes."
+	},
+	"search.filter.locked.instance": {
+		"message": "Provided by the instance"
+	},
+	"search.filter.locked.instance-game-version.title": {
+		"message": "Game version is provided by the instance"
+	},
+	"search.filter.locked.instance-loader.title": {
+		"message": "Loader is provided by the instance"
+	},
+	"search.filter.locked.instance.sync": {
+		"message": "Sync with instance"
+	},
+	"search.filter.locked.server-environment.title": {
+		"message": "Only client-side mods can be added to the server instance"
+	},
+	"settings.sidebar.label.account": {
+		"message": "Account"
+	},
+	"settings.sidebar.label.display": {
+		"message": "Display"
+	}
+}

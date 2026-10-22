@@ -1,0 +1,709 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '@modrinth/ui/src/styles/tailwind-utilities.css';
+
+/* Minecraft-style font, bundled with the launcher (no network request).
+   Source: @south-paw/typeface-minecraft, MIT. One weight; bold and italic are
+   synthesized by the browser. */
+@font-face {
+	font-family: 'bundled-minecraft-font-mrapp';
+	font-style: normal;
+	font-display: swap;
+	font-weight: 400;
+	src: url('../fonts/minecraft.woff2') format('woff2');
+}
+
+.font-minecraft {
+	font-family: 'bundled-minecraft-font-mrapp', monospace;
+}
+
+:root {
+	font-family: var(--font-standard, sans-serif), sans-serif;
+	color-scheme: dark;
+	--view-width: calc(100% - 5rem);
+	--expanded-view-width: calc(100% - 13rem);
+	--medal-promotion-bg: #000;
+	--medal-promotion-bg-orange: rgba(208, 246, 255, 0.25);
+	--medal-promotion-text-orange: #42abff;
+	--medal-promotion-bg-gradient: linear-gradient(
+		90deg,
+		rgba(66, 170, 255, 0.15),
+		rgba(0, 0, 0, 0) 100%
+	);
+}
+
+html.light-mode,
+html.macos-mode,
+html.parchment-mode {
+	color-scheme: light;
+}
+
+body {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+	// Minekube Launcher: the vivid look comes from the high-chroma palette in
+	// `variables.scss`. A `filter` on <body> (the old `saturate(1.22)`) forced
+	// the whole window through a filter pass on every repaint, dropped
+	// subpixel text antialiasing everywhere, made every `position: fixed` layer
+	// relative to <body>, and falsified the colours of skins and screenshots.
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.card-divider {
+	background-color: var(--color-button-bg);
+	border: none;
+	color: var(--color-button-bg);
+	height: 1px;
+	margin: var(--gap-sm) 0;
+}
+
+.no-wrap {
+	white-space: nowrap;
+}
+
+.no-select {
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	-webkit-font-smoothing: antialiased;
+}
+
+.badge {
+	display: flex;
+	border-radius: var(--radius-md);
+	white-space: nowrap;
+	align-items: center;
+	background-color: var(--color-bg);
+	padding-block: var(--gap-sm);
+	padding-inline: var(--gap-lg);
+	width: min-content;
+
+	svg {
+		width: 1.1rem;
+		height: 1.1rem;
+		margin-right: 0.5rem;
+	}
+
+	&.featured {
+		background-color: var(--color-brand-highlight);
+		color: var(--color-contrast);
+	}
+}
+
+* {
+	scrollbar-width: auto;
+	scrollbar-color: var(--color-scrollbar) var(--color-bg);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+	width: 16px;
+	border: 3px solid transparent;
+	opacity: 0.5;
+	transition: opacity 0.2s ease-in-out;
+}
+
+*::-webkit-scrollbar:hover {
+	opacity: 1;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--color-scrollbar);
+	border-radius: var(--radius-lg);
+	border: 5px solid transparent;
+	background-clip: content-box;
+}
+
+.highlighted {
+	box-shadow: 0 0 1rem var(--color-brand) !important;
+}
+
+.gecko {
+	background-color: var(--color-raised-bg);
+	box-shadow: none !important;
+}
+
+img {
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.card-shadow {
+	box-shadow: var(--shadow-card);
+}
+
+// From the Bootstrap project
+// The MIT License (MIT)
+// Copyright (c) 2011-2023 The Bootstrap Authors
+// https://github.com/twbs/bootstrap/blob/2f617215755b066904248525a8c56ea425dde871/scss/mixins/_visually-hidden.scss#L8
+.visually-hidden {
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+
+	&:not(caption) {
+		position: absolute !important;
+	}
+}
+
+@import '@modrinth/assets/omorphia.scss';
+
+input {
+	border-radius: var(--size-rounded-sm);
+	box-sizing: border-box;
+	border: 2px solid transparent;
+	// safari iOS rounds inputs by default
+	// set the appearance to none to prevent this
+	appearance: none !important;
+}
+
+pre {
+	font-weight: var(--font-weight-regular);
+}
+
+input,
+textarea {
+	background: var(--color-button-bg);
+	color: var(--color-text);
+	padding: 0.5rem 1rem;
+	font-weight: var(--font-weight-medium);
+	border: none;
+	outline: 2px solid transparent;
+	box-shadow:
+		var(--shadow-inset-sm),
+		0 0 0 0 transparent;
+	transition: box-shadow 0.1s ease-in-out;
+	min-height: 36px;
+
+	&:focus,
+	&:focus-visible {
+		box-shadow:
+			inset 0 0 0 transparent,
+			0 0 0 0.25rem var(--color-brand-shadow);
+		color: var(--color-button-text-active);
+	}
+
+	&:disabled,
+	&[disabled='true'] {
+		opacity: 0.6;
+		pointer-events: none;
+		cursor: not-allowed;
+	}
+
+	&:focus::placeholder {
+		opacity: 0.8;
+	}
+
+	&::placeholder {
+		color: var(--color-button-text);
+		opacity: 0.6;
+	}
+}
+
+/* =====================================================================
+   Minekube motion system — foundation
+
+   Every moving part of the launcher draws from one set of curves and
+   durations, so nothing moves at a different pace to anything else. Only
+   compositor-friendly properties are animated (transform, translate, scale,
+   opacity and colours); layout properties are never transitioned because
+   they force a relayout on every frame.
+
+   Tokens (redefined by the motion profiles further down):
+     --mk-ease-standard  interactive feedback (hover, press, toggles)
+     --mk-ease-out       entrances: decelerate into place
+     --mk-ease-in        exits: accelerate away
+     --mk-ease-spring    a light overshoot for playful details
+     --mk-dur-*          the speed scale
+     --mk-lift           how far a clickable card rises on hover
+     --mk-nudge          how far a button rises on hover
+     --mk-press          how far a control compresses while pressed
+     --mk-pop            the scale panels and menus enter from
+     --mk-rise           the distance panels and menus enter from
+   ===================================================================== */
+
+:root {
+	--mk-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+	--mk-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--mk-ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+	--mk-ease-spring: cubic-bezier(0.34, 1.26, 0.64, 1);
+
+	--mk-dur-instant: 80ms;
+	--mk-dur-fast: 140ms;
+	--mk-dur-base: 200ms;
+	--mk-dur-slow: 300ms;
+
+	--mk-lift: 0px;
+	--mk-nudge: 0px;
+	--mk-press: 0.97;
+	--mk-pop: 0.98;
+	--mk-rise: 8px;
+}
+
+button,
+a,
+[role='button'],
+[role='tab'],
+[role='menuitem'],
+.button-animation {
+	transition:
+		transform var(--mk-dur-fast) var(--mk-ease-standard),
+		translate var(--mk-dur-fast) var(--mk-ease-standard),
+		scale var(--mk-dur-fast) var(--mk-ease-standard),
+		opacity var(--mk-dur-fast) var(--mk-ease-standard),
+		background-color var(--mk-dur-fast) var(--mk-ease-standard),
+		border-color var(--mk-dur-fast) var(--mk-ease-standard),
+		color var(--mk-dur-fast) var(--mk-ease-standard),
+		box-shadow var(--mk-dur-base) var(--mk-ease-standard);
+}
+
+/* Immediate press feedback. The individual `scale` property composes with a
+   control's own `transform` (centering translates, rotated chevrons, …)
+   instead of replacing it. Special buttons and switches have their own. */
+:is(button, [role='button'], .button-animation):active:not(:disabled):not(
+		[aria-disabled='true']
+	):not([role='switch']):not(.mk-play-cta):not(.mk-stop-cta):not(.welcome-create-button):not(
+		.mk-play-icon
+	):not(.mk-stop-icon):not(.settings-footer-mark) {
+	scale: var(--mk-press);
+	transition-duration: var(--mk-dur-instant);
+}
+
+/* Focus rings only for keyboard navigation (see helpers/input-modality). */
+html.mk-pointer-input :focus-visible {
+	outline: none !important;
+	--tw-ring-shadow: 0 0 #0000 !important;
+	--tw-ring-offset-shadow: 0 0 #0000 !important;
+}
+
+/* Launcher icons (helpers/launcher-icons): the Modrinth set with a slightly
+   refined stroke — rounded joins, crisp geometry and a gentle colour change
+   when their control is hovered. */
+svg.mk-icon {
+	flex-shrink: 0;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	shape-rendering: geometricPrecision;
+	transition: color var(--mk-dur-fast) var(--mk-ease-standard);
+}
+
+/* Entrances decelerate, exits accelerate: the asymmetry is what reads as
+   physical rather than mechanical. */
+.v-enter-active,
+.fade-enter-active,
+.slide-enter-active {
+	transition:
+		opacity var(--mk-dur-base) var(--mk-ease-out),
+		transform var(--mk-dur-base) var(--mk-ease-out);
+}
+
+.v-leave-active,
+.fade-leave-active,
+.slide-leave-active {
+	transition:
+		opacity var(--mk-dur-fast) var(--mk-ease-in),
+		transform var(--mk-dur-fast) var(--mk-ease-in);
+}
+
+.v-enter-from,
+.fade-enter-from,
+.v-leave-to,
+.fade-leave-to {
+	opacity: 0;
+}
+
+/* =====================================================================
+   Visual settings — toggled from Settings → Visual via <html> classes.
+   ===================================================================== */
+
+html.no-animations,
+html.no-animations *,
+html.no-animations *::before,
+html.no-animations *::after {
+	animation-duration: 0s !important;
+	animation-delay: 0s !important;
+	transition-duration: 0s !important;
+	transition-delay: 0s !important;
+	scroll-behavior: auto !important;
+}
+
+/* =====================================================================
+   Window start-up
+
+   The window opens and closes instantly (no fade): it is shown as soon as the
+   page is ready and hidden the moment it is closed. The only thing held back
+   is the splash logo entrance, which waits (mk-window-starting) until the
+   window is really visible so it is not already over when the window appears.
+   ===================================================================== */
+
+html {
+	/* Paint the page itself in the app background, so the webview's white
+	   default never flashes before the first frame. */
+	background-color: var(--color-bg);
+}
+
+html.mk-window-starting .splash-screen .app-logo-wrapper {
+	animation-play-state: paused;
+}
+
+/* While the window is restored from the taskbar or resized, nothing may
+   animate its way from the old layout to the new one (see helpers/main-window). */
+html.mk-window-settling *,
+html.mk-window-settling *::before,
+html.mk-window-settling *::after {
+	transition: none !important;
+}
+
+/* =====================================================================
+   Minekube motion system — profiles
+
+   With the motion system on, the chosen profile redefines the tokens above,
+   so the whole launcher changes character at once instead of every
+   component carrying its own animation.
+   ===================================================================== */
+
+html.anim-style-smooth {
+	--mk-ease-standard: cubic-bezier(0.25, 0.8, 0.25, 1);
+	--mk-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--mk-ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+	--mk-dur-instant: 90ms;
+	--mk-dur-fast: 170ms;
+	--mk-dur-base: 240ms;
+	--mk-dur-slow: 360ms;
+	--mk-lift: -3px;
+	--mk-nudge: -1px;
+	--mk-press: 0.975;
+	--mk-pop: 0.975;
+	--mk-rise: 10px;
+}
+
+html.anim-style-playful {
+	--mk-ease-standard: cubic-bezier(0.34, 1.5, 0.6, 1);
+	--mk-ease-out: cubic-bezier(0.3, 1.45, 0.45, 1);
+	--mk-ease-in: cubic-bezier(0.6, -0.2, 0.75, 0);
+	--mk-dur-instant: 100ms;
+	--mk-dur-fast: 200ms;
+	--mk-dur-base: 300ms;
+	--mk-dur-slow: 420ms;
+	--mk-lift: -4px;
+	--mk-nudge: -2px;
+	--mk-press: 0.93;
+	--mk-pop: 0.9;
+	--mk-rise: 14px;
+}
+
+html.anim-style-snappy {
+	--mk-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+	--mk-ease-out: cubic-bezier(0.05, 0.7, 0.1, 1);
+	--mk-ease-in: cubic-bezier(0.3, 0, 0.8, 0.15);
+	--mk-dur-instant: 60ms;
+	--mk-dur-fast: 90ms;
+	--mk-dur-base: 130ms;
+	--mk-dur-slow: 180ms;
+	--mk-lift: -1px;
+	--mk-nudge: 0px;
+	--mk-press: 0.97;
+	--mk-pop: 0.99;
+	--mk-rise: 4px;
+}
+
+html.anim-style-cinematic {
+	--mk-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+	--mk-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--mk-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+	--mk-dur-instant: 110ms;
+	--mk-dur-fast: 260ms;
+	--mk-dur-base: 420ms;
+	--mk-dur-slow: 620ms;
+	--mk-lift: -5px;
+	--mk-nudge: -1px;
+	--mk-press: 0.985;
+	--mk-pop: 0.94;
+	--mk-rise: 18px;
+}
+
+/* Arcade moves in discrete steps, the way a block game animates. */
+html.anim-style-arcade {
+	--mk-ease-standard: steps(4, end);
+	--mk-ease-out: steps(5, end);
+	--mk-ease-in: steps(3, end);
+	--mk-dur-instant: 80ms;
+	--mk-dur-fast: 120ms;
+	--mk-dur-base: 180ms;
+	--mk-dur-slow: 260ms;
+	--mk-lift: -4px;
+	--mk-nudge: -2px;
+	--mk-press: 0.9;
+	--mk-pop: 0.88;
+	--mk-rise: 12px;
+}
+
+html.enhanced-animations,
+html.enhanced-animations .app-viewport {
+	scroll-behavior: smooth;
+}
+
+html.anim-style-arcade,
+html.anim-style-arcade .app-viewport {
+	scroll-behavior: auto;
+}
+
+/* Hover: buttons rise a hair, clickable cards lift off the page. The moves
+   are 2D and use `translate`, which adds to a control's own `transform`;
+   rotating labels in 3D re-rasterises the glyphs on every frame and tears
+   them in WebView2. Switches, disabled controls and special buttons stay put. */
+html.enhanced-animations
+	:is(button, [role='button']):not(:disabled):not([aria-disabled='true']):not([role='switch']):not(
+		.mk-play-cta
+	):not(.mk-stop-cta):not(.welcome-create-button):not(.mk-play-icon):not(.mk-stop-icon):not(
+		.settings-footer-mark
+	):hover,
+html.enhanced-animations [role='tab']:hover {
+	translate: 0 var(--mk-nudge);
+}
+
+html.enhanced-animations :is(a, button, [role='button'], [role='link'])[class*='card']:hover,
+html.enhanced-animations :is(.clickable-card, .card-link, .project-card, .mod-card):hover {
+	translate: 0 var(--mk-lift);
+	box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.6);
+	transition:
+		translate var(--mk-dur-base) var(--mk-ease-standard),
+		box-shadow var(--mk-dur-base) var(--mk-ease-standard),
+		background-color var(--mk-dur-fast) var(--mk-ease-standard);
+}
+
+html.enhanced-animations
+	:is(button, [role='button']):not(:disabled):not([aria-disabled='true']):not([role='switch']):not(
+		.mk-play-cta
+	):not(.mk-stop-cta):not(.welcome-create-button):not(.mk-play-icon):not(.mk-stop-icon):not(
+		.settings-footer-mark
+	):active {
+	translate: 0 0;
+}
+
+/* Toolbar icons answer the pointer themselves, not just their background. */
+html.enhanced-animations .main-toolbar-prism :is(a, button):hover :is(svg, .themed-icon-emoji) {
+	transform: scale(1.12);
+	transition: transform var(--mk-dur-base) var(--mk-ease-spring);
+}
+
+html.anim-style-playful .main-toolbar-prism :is(a, button):hover :is(svg, .themed-icon-emoji) {
+	animation: mk-wiggle var(--mk-dur-slow) var(--mk-ease-standard);
+}
+
+html.anim-style-arcade .main-toolbar-prism :is(a, button):hover :is(svg, .themed-icon-emoji) {
+	transform: scale(1.2);
+}
+
+/* Panels, menus and popovers share one entrance, so the launcher feels like
+   one piece of software rather than a pile of components. */
+html.enhanced-animations :is(.v-enter-active, .fade-enter-active) {
+	animation: mk-enter var(--mk-dur-base) var(--mk-ease-out) both;
+}
+
+html.enhanced-animations :is(.v-leave-active, .fade-leave-active) {
+	animation: mk-leave var(--mk-dur-fast) var(--mk-ease-in) both;
+}
+
+@keyframes mk-enter {
+	from {
+		opacity: 0;
+		transform: translate3d(0, var(--mk-rise), 0) scale(var(--mk-pop));
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes mk-leave {
+	from {
+		opacity: 1;
+		transform: none;
+	}
+	to {
+		opacity: 0;
+		transform: scale(var(--mk-pop));
+	}
+}
+
+@keyframes mk-wiggle {
+	0%,
+	100% {
+		transform: scale(1.12) rotate(0deg);
+	}
+	30% {
+		transform: scale(1.15) rotate(-8deg);
+	}
+	60% {
+		transform: scale(1.15) rotate(6deg);
+	}
+}
+
+/* =====================================================================
+   Special buttons (Play / Stop / Play orbs) live in
+   `packages/assets/styles/special-buttons.scss`, imported through
+   omorphia.scss, and are styled in Settings → Appearance.
+   ===================================================================== */
+
+/* =====================================================================
+   Ambient effects — interface light
+
+   The effects canvas is drawn by `MinekubeEffectsLayer.vue`. Here the scene
+   only tints the launcher's own accent text, as a soft text-shadow (a
+   drop-shadow filter would rasterise the glyphs into their own layer and can
+   tear them). Controls get no glow: a glow on every hovered button lit up
+   whole rectangles, including images such as the settings artwork.
+   ===================================================================== */
+
+html.enhanced-effects {
+	--mk-ambient-glow: var(--color-brand-shadow);
+}
+
+html.enhanced-effects[data-effect-style='snow'] {
+	--mk-ambient-glow: rgba(190, 228, 255, 0.6);
+}
+
+html.enhanced-effects[data-effect-style='fireflies'] {
+	--mk-ambient-glow: rgba(214, 245, 96, 0.55);
+}
+
+html.enhanced-effects[data-effect-style='aurora'] {
+	--mk-ambient-glow: rgba(120, 214, 255, 0.55);
+}
+
+html.enhanced-effects[data-effect-style='galaxy'] {
+	--mk-ambient-glow: rgba(160, 136, 255, 0.7);
+}
+
+html.enhanced-effects[data-effect-style='lightning'] {
+	--mk-ambient-glow: rgba(110, 200, 255, 0.7);
+}
+
+html.enhanced-effects .text-brand {
+	text-shadow: 0 1px 6px var(--mk-ambient-glow);
+}
+
+/* =====================================================================
+   Interface glow (Settings → Visual)
+
+   A soft gold or magenta light on headings, labels, buttons and switches,
+   and an optional animated galaxy outline around buttons and switches. The
+   glow is static (text-shadow / box-shadow); only the outline animates, and
+   only one registered angle per element, so nothing re-lays out. The special
+   Play / Stop buttons keep their own light.
+   ===================================================================== */
+
+html[data-ui-glow='gold'] {
+	--mk-ui-glow: 252, 192, 0;
+}
+
+html[data-ui-glow='magenta'] {
+	--mk-ui-glow: 252, 0, 96;
+}
+
+html[data-ui-glow] :is(h1, h2, h3, h4, .text-contrast, .text-brand, label, [data-button]) {
+	text-shadow: 0 0 10px rgba(var(--mk-ui-glow), 0.42);
+}
+
+html[data-ui-glow]
+	[data-button]:not(.mk-play-cta):not(.mk-stop-cta):not(.mk-play-icon):not(.mk-stop-icon) {
+	box-shadow:
+		inset 0 0 0 1px rgba(var(--mk-ui-glow), 0.55),
+		0 0 16px -4px rgba(var(--mk-ui-glow), 0.55) !important;
+}
+
+html[data-ui-glow] .mk-toggle {
+	box-shadow: 0 0 12px -3px rgba(var(--mk-ui-glow), 0.6) !important;
+}
+
+html[data-ui-glow] .mk-toggle.is-on {
+	box-shadow: 0 0 16px -2px rgba(var(--mk-ui-glow), 0.85) !important;
+}
+
+@property --mk-galaxy-angle {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
+}
+
+html.ui-galaxy-outline
+	:is([data-button], .mk-toggle):not(.mk-play-cta):not(.mk-stop-cta):not(.mk-play-icon):not(
+		.mk-stop-icon
+	)::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	padding: 1.5px;
+	border-radius: inherit;
+	background: conic-gradient(
+		from var(--mk-galaxy-angle),
+		#7a5cff,
+		#4de2ff,
+		#fc0060,
+		#fcc000,
+		#7a5cff
+	);
+	pointer-events: none;
+	-webkit-mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	animation: mk-galaxy-spin 4.5s linear infinite;
+}
+
+html.ui-galaxy-outline:is(.no-animations, .motion-reduced) :is([data-button], .mk-toggle)::after {
+	animation: none;
+}
+
+@keyframes mk-galaxy-spin {
+	to {
+		--mk-galaxy-angle: 360deg;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Gradient launcher colors (Settings → Appearance → Launcher color).
+   The solid accent stays in --color-brand for text and outlines; filled brand
+   surfaces carry the full gradient. */
+html[data-launcher-gradient]
+	:is(.button-frame--colored[style*='--color-brand'], .mk-toggle.is-on, .bg-brand) {
+	background-image: var(--mk-brand-gradient);
+	background-size: 100% 100%;
+}

@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
+  merge_group:
+    types: [checks_requested]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/prod' }}
+
+jobs:
+  build:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+
+    env:
+      # Ensure pnpm output is colored in GitHub Actions logs
+      FORCE_COLOR: 3
+      # Make cargo nextest successfully ignore projects without tests
+      NEXTEST_NO_TESTS: pass
+      # Fail on warnings in CI
+      # (but don't do this in the root `Cargo.toml`,
+      # since we don't want warnings to become errors
+      # while developing)
+      RUSTFLAGS: -Dwarnings
+      # Avoid stack overflows in tests
+      RUST_MIN_STACK: 134217728
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Java 17
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install apt dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libcurl4-openssl-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev
+
+      - name: Setup Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
+        with:
+          rustflags: ''
+          components: clippy, rustfmt
+
+      - name: Setup mold
+        uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1 / Mold 2.41.0
+
+      - name: Setup binstall
+        uses: cargo-bins/cargo-binstall@ead08b90bd7b2e6d81963fb9cf0b7239f66d5db4 # v1.21.0
+
+      - name: Setup nextest
+        run: cargo binstall --no-confirm --secure --locked cargo-nextest@0.9.133
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Set app environment
+        working-directory: packages/app-lib
+        run: cp .env.staging .env
+
+      - name: Lint and test
+        run: pnpm run ci
+
+      - name: Verify intl:extract has been run
+        run: |
+          pnpm turbo run intl:extract --force
+          pnpm scripts i18n-icu-contract prune-local --check
+          git diff --exit-code --color */*/src/locales/*/index.json

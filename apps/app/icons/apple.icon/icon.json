@@ -1,0 +1,59 @@
+{
+	"fill": {
+		"linear-gradient": [
+			"display-p3:0.56000,0.18000,0.16000,0.00000",
+			"display-p3:0.11000,0.04000,0.05000,0.00000"
+		]
+	},
+	"groups": [
+		{
+			"blur-material": 0.5,
+			"layers": [
+				{
+					"blend-mode-specializations": [
+						{
+							"appearance": "tinted",
+							"value": "normal"
+						}
+					],
+					"glass": false,
+					"image-name": "Minekube logo.png",
+					"name": "Minekube logo",
+					"opacity-specializations": [
+						{
+							"appearance": "tinted",
+							"value": 1
+						}
+					],
+					"position": {
+						"scale": 1.0,
+						"translation-in-points": [0, 0]
+					}
+				}
+			],
+			"lighting": "individual",
+			"opacity-specializations": [
+				{
+					"value": 1
+				},
+				{
+					"appearance": "tinted",
+					"value": 1
+				}
+			],
+			"shadow": {
+				"kind": "neutral",
+				"opacity": 0.5
+			},
+			"specular": false,
+			"translucency": {
+				"enabled": false,
+				"value": 0.5
+			}
+		}
+	],
+	"supported-platforms": {
+		"circles": ["watchOS"],
+		"squares": "shared"
+	}
+}

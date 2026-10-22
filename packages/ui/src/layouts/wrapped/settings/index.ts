@@ -1,0 +1,5 @@
+export { default as AccountProfileSettings } from './AccountProfileSettings.vue'
+export { default as AccountSocialSettings } from './AccountSocialSettings.vue'
+export { default as LanguageSettings } from './language-settings/index.vue'
+export { languageCoverage } from './language-settings/language-settings-coverage.runtime'
+export { default as LanguageSettingsSelector } from './language-settings/language-settings-selector.vue'

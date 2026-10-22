@@ -1,0 +1,189 @@
+.preview-body {
+	position: static;
+	width: auto;
+	height: auto;
+	overflow: auto;
+	background: var(--color-bg);
+	color: var(--color-contrast);
+	font-family: var(--font-standard, sans-serif);
+}
+
+.preview-shell {
+	max-width: 1180px;
+	margin: 0 auto;
+	padding: 2rem 1.5rem 4rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.preview-head {
+	h1 {
+		margin: 0;
+		font-size: 1.5rem;
+		font-weight: 800;
+		letter-spacing: -0.01em;
+	}
+
+	p {
+		margin: 0.5rem 0 0;
+		max-width: 62ch;
+		color: var(--color-secondary);
+		line-height: 1.6;
+	}
+}
+
+.style-picker {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.style-chip {
+	padding: 0.5rem 0.9rem;
+	border-radius: 10px;
+	border: 1px solid var(--color-divider);
+	background: var(--color-raised-bg);
+	color: var(--color-contrast);
+	font-weight: 600;
+	text-transform: capitalize;
+	cursor: pointer;
+
+	&.is-active {
+		border-color: var(--color-brand);
+		box-shadow: 0 0 0 1px var(--color-brand);
+	}
+
+	&.is-launch {
+		margin-left: auto;
+		border-color: var(--color-brand);
+		color: var(--color-brand);
+	}
+}
+
+.hero,
+.gallery {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.hero h2,
+.gallery h2 {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--color-secondary);
+}
+
+.hero-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1.25rem;
+	padding: 2rem 1.5rem;
+	border-radius: 16px;
+	border: 1px solid var(--color-divider);
+	background:
+		radial-gradient(120% 140% at 50% 0%, rgba(255, 255, 255, 0.05), transparent 70%),
+		var(--surface-2);
+}
+
+// The harness uses plain <button> elements, so the orbs need the box the
+// real <IconButton> would otherwise provide.
+.hero-row .mk-play-icon,
+.hero-row .mk-stop-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.6rem;
+	height: 2.6rem;
+	padding: 0;
+}
+
+.gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+	gap: 1rem;
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	padding: 1rem;
+	border-radius: 14px;
+	border: 1px solid var(--color-divider);
+	background: var(--color-raised-bg);
+	cursor: pointer;
+	transition:
+		border-color 200ms ease,
+		transform 220ms cubic-bezier(0.34, 1.26, 0.64, 1);
+
+	&:hover {
+		transform: translateY(-2px);
+	}
+
+	&.is-active {
+		border-color: var(--color-brand);
+		box-shadow: 0 0 0 1px var(--color-brand);
+	}
+
+	h3 {
+		margin: 0.35rem 0 0;
+		font-size: 0.95rem;
+		font-weight: 700;
+		text-transform: capitalize;
+	}
+
+	p {
+		margin: 0;
+		font-size: 0.8rem;
+		line-height: 1.45;
+		color: var(--color-secondary);
+	}
+}
+
+.stage {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 6.5rem;
+	border-radius: 12px;
+	padding: 1rem 0.75rem;
+	overflow: hidden;
+	background:
+		radial-gradient(120% 120% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 70%),
+		var(--surface-3);
+
+	--sb-min-h: 2.4rem;
+	--sb-pad: 0 1rem;
+	--sb-size: 0.7rem;
+	--sb-tracking: 0.09em;
+
+	.orb {
+		position: absolute !important;
+		right: 0.7rem;
+		bottom: 0.6rem;
+		width: 1.75rem;
+		height: 1.75rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.glyph {
+		width: 0.85rem;
+		height: 0.85rem;
+		flex-shrink: 0;
+	}
+}
+
+.glyph {
+	width: 1.05rem;
+	height: 1.05rem;
+	flex-shrink: 0;
+}
