@@ -45,7 +45,7 @@ Minekube brand (gold / orange / magenta on maroon). Built with **Tauri**
 | Loader | `packages/ui/src/components/brand/AnimatedLogo.vue` → spinning Minekube cube |
 | App icons | `apps/app/icons/*` regenerated (isometric Minekube cube) |
 | Modrinth logo assets | removed `wrench-rinth.png`, `modrinth_app.svg`; dropped the "Modrinth Wrench" instance icon |
-| CI | added `.github/workflows/minekube-build.yml` (unsigned Windows `.exe`, macOS `.dmg` and Linux `.deb`/AppImage builds on GitHub-hosted runners) |
+| CI | none — no GitHub Actions or build tooling is checked in (source-only distribution) |
 | Trimmed | removed `apps/frontend` (the modrinth.com website) and `packages/blog/public` (blog images) — not needed to build the launcher |
 | Sidebar account | `apps/app-frontend/src/App.vue` + `components/ui/AccountsCard.vue`: the "Playing as" panel is always shown; a fresh install shows the bundled default head avatar with **Not logged in** instead of an empty sidebar |
 | Support section | `Settings → Support project` shows a single heart — the `❤Support project` heading — and the settings entry uses a helping-hands icon |
@@ -58,74 +58,15 @@ remote (see below).
 
 ---
 
-## Building the Windows installer
+## Building
 
-### Option A — GitHub Actions (recommended, no local setup)
-
-1. Create a new GitHub repository and push this source to it.
-2. Go to the **Actions** tab → **"Minekube Launcher (Windows build)"** →
-   **Run workflow**.
-3. When it finishes, download the **`Minekube-Launcher-windows-setup`**
-   artifact from the run summary. Inside is the `*-setup.exe` installer.
-
-The installer is **unsigned**, so Windows SmartScreen will show a
-"Windows protected your PC" warning on first run — click *More info → Run
-anyway*. Signing requires a code-signing certificate (see below).
-
-### Option B — One-click on Windows (easiest local route)
-
-Unzip this archive and **double-click `build-windows.bat`**. On first run it
-auto-installs the required tools via `winget` (Rust, Node, JDK 17, VS C++ Build
-Tools, WebView2), then builds the installer and opens the output folder. First
-build takes ~15–25 min (downloads + compile). If it reports a tool is not on
-PATH, restart the PC once and run it again.
-
-> If `winget` is missing, install **"App Installer"** from the Microsoft Store.
-
-### Option C — Build locally on Windows (manual steps)
-
-Prerequisites:
-
-- **Rust 1.95.0** (MSVC toolchain) — <https://rustup.rs>
-- **Node 24.15.0** (see `.nvmrc`) + **pnpm** via `corepack enable`
-- **JDK 17** (Temurin) — the build compiles bundled Java helpers via Gradle
-- **Visual Studio Build Tools** (C++ workload) and **WebView2 Runtime**
-  (preinstalled on Windows 11)
-
-Then, from the repo root:
-
-```bash
-# 1) provide the backend environment (compile-time API URLs)
-cp packages/app-lib/.env.prod packages/app-lib/.env
-
-# 2) install JS dependencies (recent Node has no corepack, so use npm to get pnpm)
-npm install -g pnpm@10.33.2
-pnpm install
-
-# 3) build the unsigned NSIS installer
-pnpm --filter=@modrinth/app run tauri build --bundles nsis
-```
-
-The installer lands in
-`target/release/bundle/nsis/Minekube Launcher_<version>-setup.exe`.
-
-### Code signing (optional)
-
-To avoid the SmartScreen warning you need a code-signing certificate. The
-upstream signing setup (jsign + DigiCert ONE) lives in
-`apps/app/tauri-release.conf.json`; adapt it to your own certificate, or use any
-Authenticode signing tool on the produced `.exe`.
-
----
-
-## Note on the build environment
-
-This fork was prepared in a Linux cloud sandbox that could not complete a full
-`pnpm install` (one dependency is served from `codeload.github.com`, which the
-sandbox proxy blocks) and cannot cross‑compile a Windows Tauri installer from
-Linux. The actual compile is therefore expected to happen on Windows or via the
-GitHub Actions workflow above, where GitHub is reachable. All rebranding source
-changes were verified for validity (JSON/YAML/SCSS/Vue structure).
+This fork is distributed as **source code only** — no build or CI tooling is
+checked in: no GitHub Actions workflow, no `build-windows.bat`/`build-windows.ps1`
+scripts, no Turborepo or pnpm workspace configuration, and no lock files. The
+Tauri shell lives in `apps/app`, the Vue frontend in `apps/app-frontend`, and
+the shared Rust library in `packages/app-lib`; producing an installer is left
+to whatever toolchain setup you bring (Rust MSVC, Node + pnpm, JDK 17 on
+Windows).
 
 ---
 
