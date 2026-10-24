@@ -4,7 +4,7 @@ This is the Modrinth monorepo — it contains all Modrinth projects, both fronte
 
 ## Architecture
 
-- **Monorepo tooling:** [Turborepo](https://turbo.build/) (`turbo.jsonc`) + [pnpm workspaces](https://pnpm.io/workspaces) (`pnpm-workspace.yaml`)
+- **Monorepo layout:** plain source tree — `apps/` (Tauri app shell + Vue frontend) and `packages/` (shared Rust/JS libraries). No build or CI tooling is checked in (no GitHub Actions, no Turborepo, no pnpm workspace config) — do not run builds, installs, or dev servers
 - **Frontend:** Vue 3 / Nuxt 3, Tailwind CSS v3
 - **Backend:** Rust (Labrinth API), Postgres, Clickhouse
 - **Indentation:** Use TAB everywhere, never spaces
@@ -44,21 +44,11 @@ This is the Modrinth monorepo — it contains all Modrinth projects, both fronte
 
 ## Pre-PR Commands
 
-Run these from the **root** folder before opening a pull request - do not run these after each prompt the user gives you, only run when asked, ask the user a question if they want to run it if the user indicates that they are about to create a pull request.
-
-- **Website:** `pnpm prepr:frontend:web`
-- **App frontend:** `pnpm prepr:frontend:app`
-- **Frontend libs:** `pnpm prepr:frontend:lib`
-- **All frontend (app+web):** `pnpm prepr`
-- **Labrinth (backend):** See `apps/labrinth/AGENTS.md`
-
-The website and app `prepr` commands
+None — no build or CI tooling is checked in, so there is nothing to run before a pull request.
 
 ## Dev Commands
 
-- **Website:** `pnpm web:dev` (copy `.env` template in `apps/frontend/` first)
-- **App:** `pnpm app:dev` (copy `.env` template in `packages/app-lib/` first)
-- **Storybook (packages/ui):** `pnpm storybook`
+None — no build tooling is checked in at the repo root (no `turbo`/`pnpm` orchestration).
 
 ## Project-Specific Instructions
 
@@ -87,7 +77,7 @@ Each project may have its own file with detailed instructions:
 ### General
 
 - Do not create new non-source code files (e.g. Bash scripts, SQL scripts) unless explicitly prompted to
-- For Frontend, when doing lint checks, only use the `prepr` commands, do not use `typecheck` or `tsc` etc.
+- Lint tooling is not checked in; do not run `tsc`, `eslint`, or similar.
 - Types in `@modrinth/utils` are considered highly outdated, if a component needs them, check if you can switch said component to use types from `packages/api-client`
 - When provided problems, do not say "I didn't introduce these problems" (shifting the blame/effort) - just fix them.
 
