@@ -20,12 +20,14 @@ Minekube Launcher is an open-source desktop launcher for organizing and playing 
 
 ## 🚀 Highlights
 
-- 🧩 **Organize Minecraft instances** — keep separate game setups and modded profiles in one place.
-- 📦 **Work with modpacks** — import `.mrpack` files and supported Prism Launcher / MultiMC instance archives.
-- 🔎 **Find Minecraft content** — browse and install content using the Modrinth catalog and API.
-- 🎨 **Make it yours** — customize the launcher's appearance, themes, and animation settings.
-- 👤 **Minecraft sign-in** — connect a Microsoft account when you want to play Minecraft.
-- 🔄 **Keep up to date** — supported releases can provide in-app update notifications and installation.
+| Feature | What it offers |
+| --- | --- |
+| 🧩 **Organize Minecraft instances** | Keep separate game setups and modded profiles in one place. |
+| 📦 **Work with modpacks** | Import `.mrpack` files and supported Prism Launcher / MultiMC instance archives. |
+| 🔎 **Find Minecraft content** | Browse and install content using the Modrinth catalog and API. |
+| 🎨 **Make it yours** | Customize the launcher's appearance, themes, and animation settings. |
+| 👤 **Minecraft sign-in** | Connect a Microsoft account when you want to play Minecraft. |
+| 🔄 **Keep up to date** | Supported releases can provide in-app update notifications and installation. |
 
 ## 📥 Download
 
