@@ -1,39 +1,56 @@
-# ![Modrinth Monorepo Cover](/.github/assets/monorepo_cover.png)
+<div align="center">
+  <img src="packages/assets/branding/minekube-launcher-logo.png" alt="Minekube Launcher" width="620">
 
-![Issues](https://img.shields.io/github/issues-raw/Modrinth/code?color=c78aff&label=issues&style=for-the-badge)
-![Pull Requests](https://img.shields.io/github/issues-pr-raw/Modrinth/code?color=c78aff&label=PRs&style=for-the-badge)
-![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=c78aff&label=contributors&style=for-the-badge)
-![Lines of Code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge?style=flat&logoColor=white&color=c78aff&style=for-the-badge)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/Modrinth/code?color=c78aff&label=commits&style=for-the-badge)
-![Last Commit](https://img.shields.io/github/last-commit/Modrinth/code?color=c78aff&label=last%20commit&style=for-the-badge)
+  # Minekube Launcher 🎮
 
-## Modrinth Monorepo
+  **A cleaner home for your Minecraft instances, mods, and modpacks.**
 
-Welcome to the Modrinth Monorepo, the primary codebase for the Modrinth web interface and app. It contains ![Lines of code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge%3Fformat%3Dhuman&logoColor=white&color=black&label=) lines of code and has ![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=black&label=) contributors!
+  <a href="https://github.com/MinekubeStudios/MinekubeLauncher/releases/latest">⬇️ Releases</a>
+  ·
+  <a href="https://github.com/MinekubeStudios/MinekubeLauncher/issues">🐛 Report a problem</a>
+</div>
 
-If you're not a developer and you've stumbled upon this repository, you can access the web interface on the [Modrinth website](https://modrinth.com) and download the latest release of the app [here](https://modrinth.com/app).
+---
 
-## Development
+## ✨ About
 
-This repository contains two primary packages. For detailed development information, please refer to their respective guides:
+Minekube Launcher is an open-source desktop launcher for organizing and playing modded Minecraft. It brings a Minekube look and a set of launcher-focused customizations to a Rust-powered desktop application with a Vue and TypeScript interface.
 
-- [Website frontend](https://docs.modrinth.com/contributing/knossos/)
-- [Desktop app](https://docs.modrinth.com/contributing/theseus/)
+> **A note on services:** Minekube Launcher is an independent rebrand of the Modrinth App, not a separate mod hosting platform. Mod discovery, versions, and related metadata continue to use Modrinth's services.
 
-## Contributing
+## 🚀 Highlights
 
-We welcome contributions! Before submitting any contributions, please read our [contributing guidelines](https://docs.modrinth.com/contributing/getting-started/).
+- 🧩 **Organize Minecraft instances** — keep separate game setups and modded profiles in one place.
+- 📦 **Work with modpacks** — import `.mrpack` files and supported Prism Launcher / MultiMC instance archives.
+- 🔎 **Find Minecraft content** — browse and install content using the Modrinth catalog and API.
+- 🎨 **Make it yours** — customize the launcher's appearance, themes, and animation settings.
+- 👤 **Minecraft sign-in** — connect a Microsoft account when you want to play Minecraft.
+- 🔄 **Keep up to date** — supported releases can provide in-app update notifications and installation.
 
-If you plan to fork this repository for your own purposes, please review our [copying guidelines](COPYING.md).
+## 📥 Download
 
-## Security
+Visit the [GitHub Releases page](https://github.com/MinekubeStudios/MinekubeLauncher/releases/latest) to check for the latest available build. Windows installer builds are the currently supported packaged release target. Download the installer from a release and follow its prompts to install.
 
-If you discover a security vulnerability within our codebase, please follow our [responsible disclosure guidelines](https://modrinth.com/legal/security).
+## 🛠️ Technology
 
-## Support
+- **Desktop shell:** Tauri
+- **Core:** Rust
+- **Interface:** Vue 3 and TypeScript
+- **Workspace:** pnpm and Cargo
 
-If you need help with the Modrinth web interface or app, please visit our [support page](https://support.modrinth.com). For general inquiries, you can also join our [Discord server](https://discord.modrinth.com).
+## 🤝 Contributing
 
-## License
+Bug reports, ideas, and code contributions are welcome. Before opening an issue, please check whether it has already been reported. For a proposed change, open a pull request with a short explanation of the problem and how you tested the change.
 
-All packages in this repository are licensed under their respective licenses. Refer to the LICENSE file in each package for more information.
+- [Open an issue](https://github.com/MinekubeStudios/MinekubeLauncher/issues)
+- [Browse open pull requests](https://github.com/MinekubeStudios/MinekubeLauncher/pulls)
+
+## 🔐 Privacy and security
+
+Please do not post passwords, access tokens, private keys, or other sensitive data in issues or pull requests. If you discover a security vulnerability, report it privately to the repository maintainers rather than publishing exploit details.
+
+## 📄 License and credits
+
+Minekube Launcher is based on the [Modrinth App](https://github.com/Modrinth/code) and is distributed under **GPL-3.0-only**. See [`LICENSE`](LICENSE) and [`COPYING.md`](COPYING.md) for the applicable license and attribution details.
+
+Minekube Launcher is an independent project and is not affiliated with, endorsed by, or an official product of Modrinth, Microsoft, or Mojang. Minecraft is a trademark of Mojang Studios.
