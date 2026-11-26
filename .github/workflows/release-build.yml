@@ -1,0 +1,64 @@
+name: release-build
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Verze pro artefakt (nepovinné)"
+        required: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # packages/app-lib/build.rs spouští Gradle wrapper (java/gradlew.bat build),
+      # bez JDK 17 by Rust build spadl ještě před Tauri.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "."
+
+      # build.rs načítá .env přes dotenvy; šablona .env.prod je v repu, .env je ignorenutý.
+      - name: Provide backend environment (.env)
+        shell: bash
+        run: cp packages/app-lib/.env.prod packages/app-lib/.env
+
+      # Frontend se staví přímo vite — nezávisle na turbo/lockfile.
+      # Záměrně bez `vue-tsc --noEmit` (v tomto source-only fork-u má předchozí
+      # typové chyby a neprodukuje žádný výstup, který by Tauri potřeboval).
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm --filter @modrinth/app-frontend exec vite build
+
+      # beforeBuildCommand v tauri.conf.json volá turbo; vypneme ho,
+      # protože frontend už je postavený.
+      - name: Tauri build (NSIS)
+        working-directory: apps/app
+        run: |
+          echo '{ "build": { "beforeBuildCommand": "" } }' > tauri.ci.conf.json
+          pnpm tauri build --bundles nsis --config tauri.ci.conf.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: minekube-installer
+          # Cargo workspace má kořen v rootu repa, nikoli v apps/app.
+          path: |
+            target/release/bundle/nsis/*.exe
+            target/release/bundle/msi/*.msi
+            apps/app/target/release/bundle/nsis/*.exe
+            apps/app/target/release/bundle/msi/*.msi
+          if-no-files-found: error
+          retention-days: 7
