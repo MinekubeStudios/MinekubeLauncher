@@ -12,10 +12,12 @@ use crate::state::{InstanceMetadata, State};
 use crate::util::io;
 use std::collections::HashSet;
 
+const EXTRA_TELEMETRY_KEY: &str = "telemetryOptInExtra";
+
 pub(super) fn currently_launcher_owned_keys(
     metadata: &InstanceMetadata,
 ) -> HashSet<String> {
-    let mut keys = HashSet::new();
+    let mut keys = HashSet::from([EXTRA_TELEMETRY_KEY.to_owned()]);
     if metadata.launch_overrides.force_fullscreen.is_some() {
         keys.insert("fullscreen".to_string());
     }
@@ -43,16 +45,17 @@ pub async fn apply_launcher_overrides(
     instance_id: &str,
     overrides: &[(String, String)],
 ) -> crate::Result<()> {
-    if overrides.is_empty() {
-        return Ok(());
-    }
     let state = State::get().await?;
     let _guard = state.lock_synced_options().await;
     let metadata = crate::state::get_instance(instance_id, &state.pool)
         .await?
         .ok_or_else(|| input_error("Unknown instance"))?;
     let path = options_path(&metadata, &state);
-    let (mut document, input_bytes) = if path.exists() {
+    let exists = tokio::fs::try_exists(&path).await?;
+    if overrides.is_empty() && !exists {
+        return Ok(());
+    }
+    let (mut document, input_bytes) = if exists {
         read_document(&path).await?
     } else {
         (
@@ -65,6 +68,13 @@ pub async fn apply_launcher_overrides(
     for (key, value) in overrides {
         validate_raw_key_value(key, value)?;
         document.set(key, value, true)?;
+    }
+    if let Some(value) = document.value(EXTRA_TELEMETRY_KEY)
+        && value != "false"
+    {
+        document.set(EXTRA_TELEMETRY_KEY, "false", true)?;
+    } else if overrides.is_empty() {
+        return Ok(());
     }
     let output_bytes = document.serialize()?;
     let output_sha1 = sha1_bytes(&output_bytes);

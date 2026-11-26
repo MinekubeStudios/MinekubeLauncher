@@ -17,6 +17,7 @@ pub async fn authenticate_begin_flow(
 ) -> crate::Result<&'static str> {
     let state = crate::State::get().await?;
     let settings = Settings::get(&state.pool).await?;
+    crate::util::secret::require_available()?;
     let use_localhost = settings
         .feature_flags
         .get(&FeatureFlag::LocalhostSignIn)
@@ -31,7 +32,7 @@ pub async fn authenticate_begin_flow(
     })
 }
 
-#[tracing::instrument]
+#[tracing::instrument(skip_all)]
 pub async fn authenticate_finish_flow(
     code: &str,
 ) -> crate::Result<ModrinthCredentials> {
@@ -54,7 +55,7 @@ pub async fn authenticate_finish_flow(
         );
     }
 
-    reconnect_friends(&state).await?;
+    state.friends_socket.disconnect().await?;
 
     Ok(creds)
 }
@@ -89,7 +90,7 @@ pub async fn set_active(user_id: &str) -> crate::Result<()> {
 
     creds.active = true;
     creds.upsert(&state.pool).await?;
-    reconnect_friends(&state).await?;
+    state.friends_socket.disconnect().await?;
 
     Ok(())
 }
@@ -107,27 +108,10 @@ pub async fn remove_user(user_id: &str) -> crate::Result<()> {
     Ok(())
 }
 
-async fn reconnect_friends(state: &crate::State) -> crate::Result<()> {
-    if let Err(error) = state.friends_socket.disconnect().await {
-        tracing::warn!("Failed to disconnect friends socket: {error}");
-    }
-    if let Err(error) = state
-        .friends_socket
-        .connect(&state.pool, &state.api_semaphore, &state.process_manager)
-        .await
-    {
-        tracing::warn!("Failed to reconnect friends socket: {error}");
-    }
-
-    Ok(())
-}
-
 #[tracing::instrument]
 pub async fn get_credentials() -> crate::Result<Option<ModrinthCredentials>> {
     let state = crate::State::get().await?;
-    let current =
-        ModrinthCredentials::get_and_refresh(&state.pool, &state.api_semaphore)
-            .await?;
+    let current = ModrinthCredentials::get_active(&state.pool).await?;
     if current.is_none() {
         state.friends_socket.disconnect().await?;
     }

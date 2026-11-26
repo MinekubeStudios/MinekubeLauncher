@@ -6,8 +6,9 @@
 			project.wiki_url ||
 			project.discord_url ||
 			project.site_url ||
-			projectV3?.link_urls.store?.url ||
-			project.donation_urls.length > 0
+			projectV3?.link_urls?.site?.url ||
+			projectV3?.link_urls?.store?.url ||
+			(project.donation_urls?.length ?? 0) > 0
 		"
 		class="flex flex-col gap-3"
 	>
@@ -56,8 +57,8 @@
 				<ExternalIcon aria-hidden="true" class="external-icon" />
 			</a>
 			<a
-				v-if="projectV3?.link_urls.site?.url"
-				:href="projectV3?.link_urls.site?.url"
+				v-if="projectV3?.link_urls?.site?.url"
+				:href="projectV3?.link_urls?.site?.url"
 				:target="linkTarget"
 				rel="noopener nofollow ugc"
 			>
@@ -66,8 +67,8 @@
 				<ExternalIcon aria-hidden="true" class="external-icon" />
 			</a>
 			<a
-				v-if="projectV3?.link_urls.store?.url"
-				:href="projectV3?.link_urls.store?.url"
+				v-if="projectV3?.link_urls?.store?.url"
+				:href="projectV3?.link_urls?.store?.url"
 				:target="linkTarget"
 				rel="noopener nofollow ugc"
 			>
@@ -81,9 +82,9 @@
 						project.source_url ||
 						project.wiki_url ||
 						project.discord_url ||
-						projectV3?.link_urls.site?.url ||
-						projectV3?.link_urls.store?.url) &&
-					project.donation_urls.length > 0
+						projectV3?.link_urls?.site?.url ||
+						projectV3?.link_urls?.store?.url) &&
+					(project.donation_urls?.length ?? 0) > 0
 				"
 				class="w-full border-button-border my-0.5"
 			/>
@@ -145,10 +146,12 @@ defineProps<{
 		discord_url: string
 		site_url?: string
 		store_url?: string
-		donation_urls: {
-			id: string
-			url: string
-		}[]
+		donation_urls?:
+			| {
+					id: string
+					url: string
+			  }[]
+			| null
 	}
 	projectV3?: Labrinth.Projects.v3.Project
 	linkTarget: string

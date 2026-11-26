@@ -547,8 +547,12 @@ async fn minecraft_tokens(
     let mut tokens = Vec::with_capacity(rows.len() * 2);
 
     for row in rows {
-        tokens.push(row.try_get("access_token")?);
-        tokens.push(row.try_get("refresh_token")?);
+        tokens.push(crate::util::secret::open(
+            row.try_get::<&str, _>("access_token")?,
+        ));
+        tokens.push(crate::util::secret::open(
+            row.try_get::<&str, _>("refresh_token")?,
+        ));
     }
 
     Ok(tokens)

@@ -14,7 +14,7 @@ pub enum QuickPlayType {
     Server(ServerAddress),
 }
 
-#[tracing::instrument]
+#[tracing::instrument(skip(quick_play_type))]
 pub async fn run(
     instance_id: &str,
     quick_play_type: QuickPlayType,
@@ -31,37 +31,29 @@ pub async fn run(
         )
         .into());
     }
-    {
-        let _priority =
-            state.content_store.legacy_migration_priority.write().await;
-        crate::state::instances::commands::migrate_legacy_content(
+    let settings = Settings::get(&state.pool).await?;
+    let isolation_requested = settings
+        .feature_flags
+        .get(&FeatureFlag::ShieldGameIsolation)
+        .copied()
+        .unwrap_or(false);
+    if !isolation_requested {
+        {
+            let _priority =
+                state.content_store.legacy_migration_priority.write().await;
+            crate::state::instances::commands::migrate_legacy_content(
+                instance_id,
+                &state,
+                false,
+            )
+            .await?;
+        }
+        super::shared::check_shared_instance_availability_before_launch(
             instance_id,
             &state,
-            false,
         )
         .await?;
     }
-    super::shared::check_shared_instance_availability_before_launch(
-        instance_id,
-        &state,
-    )
-    .await?;
-
-    let default_account = Credentials::get_default_credential(&state.pool)
-        .await?
-        .ok_or_else(|| crate::ErrorKind::NoCredentialsError.as_error())?;
-
-    run_credentials(instance_id, &default_account, quick_play_type).await
-}
-
-#[tracing::instrument(skip(credentials))]
-async fn run_credentials(
-    instance_id: &str,
-    credentials: &Credentials,
-    quick_play_type: QuickPlayType,
-) -> crate::Result<ProcessMetadata> {
-    let state = State::get().await?;
-    let settings = Settings::get(&state.pool).await?;
     let context =
         crate::state::instances::commands::get_instance_launch_context(
             instance_id,
@@ -98,6 +90,28 @@ async fn run_credentials(
         .into());
     }
 
+    let isolation = if isolation_requested {
+        if matches!(quick_play_type, QuickPlayType::Server(_)) {
+            return Err(crate::ErrorKind::LauncherError(
+                "Multiplayer is unavailable while game network isolation is enabled. Change it in Privacy to join a server.".to_owned(),
+            )
+            .into());
+        }
+        Some(
+            crate::launcher::network_isolation::NetworkIsolation::prepare()
+                .await?,
+        )
+    } else {
+        None
+    };
+    let isolated = isolation.is_some();
+    let credentials = if isolated {
+        Credentials::get_active_without_refresh(&state.pool).await?
+    } else {
+        Credentials::get_default_credential(&state.pool).await?
+    }
+    .ok_or_else(|| crate::ErrorKind::NoCredentialsError.as_error())?;
+
     // Minekube Shield: the optional privacy mods (No Telemetry, No Chat
     // Reports) follow the player's choice before every launch.
     let shield_game_mods = settings
@@ -112,13 +126,14 @@ async fn run_credentials(
                 &instance_path.join("mods"),
             )
             .await;
-            if let Err(error) = crate::launcher::shield_game::sync_privacy_mods(
-                &instance_path,
-                context.applied_content_set.loader,
-                &context.applied_content_set.game_version,
-                shield_game_mods,
-            )
-            .await
+            if !isolated
+                && let Err(error) = crate::launcher::shield_game::sync_privacy_mods(
+                    &instance_path,
+                    context.applied_content_set.loader,
+                    &context.applied_content_set.game_version,
+                    shield_game_mods,
+                )
+                .await
             {
                 warn!("Could not prepare the Minekube Shield mods: {error}");
             }
@@ -134,7 +149,7 @@ async fn run_credentials(
         .pre_launch
         .as_ref()
         .or(settings.hooks.pre_launch.as_ref())
-        .filter(|hook_command| !hook_command.is_empty());
+        .filter(|hook_command| !isolated && !hook_command.is_empty());
 
     let mut java_args = context
         .launch_overrides
@@ -149,7 +164,7 @@ async fn run_credentials(
         .wrapper
         .clone()
         .or(settings.hooks.wrapper)
-        .filter(|hook_command| !hook_command.is_empty());
+        .filter(|hook_command| !isolated && !hook_command.is_empty());
 
     let env_args = context
         .launch_overrides
@@ -163,7 +178,7 @@ async fn run_credentials(
         .post_exit
         .clone()
         .or(settings.hooks.post_exit)
-        .filter(|hook_command| !hook_command.is_empty());
+        .filter(|hook_command| !isolated && !hook_command.is_empty());
 
     let memory = context.launch_overrides.memory.unwrap_or(settings.memory);
     let resolution = context
@@ -268,11 +283,9 @@ async fn run_credentials(
         mc_set_options.push(("fullscreen".to_string(), "true".to_string()));
     }
 
-    // Minekube Shield: nothing about the session is reported anywhere. (The
-    // Modrinth base this launcher comes from posted the player's username and
-    // the server they joined to Modrinth's analytics on every launch.)
-
-    crate::minecraft_skins::flush_pending_skin_change().await?;
+    if !isolated {
+        crate::minecraft_skins::flush_pending_skin_change().await?;
+    }
     crate::launcher::launch_minecraft(
         &java_args,
         &launch_env_args,
@@ -280,10 +293,11 @@ async fn run_credentials(
         &wrapper,
         &memory,
         &resolution,
-        credentials,
+        &credentials,
         post_exit_hook,
         &context,
         quick_play_type,
+        isolation.as_ref(),
     )
     .await
 }

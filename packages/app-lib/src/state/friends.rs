@@ -2,8 +2,8 @@ use crate::ErrorKind;
 use crate::data::ModrinthCredentials;
 use crate::event::FriendPayload;
 use crate::event::emit::{emit_friend, emit_notification};
+use crate::state::TunnelSocket;
 use crate::state::tunnel::InternalTunnelSocket;
-use crate::state::{ProcessManager, TunnelSocket};
 use crate::util::fetch::{FetchSemaphore, fetch_advanced, fetch_json};
 use ariadne::ids::UserId;
 use ariadne::networking::message::{
@@ -75,7 +75,6 @@ impl FriendsSocket {
         &self,
         exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite> + Copy,
         semaphore: &FetchSemaphore,
-        process_manager: &ProcessManager,
     ) -> crate::Result<()> {
         let _connection_guard = self.connection_lock.lock().await;
         if self.is_connected().await {
@@ -112,12 +111,6 @@ impl FriendsSocket {
                     {
                         let mut write_lock = self.write.write().await;
                         *write_lock = Some(write);
-                    }
-
-                    if let Some(process) = process_manager.get_all().first() {
-                        let _ = self
-                            .update_status(Some(process.instance_name.clone()))
-                            .await;
                     }
 
                     let write_handle = self.write.clone();
@@ -308,11 +301,7 @@ impl FriendsSocket {
                     last_ping = Utc::now();
                     let _ = state
                         .friends_socket
-                        .connect(
-                            &state.pool,
-                            &state.api_semaphore,
-                            &state.process_manager,
-                        )
+                        .connect(&state.pool, &state.api_semaphore)
                         .await;
                 } else if connected
                     && Utc::now().signed_duration_since(last_ping)
@@ -349,20 +338,6 @@ impl FriendsSocket {
         }
 
         Ok(())
-    }
-
-    #[tracing::instrument(skip(self))]
-    pub async fn update_status(
-        &self,
-        instance_name: Option<String>,
-    ) -> crate::Result<()> {
-        Self::send_message(
-            &self.write,
-            ClientToServerMessage::StatusUpdate {
-                profile_name: instance_name,
-            },
-        )
-        .await
     }
 
     #[tracing::instrument(skip_all)]

@@ -78,7 +78,7 @@ pub async fn get() -> crate::Result<Settings> {
 }
 
 /// Sets entire settings
-#[tracing::instrument]
+#[tracing::instrument(skip(settings))]
 pub async fn set(settings: Settings) -> crate::Result<()> {
     let state = State::get().await?;
     let _guard = state.lock_synced_options().await;

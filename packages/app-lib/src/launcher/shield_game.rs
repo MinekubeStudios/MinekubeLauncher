@@ -73,10 +73,17 @@ pub async fn remove_retired_companion(mods_dir: &Path) {
 
 /// Appends the hardening arguments the player has not set themselves.
 pub fn harden_jvm_args(java_args: &mut Vec<String>) {
+    fn argument_key(argument: &str) -> &str {
+        let key = argument.split_once('=').map_or(argument, |(key, _)| key);
+        key.strip_prefix("-XX:-")
+            .or_else(|| key.strip_prefix("-XX:+"))
+            .unwrap_or(key)
+    }
     for arg in HARDENING_JVM_ARGS {
-        let key = arg.split('=').next().unwrap_or(arg);
-        let key = key.trim_start_matches("-XX:-").trim_start_matches("-XX:+");
-        if !java_args.iter().any(|existing| existing.contains(key)) {
+        if !java_args
+            .iter()
+            .any(|existing| argument_key(existing) == argument_key(arg))
+        {
             java_args.push((*arg).to_string());
         }
     }
@@ -163,6 +170,9 @@ async fn cleanup(
             continue;
         };
         let lower = name.to_ascii_lowercase();
+        if !lower.ends_with(".jar") {
+            continue;
+        }
         if lower.starts_with(&ours) {
             if name != keep {
                 let _ = tokio::fs::remove_file(entry.path()).await;
@@ -188,7 +198,10 @@ async fn remove_ours(mods_dir: &Path, privacy_mod: &PrivacyMod) {
         if entry
             .file_name()
             .to_str()
-            .is_some_and(|name| name.to_ascii_lowercase().starts_with(&ours))
+            .is_some_and(|name| {
+                let lower = name.to_ascii_lowercase();
+                lower.starts_with(&ours) && lower.ends_with(".jar")
+            })
         {
             let _ = tokio::fs::remove_file(entry.path()).await;
         }
@@ -343,6 +356,13 @@ async fn mark(cache_dir: &Path, marker: &Path) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn unrelated_jvm_arguments_do_not_disable_hardening() {
+        let mut args = vec!["-Dtest=UsePerfData".to_owned()];
+        harden_jvm_args(&mut args);
+        assert!(args.iter().any(|arg| arg == "-XX:-UsePerfData"));
+    }
 
     #[test]
     fn hardening_respects_player_args() {

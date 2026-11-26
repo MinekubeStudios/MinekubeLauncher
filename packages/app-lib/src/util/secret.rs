@@ -1,81 +1,88 @@
-//! Sealing of sign-in secrets at rest.
-//!
-//! Microsoft sign-in tokens and the Xbox device key live in the launcher's
-//! SQLite database and are sealed before they are written:
-//!
-//! - **Windows**: DPAPI encrypts them with a key Windows derives from the
-//!   signed-in user, so a copy of the database (a backup, malware that grabs
-//!   `app.db`, another user of the PC) holds nothing usable.
-//! - **macOS and Linux**: AES-256-GCM with a random key kept in a separate
-//!   file readable only by the user who runs the launcher (mode 0600).
-//!
-//! Sealed values carry a short prefix, which keeps reading compatible with
-//! databases written by older versions: an unsealed value is returned as is
-//! and sealed on the next write (and once at startup, see
-//! [`crate::state::Credentials::seal_stored_secrets`]).
-//!
-//! If a sealed value cannot be opened (the database was moved to another
-//! account or computer), an empty string is returned, which simply makes the
-//! launcher ask for a fresh sign-in.
+//! Authenticated encryption of sign-in secrets before they reach SQLite.
+//! DPAPI protects Windows values. On macOS and Linux the AES-GCM key is
+//! stored in the system credential store, never in the launcher directory.
+//! The old Unix key file is read only to migrate existing ciphertext.
 
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD;
 
-const PREFIX: &str = "mksealed1:";
+const LEGACY_PREFIX: &str = "mksealed1:";
+const PREFIX: &str = "mksealed2:";
 
-/// Prepares sealing; `dir` is the launcher's settings folder (where the key
-/// file lives on macOS and Linux). Call once at startup, before secrets are
-/// read or written.
-pub fn init(dir: &std::path::Path) {
-    platform::init(dir);
+pub async fn init(dir: &std::path::Path, app_id: &str) {
+    platform::init(dir, app_id).await;
 }
 
-/// Whether secrets can be sealed right now.
 pub fn sealing_available() -> bool {
     platform::available()
 }
 
-/// Whether `stored` is already sealed.
-pub fn is_sealed(stored: &str) -> bool {
-    stored.starts_with(PREFIX)
+fn is_sealed(stored: &str) -> bool {
+    stored.starts_with(PREFIX) || stored.starts_with(LEGACY_PREFIX)
 }
 
-/// Seals `plain` for storage. Empty values stay empty. On platforms without
-/// sealing (or if sealing fails) the value is stored as before.
-pub fn seal(plain: &str) -> String {
-    if plain.is_empty() || is_sealed(plain) {
-        return plain.to_string();
+/// Fails instead of ever returning plaintext for persistence.
+pub fn seal(plain: &str) -> crate::Result<String> {
+    if plain.is_empty() {
+        return Ok(String::new());
     }
-    match platform::protect(plain.as_bytes()) {
-        Some(sealed) => format!("{PREFIX}{}", STANDARD.encode(sealed)),
-        None => plain.to_string(),
+    encode(plain, platform::protect).ok_or_else(storage_error)
+}
+
+pub(crate) fn require_available() -> crate::Result<()> {
+    if sealing_available() {
+        Ok(())
+    } else {
+        Err(storage_error())
     }
 }
 
-/// Opens a stored value written by [`seal`] (or by an older version).
+fn storage_error() -> crate::Error {
+    crate::ErrorKind::InputError(
+        "Could not save the sign-in securely. Unlock or enable your system credential store, restart the launcher, and try again.".to_owned(),
+    )
+    .into()
+}
+
+fn encode(
+    plain: &str,
+    protect: impl FnOnce(&[u8]) -> Option<Vec<u8>>,
+) -> Option<String> {
+    protect(plain.as_bytes())
+        .map(|value| format!("{PREFIX}{}", STANDARD.encode(value)))
+}
+
 pub fn open(stored: &str) -> String {
-    let Some(encoded) = stored.strip_prefix(PREFIX) else {
-        return stored.to_string();
+    decode(stored).unwrap_or_default()
+}
+
+fn decode(stored: &str) -> Option<String> {
+    let (encoded, legacy) = if let Some(encoded) = stored.strip_prefix(PREFIX) {
+        (encoded, false)
+    } else {
+        (stored.strip_prefix(LEGACY_PREFIX)?, true)
     };
-    STANDARD
-        .decode(encoded)
-        .ok()
-        .and_then(|bytes| platform::unprotect(&bytes))
-        .and_then(|bytes| String::from_utf8(bytes).ok())
-        .unwrap_or_else(|| {
-            tracing::warn!(
-                "A sealed sign-in secret could not be opened on this Windows account; a new sign-in will be needed"
-            );
-            String::new()
-        })
+    let bytes = STANDARD.decode(encoded).ok()?;
+    String::from_utf8(platform::unprotect(&bytes, legacy)?).ok()
+}
+
+/// Keep encrypted values recoverable when the OS store is temporarily locked.
+/// Plaintext from old versions is re-sealed or removed, never copied as-is.
+pub(crate) fn migrate_value(stored: &str) -> Option<String> {
+    if stored.is_empty() || stored.starts_with(PREFIX) {
+        None
+    } else if is_sealed(stored) {
+        decode(stored).and_then(|plain| seal(&plain).ok())
+    } else {
+        Some(seal(stored).unwrap_or_default())
+    }
 }
 
 #[cfg(windows)]
 mod platform {
     use std::ffi::c_void;
 
-    /// Extra entropy so other programs running as the same Windows user
-    /// cannot open the launcher's secrets with a plain DPAPI call.
+    /// Stable domain separation, not a boundary against same-user software.
     const ENTROPY: &[u8] = b"MinekubeLauncher/sign-in-secrets/v1";
     const CRYPTPROTECT_UI_FORBIDDEN: u32 = 0x1;
 
@@ -148,7 +155,7 @@ mod platform {
         Some(bytes)
     }
 
-    pub fn init(_dir: &std::path::Path) {}
+    pub async fn init(_dir: &std::path::Path, _app_id: &str) {}
 
     pub fn available() -> bool {
         true
@@ -171,7 +178,7 @@ mod platform {
         })
     }
 
-    pub fn unprotect(sealed: &[u8]) -> Option<Vec<u8>> {
+    pub fn unprotect(sealed: &[u8], _legacy: bool) -> Option<Vec<u8>> {
         run(sealed, |input, entropy, output| {
             // SAFETY: all pointers come from live blobs owned by `run`.
             unsafe {
@@ -191,6 +198,8 @@ mod platform {
 
 #[cfg(not(windows))]
 mod platform {
+    use base64::Engine;
+    use base64::engine::general_purpose::STANDARD;
     use ring::aead::{
         AES_256_GCM, Aad, LessSafeKey, NONCE_LEN, Nonce, UnboundKey,
     };
@@ -198,53 +207,136 @@ mod platform {
     use std::path::Path;
     use std::sync::OnceLock;
 
-    const KEY_FILE: &str = "secrets.key";
+    const SERVICE: &str = "Minekube Launcher sign-in vault";
     const KEY_LEN: usize = 32;
-
     static KEY: OnceLock<LessSafeKey> = OnceLock::new();
+    static LEGACY_KEY: OnceLock<LessSafeKey> = OnceLock::new();
 
-    fn load_or_create_key(dir: &Path) -> Option<[u8; KEY_LEN]> {
-        let path = dir.join(KEY_FILE);
-        if let Ok(bytes) = std::fs::read(&path) {
-            return bytes.try_into().ok();
-        }
+    fn random_key() -> Option<[u8; KEY_LEN]> {
         let mut key = [0u8; KEY_LEN];
         SystemRandom::new().fill(&mut key).ok()?;
-        std::fs::create_dir_all(dir).ok()?;
-        write_private(&path, &key).ok()?;
         Some(key)
     }
 
-    #[cfg(unix)]
-    fn write_private(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
-        use std::io::Write;
-        use std::os::unix::fs::OpenOptionsExt;
-        let mut file = std::fs::OpenOptions::new()
-            .write(true)
-            .create_new(true)
-            .mode(0o600)
-            .open(path)?;
-        file.write_all(bytes)
+    fn parse_key(encoded: &[u8]) -> Option<[u8; KEY_LEN]> {
+        let encoded = std::str::from_utf8(encoded).ok()?.trim();
+        STANDARD.decode(encoded).ok()?.try_into().ok()
     }
 
-    #[cfg(not(unix))]
-    fn write_private(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
-        std::fs::write(path, bytes)
+    #[cfg(target_os = "macos")]
+    async fn system_key(app_id: &str) -> Option<[u8; KEY_LEN]> {
+        use security_framework::passwords::{
+            get_generic_password, set_generic_password,
+        };
+        let app_id = app_id.to_owned();
+        tokio::task::spawn_blocking(move || {
+            match get_generic_password(SERVICE, &app_id) {
+                Ok(value) => parse_key(&value),
+                // errSecItemNotFound; never replace a locked or unreadable key.
+                Err(error) if error.code() == -25300 => {
+                    let key = random_key()?;
+                    set_generic_password(
+                        SERVICE,
+                        &app_id,
+                        STANDARD.encode(key).as_bytes(),
+                    )
+                    .ok()?;
+                    Some(key)
+                }
+                Err(_) => None,
+            }
+        })
+        .await
+        .ok()
+        .flatten()
     }
 
-    pub fn init(dir: &Path) {
+    #[cfg(target_os = "linux")]
+    async fn system_key(app_id: &str) -> Option<[u8; KEY_LEN]> {
+        use std::process::Stdio;
+        use std::time::Duration;
+        use tokio::io::AsyncWriteExt;
+        use tokio::process::Command;
+
+        tokio::time::timeout(Duration::from_secs(8), async {
+            let command = || {
+                let mut command = Command::new("/usr/bin/secret-tool");
+                command.kill_on_drop(true);
+                command
+            };
+            let output = command()
+                .args([
+                    "lookup",
+                    "application",
+                    app_id,
+                    "purpose",
+                    "minekube-secrets-v2",
+                ])
+                .stdin(Stdio::null())
+                .output()
+                .await
+                .ok()?;
+            if output.status.success() {
+                return parse_key(&output.stdout);
+            }
+            if output.status.code() != Some(1)
+                || !output.stderr.is_empty()
+                || !output.stdout.is_empty()
+            {
+                return None;
+            }
+            let key = random_key()?;
+            let mut child = command()
+                .args([
+                    "store",
+                    "--label",
+                    SERVICE,
+                    "application",
+                    app_id,
+                    "purpose",
+                    "minekube-secrets-v2",
+                ])
+                .stdin(Stdio::piped())
+                .stdout(Stdio::null())
+                .stderr(Stdio::null())
+                .spawn()
+                .ok()?;
+            // Secret Tool accepts stdin, so the key never appears in arguments.
+            let mut stdin = child.stdin.take()?;
+            stdin
+                .write_all(STANDARD.encode(key).as_bytes())
+                .await
+                .ok()?;
+            drop(stdin);
+            child.wait().await.ok()?.success().then_some(key)
+        })
+        .await
+        .ok()
+        .flatten()
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "linux")))]
+    async fn system_key(_app_id: &str) -> Option<[u8; KEY_LEN]> {
+        None
+    }
+
+    pub async fn init(dir: &Path, app_id: &str) {
         if KEY.get().is_some() {
             return;
         }
-        match load_or_create_key(dir)
-            .and_then(|bytes| UnboundKey::new(&AES_256_GCM, &bytes).ok())
+        if let Ok(bytes) = std::fs::read(dir.join("secrets.key"))
+            && let Ok(key) = UnboundKey::new(&AES_256_GCM, &bytes)
         {
-            Some(key) => {
-                let _ = KEY.set(LessSafeKey::new(key));
-            }
-            None => tracing::warn!(
-                "Could not prepare the key for sign-in secrets; they stay unsealed"
-            ),
+            let _ = LEGACY_KEY.set(LessSafeKey::new(key));
+        }
+        if let Some(key) = system_key(app_id).await
+            && let Ok(key) = UnboundKey::new(&AES_256_GCM, &key)
+        {
+            let _ = KEY.set(LessSafeKey::new(key));
+        } else {
+            tracing::warn!(
+                "System credential store unavailable; saving new sign-in secrets is disabled"
+            );
         }
     }
 
@@ -252,7 +344,6 @@ mod platform {
         KEY.get().is_some()
     }
 
-    /// Output layout: 12-byte random nonce, then ciphertext and tag.
     pub fn protect(plain: &[u8]) -> Option<Vec<u8>> {
         let key = KEY.get()?;
         let mut nonce = [0u8; NONCE_LEN];
@@ -269,12 +360,13 @@ mod platform {
         Some(out)
     }
 
-    pub fn unprotect(sealed: &[u8]) -> Option<Vec<u8>> {
-        let key = KEY.get()?;
-        if sealed.len() < NONCE_LEN {
-            return None;
-        }
-        let (nonce, ciphertext) = sealed.split_at(NONCE_LEN);
+    pub fn unprotect(sealed: &[u8], legacy: bool) -> Option<Vec<u8>> {
+        let key = if legacy {
+            LEGACY_KEY.get()?
+        } else {
+            KEY.get()?
+        };
+        let (nonce, ciphertext) = sealed.split_at_checked(NONCE_LEN)?;
         let nonce = Nonce::try_assume_unique_for_key(nonce).ok()?;
         let mut buffer = ciphertext.to_vec();
         let plain = key.open_in_place(nonce, Aad::empty(), &mut buffer).ok()?;
@@ -287,25 +379,25 @@ mod tests {
     use super::*;
 
     #[test]
-    fn unsealed_values_pass_through() {
-        assert_eq!(open("plain-token"), "plain-token");
-        assert_eq!(seal(""), "");
+    fn failed_protection_never_returns_plaintext() {
+        assert_eq!(encode("private-token", |_| None), None);
+        assert_eq!(open("legacy-plaintext"), "");
+        assert_eq!(seal("").unwrap(), "");
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn windows_dpapi_round_trips() {
+        let encrypted = seal("private-token").unwrap();
+        assert!(encrypted.starts_with(PREFIX));
+        assert!(!encrypted.contains("private-token"));
+        assert_eq!(open(&encrypted), "private-token");
     }
 
     #[test]
-    fn seal_round_trip() {
-        let dir = tempfile::tempdir().unwrap();
-        init(dir.path());
-        let sealed = seal("refresh-token-123");
-        if sealing_available() {
-            assert!(is_sealed(&sealed));
-            assert_ne!(sealed, "refresh-token-123");
-        }
-        assert_eq!(open(&sealed), "refresh-token-123");
-    }
-
-    #[test]
-    fn broken_sealed_value_opens_empty() {
-        assert_eq!(open("mksealed1:not base64!"), "");
+    fn encrypted_values_are_not_discarded_when_inaccessible() {
+        assert_eq!(migrate_value("mksealed1:unreadable"), None);
+        assert_eq!(migrate_value("mksealed2:unreadable"), None);
+        assert_eq!(migrate_value(""), None);
     }
 }

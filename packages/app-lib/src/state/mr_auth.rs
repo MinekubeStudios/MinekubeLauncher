@@ -1,15 +1,22 @@
-use crate::state::{CacheBehaviour, CachedEntry};
 use crate::util::fetch::{FetchSemaphore, fetch_advanced};
 use chrono::{DateTime, Duration, TimeZone, Utc};
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct ModrinthCredentials {
+    #[serde(skip_serializing)]
     pub session: String,
     pub expires: DateTime<Utc>,
     pub user_id: String,
     pub active: bool,
+}
+
+impl std::fmt::Debug for ModrinthCredentials {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ModrinthCredentials")
+            .finish_non_exhaustive()
+    }
 }
 
 impl ModrinthCredentials {
@@ -75,15 +82,17 @@ impl ModrinthCredentials {
         .fetch_optional(exec)
         .await?;
 
-        Ok(res.map(|x| Self {
-            session: x.session_id,
-            expires: Utc
-                .timestamp_opt(x.expires, 0)
-                .single()
-                .unwrap_or_else(Utc::now),
-            user_id: x.id,
-            active: x.active == 1,
-        }))
+        Ok(res
+            .map(|x| Self {
+                session: crate::util::secret::open(&x.session_id),
+                expires: Utc
+                    .timestamp_opt(x.expires, 0)
+                    .single()
+                    .unwrap_or_else(Utc::now),
+                user_id: x.id,
+                active: x.active == 1,
+            })
+            .filter(|credentials| !credentials.session.is_empty()))
     }
 
     pub async fn get_all(
@@ -103,7 +112,7 @@ impl ModrinthCredentials {
         Ok(res
             .into_iter()
             .map(|x| Self {
-                session: x.session_id,
+                session: crate::util::secret::open(&x.session_id),
                 expires: Utc
                     .timestamp_opt(x.expires, 0)
                     .single()
@@ -111,6 +120,7 @@ impl ModrinthCredentials {
                 user_id: x.id,
                 active: x.active == 1,
             })
+            .filter(|credentials| !credentials.session.is_empty())
             .collect())
     }
 
@@ -119,6 +129,7 @@ impl ModrinthCredentials {
         exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite> + Copy,
     ) -> crate::Result<()> {
         let expires = self.expires.timestamp();
+        let session = crate::util::secret::seal(&self.session)?;
 
         if self.active {
             Self::deactivate_all(exec).await?;
@@ -135,7 +146,7 @@ impl ModrinthCredentials {
             ",
             self.user_id,
             self.active,
-            self.session,
+            session,
             expires,
         )
         .execute(exec)
@@ -170,23 +181,6 @@ impl ModrinthCredentials {
             user_id,
         )
         .execute(exec)
-        .await?;
-
-        Ok(())
-    }
-
-    pub(crate) async fn refresh_all() -> crate::Result<()> {
-        let state = crate::State::get().await?;
-        let all = Self::get_all(&state.pool).await?;
-
-        let user_ids = all.into_iter().map(|x| x.user_id).collect::<Vec<_>>();
-
-        CachedEntry::get_user_many(
-            &user_ids.iter().map(|x| &**x).collect::<Vec<_>>(),
-            Some(CacheBehaviour::Bypass),
-            &state.pool,
-            &state.fetch_semaphore,
-        )
         .await?;
 
         Ok(())

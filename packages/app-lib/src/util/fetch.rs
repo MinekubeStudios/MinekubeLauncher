@@ -323,6 +323,21 @@ fn duration_seconds_ceil(duration: Duration) -> u64 {
         .saturating_add(u64::from(duration.subsec_nanos() > 0))
 }
 
+fn is_under_endpoint(url: &reqwest::Url, endpoint: &str) -> bool {
+    let Ok(endpoint) = reqwest::Url::parse(endpoint) else {
+        return false;
+    };
+    let root = endpoint.path().trim_end_matches('/');
+    url.username().is_empty()
+        && url.password().is_none()
+        && url.origin() == endpoint.origin()
+        && (url.path() == root
+            || url
+                .path()
+                .strip_prefix(root)
+                .is_some_and(|rest| rest.starts_with('/')))
+}
+
 fn reqwest_client_builder_with_timeout() -> reqwest::ClientBuilder {
     reqwest_client_builder().read_timeout(Duration::from_secs(30))
 }
@@ -340,6 +355,17 @@ fn reqwest_client_builder() -> reqwest::ClientBuilder {
         .http2_adaptive_window(true)
         .user_agent(crate::launcher_user_agent())
         .dns_resolver(std::sync::Arc::new(super::shield::ShieldResolver))
+        .redirect(reqwest::redirect::Policy::custom(|attempt| {
+            if !super::shield::allows_url(attempt.url()) {
+                return attempt.error("Redirect blocked by Minekube Shield");
+            }
+            if attempt.previous().last().is_some_and(|previous| {
+                previous.scheme() == "https" && attempt.url().scheme() == "http"
+            }) {
+                return attempt.error("Insecure HTTP redirect blocked");
+            }
+            reqwest::redirect::Policy::limited(10).redirect(attempt)
+        }))
 }
 
 pub static INSECURE_REQWEST_CLIENT: LazyLock<reqwest::Client> =
@@ -773,7 +799,7 @@ where
 
 /// Downloads a file with retry and checksum functionality, and a specific
 /// [`reqwest::Client`].
-#[tracing::instrument(skip(json_body, semaphore))]
+#[tracing::instrument(skip(json_body, semaphore, header, url))]
 #[allow(clippy::too_many_arguments)]
 pub async fn fetch_advanced(
     method: Method,
@@ -803,7 +829,7 @@ pub async fn fetch_advanced(
     .await
 }
 
-#[tracing::instrument(skip(body, semaphore))]
+#[tracing::instrument(skip(body, semaphore, header, url))]
 #[allow(clippy::too_many_arguments)]
 pub async fn fetch_advanced_bytes(
     method: Method,
@@ -832,7 +858,7 @@ pub async fn fetch_advanced_bytes(
     .await
 }
 
-#[tracing::instrument(skip(json_body, semaphore, progress))]
+#[tracing::instrument(skip(json_body, semaphore, progress, header, url))]
 #[allow(clippy::too_many_arguments)]
 pub async fn fetch_advanced_with_progress(
     method: Method,
@@ -866,7 +892,7 @@ pub async fn fetch_advanced_with_progress(
 }
 
 /// Downloads a file with retry and checksum functionality
-#[tracing::instrument(skip(json_body, semaphore))]
+#[tracing::instrument(skip(json_body, semaphore, header, url))]
 #[allow(clippy::too_many_arguments)]
 pub async fn fetch_advanced_with_client(
     method: Method,
@@ -900,7 +926,7 @@ pub async fn fetch_advanced_with_client(
 }
 
 #[tracing::instrument(skip(
-    json_body, bytes_body, semaphore, client, progress
+    json_body, bytes_body, semaphore, client, progress, header, url
 ))]
 #[allow(clippy::too_many_arguments)]
 async fn fetch_advanced_with_client_and_progress(
@@ -962,14 +988,24 @@ async fn fetch_advanced_with_target(
     let _permit =
         crate::install::control::download_step(semaphore.0.acquire()).await??;
 
-    let is_api_url = url.starts_with(env!("MODRINTH_API_URL"))
-        || url.starts_with(env!("MODRINTH_API_URL_V3"));
+    let request_url = reqwest::Url::parse(url).map_err(|_| {
+        ErrorKind::InputError("Invalid request URL".to_owned())
+    })?;
+    if !super::shield::allows_url(&request_url) {
+        return Err(ErrorKind::InputError(
+            "Request blocked by Minekube Shield".to_owned(),
+        )
+        .into());
+    }
+    let is_api_url = is_under_endpoint(&request_url, env!("MODRINTH_API_URL"))
+        || is_under_endpoint(&request_url, env!("MODRINTH_API_URL_V3"));
     let fence_key = if is_api_url { uri_path } else { None };
 
     let creds = if header
         .as_ref()
         .is_none_or(|x| &*x.0.to_lowercase() != "authorization")
-        && (url.starts_with("https://cdn.modrinth.com") || is_api_url)
+        && (is_under_endpoint(&request_url, "https://cdn.modrinth.com/")
+            || is_api_url)
     {
         crate::state::ModrinthCredentials::get_active(exec).await?
     } else {
@@ -994,7 +1030,13 @@ async fn fetch_advanced_with_target(
             .into());
         }
 
-        let mut req = client.request(method.clone(), url);
+        if !super::shield::allows_url(&request_url) {
+            return Err(ErrorKind::InputError(
+                "Request blocked by Minekube Shield".to_owned(),
+            )
+            .into());
+        }
+        let mut req = client.request(method.clone(), request_url.clone());
 
         if let Some(body) = &json_body {
             req = req.json(body);
@@ -1102,7 +1144,7 @@ async fn fetch_advanced_with_target(
             }
             Err(_) if attempt <= FETCH_ATTEMPTS => continue,
             Err(err) => {
-                return Err(err.into());
+                return Err(err.without_url().into());
             }
         }
     }
@@ -1410,5 +1452,27 @@ mod tests {
                 "Should be less than 15 minutes (attempt {i})"
             ); // less than 15 minutes
         }
+    }
+}
+
+#[cfg(test)]
+mod shield_endpoint_tests {
+    use super::*;
+
+    #[test]
+    fn only_send_automatic_credentials_to_the_configured_origin_and_path() {
+        let cdn = "https://cdn.modrinth.com/";
+        let trusts = |url: &str, endpoint| {
+            is_under_endpoint(&reqwest::Url::parse(url).unwrap(), endpoint)
+        };
+        assert!(trusts("https://cdn.modrinth.com/data/file.jar", cdn));
+        assert!(!trusts("https://cdn.modrinth.com.example.org/", cdn));
+        assert!(!trusts("https://cdn.modrinth.com@example.org/", cdn));
+        assert!(!trusts("https://cdn.modrinth.com:8443/", cdn));
+        assert!(!trusts("http://cdn.modrinth.com/", cdn));
+        assert!(!trusts(
+            "https://api.modrinth.com/v3other",
+            "https://api.modrinth.com/v3/"
+        ));
     }
 }

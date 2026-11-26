@@ -94,6 +94,8 @@ pub enum FeatureFlag {
     MinekubeCompanion,
     /// Minekube Shield strict mode: also blocks Modrinth's API and image CDNs.
     ShieldStrict,
+    /// Runs the Minecraft process without direct network access.
+    ShieldGameIsolation,
     /// Installs No Telemetry and No Chat Reports into modded instances.
     ShieldGameMods,
     /// Retired: shared logs are now always anonymized. Kept so settings

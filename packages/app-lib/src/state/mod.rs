@@ -65,7 +65,6 @@ pub use self::mr_auth::*;
 mod legacy_converter;
 
 pub mod attached_world_data;
-pub mod server_join_log;
 
 // Global state
 // RwLock on state only has concurrent reads, except for config dir change which takes control of the State
@@ -270,17 +269,9 @@ impl State {
                 tracing::error!("Error migrating legacy instance icons: {e}");
             }
 
-            let res = tokio::try_join!(
-                state.discord_rpc.clear_to_default(true),
-                instances::refresh_all_instances(),
-                ModrinthCredentials::refresh_all(),
-            );
-
-            if let Err(e) = res {
-                tracing::error!("Error running discord RPC: {e}");
+            if let Err(error) = instances::refresh_all_instances().await {
+                tracing::error!("Failed to refresh local instances: {error}");
             }
-            // Minekube Shield: the launcher keeps no standing connection to
-            // Modrinth (the old friends socket is never opened at startup).
         });
 
         Ok(())
@@ -324,6 +315,7 @@ impl State {
                 })?;
         let store_lock =
             content_store::ContentStore::lock_process(&settings_dir).await?;
+        crate::util::secret::init(&settings_dir, &app_identifier).await;
         let pool = db::connect(&app_identifier).await?;
 
         legacy_converter::migrate_legacy_data(&pool).await?;
@@ -336,10 +328,6 @@ impl State {
         }
         let mut settings = Settings::get(&pool).await?;
         crate::util::shield::set_strict(settings.shield_strict());
-        crate::util::secret::init(&settings_dir);
-        if let Err(error) = Credentials::seal_stored_secrets(&pool).await {
-            tracing::warn!("Could not seal stored sign-in secrets: {error}");
-        }
 
         let fetch_semaphore =
             FetchSemaphore(Semaphore::new(settings.max_concurrent_downloads));

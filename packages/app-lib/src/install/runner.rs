@@ -601,10 +601,27 @@ async fn prepare_initial_instance(
             emit_instance(&instance_id, InstancePayloadType::Edited).await?;
         }
         InstallRequest::ImportInstance {
-            instance_folder, ..
+            launcher_type,
+            base_path,
+            instance_folder,
         } => {
+            let name = match launcher_type {
+                crate::api::pack::import::ImportLauncherType::MultiMC
+                | crate::api::pack::import::ImportLauncherType::PrismLauncher
+                    if crate::api::pack::import::mmc::is_instance_archive(
+                        base_path.as_path(),
+                    ) =>
+                {
+                    crate::api::pack::import::mmc::archive_instance_name(
+                        base_path.clone(),
+                    )
+                    .await
+                    .unwrap_or_else(|| instance_folder.clone())
+                }
+                _ => instance_folder.clone(),
+            };
             let metadata = Box::pin(crate::api::instance::create(
-                instance_folder,
+                name,
                 "1.19.4".to_string(),
                 ModLoader::Vanilla,
                 Some("latest".to_string()),

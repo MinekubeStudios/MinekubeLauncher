@@ -3,9 +3,7 @@ use crate::instance::get_full_path;
 use crate::launcher::get_loader_version_from_profile;
 use crate::server_address::{parse_server_address, resolve_server_address};
 use crate::state::attached_world_data::AttachedWorldData;
-use crate::state::{
-    InstanceInstallStage, attached_world_data, server_join_log,
-};
+use crate::state::{InstanceInstallStage, attached_world_data};
 use crate::util::protocol_version::OLD_PROTOCOL_VERSIONS;
 pub use crate::util::protocol_version::ProtocolVersion;
 pub use crate::util::server_ping::{
@@ -550,13 +548,6 @@ async fn get_server_worlds_in_instance(
         return Ok(());
     }
 
-    let join_log = time_world_load(
-        "server_join_history",
-        server_join_log::get_joins(instance_id, &state.pool),
-    )
-    .await
-    .ok();
-
     for (index, server) in servers.into_iter().enumerate() {
         if server.hidden() {
             // TODO: Figure out whether we want to hide or show direct connect servers
@@ -566,13 +557,7 @@ async fn get_server_worlds_in_instance(
         let server_id = server.id.clone();
         let world = World {
             name: server.name(),
-            last_played: join_log
-                .as_ref()
-                .and_then(|log| {
-                    let (host, port) = parse_server_address(&address).ok()?;
-                    log.get(&(host.to_owned(), port))
-                })
-                .copied(),
+            last_played: None,
             icon: server
                 .icon()
                 .and_then(|icon| {

@@ -1,4 +1,4 @@
-use sqlx::ConnectOptions;
+use sqlx::{ConnectOptions, Connection};
 use sqlx::sqlite::{SqliteConnectOptions, SqliteConnection};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -97,7 +97,9 @@ pub(crate) async fn maybe_backup_existing_app_db(
         backup_path.display()
     );
 
-    if let Err(err) = create_sqlite_snapshot(&mut conn, &backup_path).await {
+    if let Err(err) =
+        create_sanitized_snapshot(&mut conn, &backup_dir, &backup_path).await
+    {
         tracing::error!(
             "Failed to create pre-migration app database backup at {}: {err}",
             backup_path.display()
@@ -247,17 +249,110 @@ fn sanitize_version_for_filename(version: &str) -> String {
     }
 }
 
-async fn create_sqlite_snapshot(
+async fn create_sanitized_snapshot(
     conn: &mut SqliteConnection,
+    backup_dir: &Path,
     backup_path: &Path,
 ) -> crate::Result<()> {
-    let backup_path = backup_path
-        .to_str()
-        .ok_or_else(|| crate::ErrorKind::UTFError(backup_path.to_path_buf()))?;
-
-    sqlx::query!("VACUUM INTO ?", backup_path)
+    let staging = tempfile::Builder::new()
+        .prefix(".app-db-backup-")
+        .tempdir_in(backup_dir)?;
+    let snapshot =
+        tempfile::NamedTempFile::new_in(staging.path())?.into_temp_path();
+    let snapshot_path: &Path = snapshot.as_ref();
+    let snapshot_str = snapshot_path.to_str().ok_or_else(|| {
+        crate::ErrorKind::UTFError(snapshot_path.to_path_buf())
+    })?;
+    sqlx::query!("VACUUM INTO ?", snapshot_str)
         .execute(&mut *conn)
         .await?;
 
+    let mut copy = SqliteConnectOptions::new()
+        .filename(snapshot_path)
+        .pragma("secure_delete", "ON")
+        .create_if_missing(false)
+        .connect()
+        .await?;
+    strip_snapshot_credentials(&mut copy).await?;
+    copy.close().await?;
+
+    // Publish only after sanitizing; never replace an existing backup.
+    snapshot
+        .persist_noclobber(backup_path)
+        .map_err(|error| error.error)?;
     Ok(())
+}
+
+async fn strip_snapshot_credentials(
+    conn: &mut SqliteConnection,
+) -> crate::Result<()> {
+    // Keep local Minecraft profiles and all worlds, settings and server bookmarks.
+    const REDACTIONS: &[(&str, &str)] = &[
+        (
+            "minecraft_users",
+            "UPDATE minecraft_users SET access_token = '', refresh_token = ''",
+        ),
+        (
+            "minecraft_device_tokens",
+            "DELETE FROM minecraft_device_tokens",
+        ),
+        ("modrinth_users", "DELETE FROM modrinth_users"),
+        ("join_log", "DELETE FROM join_log"),
+    ];
+    for &(table, sql) in REDACTIONS {
+        if has_table(conn, table).await? {
+            sqlx::query(sql).execute(&mut *conn).await?;
+        }
+    }
+    sqlx::query("VACUUM").execute(&mut *conn).await?;
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn snapshot_keeps_worlds_and_profiles_without_session_secrets() {
+        let mut db = SqliteConnectOptions::new()
+            .in_memory(true)
+            .connect()
+            .await
+            .unwrap();
+        for statement in [
+            "CREATE TABLE minecraft_users (username TEXT, access_token TEXT, refresh_token TEXT)",
+            "CREATE TABLE minecraft_device_tokens (token TEXT)",
+            "CREATE TABLE modrinth_users (session_id TEXT)",
+            "CREATE TABLE join_log (host TEXT)",
+            "CREATE TABLE worlds (name TEXT)",
+            "INSERT INTO minecraft_users VALUES ('Player', 'access', 'refresh')",
+            "INSERT INTO minecraft_device_tokens VALUES ('device')",
+            "INSERT INTO modrinth_users VALUES ('session')",
+            "INSERT INTO join_log VALUES ('history.example')",
+            "INSERT INTO worlds VALUES ('Home')",
+        ] {
+            sqlx::query(statement).execute(&mut db).await.unwrap();
+        }
+        strip_snapshot_credentials(&mut db).await.unwrap();
+        let player: (String, String, String) = sqlx::query_as(
+            "SELECT username, access_token, refresh_token FROM minecraft_users",
+        )
+        .fetch_one(&mut db)
+        .await
+        .unwrap();
+        assert_eq!(player, ("Player".into(), String::new(), String::new()));
+        for table in ["minecraft_device_tokens", "modrinth_users", "join_log"] {
+            let count: i64 =
+                sqlx::query_scalar(&format!("SELECT count(*) FROM {table}"))
+                    .fetch_one(&mut db)
+                    .await
+                    .unwrap();
+            assert_eq!(count, 0);
+        }
+        let world: String = sqlx::query_scalar("SELECT name FROM worlds")
+            .fetch_one(&mut db)
+            .await
+            .unwrap();
+        assert_eq!(world, "Home");
+    }
 }

@@ -45,12 +45,14 @@ Minekube brand (gold / orange / magenta on maroon). Built with **Tauri**
 | Loader | `packages/ui/src/components/brand/AnimatedLogo.vue` → spinning Minekube cube |
 | App icons | `apps/app/icons/*` regenerated (isometric Minekube cube) |
 | Modrinth logo assets | removed `wrench-rinth.png`, `modrinth_app.svg`; dropped the "Modrinth Wrench" instance icon |
-| CI | none — no GitHub Actions or build tooling is checked in (source-only distribution) |
+| CI | `.github/workflows/minekube-build.yml` is the only workflow: unsigned Windows `.exe` on `windows-latest`; a tag `vX.Y.Z` sets the version and publishes a GitHub release. The upstream Modrinth workflows were removed. |
+| Windows only | macOS and Linux packaging was removed for now (`icon.icns`, `apple.icon/`, `dmg/`, `Info.plist`, `App.entitlements`, `tauri.macos.conf.json`, the Linux `.desktop` template, and the macOS/Linux sections of `tauri.conf.json`; bundle target `nsis`). Platform code in Rust/TS is kept. To bring macOS back, regenerate `icons/icon.icns` (`pnpm tauri icon`) — `src/api/shortcuts/macos.rs` embeds it. |
 | Trimmed | removed `apps/frontend` (the modrinth.com website) and `packages/blog/public` (blog images) — not needed to build the launcher |
 | Sidebar account | `apps/app-frontend/src/App.vue` + `components/ui/AccountsCard.vue`: the "Playing as" panel is always shown; a fresh install shows the bundled default head avatar with **Not logged in** instead of an empty sidebar |
 | Support section | `Settings → Support project` shows a single heart — the `❤Support project` heading — and the settings entry uses a helping-hands icon |
 | Language coverage | the language picker reports how much of the message catalog is translated (`scripts/coverage-i18n.ts`), so a fully translated language shows 100%; source-level interface coverage is still reported as `interfaceCoverage` / `unlocalizedStrings` |
 | Czech | `cs-CZ` catalogs are fully translated (app + `packages/ui`) |
+| Automatic updates | With "Automatic updates" on (Updates menu), the Launcher checks the latest GitHub release right after it opens (and every 6 h while open). A newer version opens a centred dialog (`components/ui/modal/LauncherUpdateModal.vue`): **Update** downloads, installs quietly and restarts; **Don't update** asks again on the next start. Releases are built with `tauri-release.conf.json` (self-updater + `.sig`), and the workflow publishes a signed `latest.json`. Needs repository secrets `TAURI_SIGNING_PRIVATE_KEY` / `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`. |
 | Instance archives | `Create instance` → second option **Upload a file (.zip / .mrpack)**: imports instances exported from Prism Launcher / MultiMC (`.zip` with `instance.cfg` + `mmc-pack.json`, also when nested in a folder) as well as `.mrpack` modpacks (`packages/app-lib/src/api/pack/import/mmc.rs`, `get_instance_archive_kind`). The Prism `.zip` export now carries the instance icon the way Prism does (`<iconKey>.png` next to `instance.cfg`). |
 
 To see the full diff against upstream, run `git diff` after adding the upstream
@@ -58,15 +60,86 @@ remote (see below).
 
 ---
 
-## Building
+## Building the Windows installer
 
-This fork is distributed as **source code only** — no build or CI tooling is
-checked in: no GitHub Actions workflow, no `build-windows.bat`/`build-windows.ps1`
-scripts, no Turborepo or pnpm workspace configuration, and no lock files. The
-Tauri shell lives in `apps/app`, the Vue frontend in `apps/app-frontend`, and
-the shared Rust library in `packages/app-lib`; producing an installer is left
-to whatever toolchain setup you bring (Rust MSVC, Node + pnpm, JDK 17 on
-Windows).
+### Option A — GitHub Actions (recommended, no local setup)
+
+1. Create a new GitHub repository and push this source to it.
+2. Go to the **Actions** tab → **"Minekube Launcher (Windows build)"** →
+   **Run workflow**.
+3. When it finishes, download the **`Minekube-Launcher-windows-setup`**
+   artifact from the run summary. Inside is the `*-setup.exe` installer.
+
+The installer is **unsigned**, so Windows SmartScreen will show a
+"Windows protected your PC" warning on first run — click *More info → Run
+anyway*. Signing requires a code-signing certificate (see below).
+
+### Option B — One-click on Windows (easiest local route)
+
+Unzip this archive and **double-click `build-windows.bat`**. On first run it
+auto-installs the required tools via `winget` (Rust, Git, Node, JDK 17, VS C++
+Build Tools, WebView2), then builds the installer and opens the output folder.
+First build takes ~15–25 min (downloads + compile). If it reports a tool is not
+on PATH, restart the PC once and run it again.
+
+The script first checks that the folder really contains the current sources. A
+ZIP that was unpacked earlier — or unpacked *next to* the new one, so
+`Launcher-main` exists several times — still builds an installer, but one with
+the bugs that were fixed in the meantime. The build then starts on a folder
+such as `…\Launcher\Launcher-main3\Launcher-main\`, i.e. three levels deep.
+In that case delete the old folders, unpack the fresh ZIP into an empty one and
+run the build there. The script now stops with a message instead of compiling
+a stale copy, and the version in *Settings* (`v1.2.2` for this fix) tells you
+which sources the running launcher came from.
+
+> If `winget` is missing, install **"App Installer"** from the Microsoft Store.
+
+### Option C — Build locally on Windows (manual steps)
+
+Prerequisites:
+
+- **Rust 1.95.0** (MSVC toolchain) — <https://rustup.rs>
+- **Git for Windows** — needed by pnpm to fetch the GitHub-hosted
+  `highlightjs-mcfunction` dependency.
+- **Node 24.15.0** (see `.nvmrc`) + **pnpm** via `corepack enable`
+- **JDK 17** (Temurin) — the build compiles bundled Java helpers via Gradle
+- **Visual Studio Build Tools** (C++ workload) and **WebView2 Runtime**
+  (preinstalled on Windows 11)
+
+Then, from the repo root:
+
+```bash
+# 1) provide the backend environment (compile-time API URLs)
+cp packages/app-lib/.env.prod packages/app-lib/.env
+
+# 2) install JS dependencies (recent Node has no corepack, so use npm to get pnpm)
+npm install -g pnpm@10.33.2
+pnpm install
+
+# 3) build the unsigned NSIS installer
+pnpm --filter=@modrinth/app run tauri build --bundles nsis
+```
+
+The installer lands in
+`target/release/bundle/nsis/Minekube Launcher_<version>-setup.exe`.
+
+### Code signing (optional)
+
+To avoid the SmartScreen warning you need a code-signing certificate. The
+upstream signing setup (jsign + DigiCert ONE) lives in
+`apps/app/tauri-release.conf.json`; adapt it to your own certificate, or use any
+Authenticode signing tool on the produced `.exe`.
+
+---
+
+## Note on the build environment
+
+This fork was prepared in a Linux cloud sandbox that could not complete a full
+`pnpm install` (one dependency is served from `codeload.github.com`, which the
+sandbox proxy blocks) and cannot cross‑compile a Windows Tauri installer from
+Linux. The actual compile is therefore expected to happen on Windows or via the
+GitHub Actions workflow above, where GitHub is reachable. All rebranding source
+changes were verified for validity (JSON/YAML/SCSS/Vue structure).
 
 ---
 
@@ -812,7 +885,7 @@ the **Minekube Studios** lockup in the top-left corner of the app
 | exe, installer, desktop shortcut, Start menu | `apps/app/icons/icon.ico` (16–256 px), `favicon.ico` |
 | Window / taskbar icon (set at runtime in `main.rs`) | `apps/app/icons/window-icon.png` |
 | Tauri bundle icons, Windows Store tiles | `apps/app/icons/icon.png`, `128x128*.png`, `Square*Logo.png`, `StoreLogo.png` |
-| macOS | `apps/app/icons/icon.icns`, `apple.icon/` (full-colour PNG layer, no tint/glass), DMG background header |
+| macOS | removed for now (Windows-only builds) |
 | Splash screen, Settings → About (dev-mode button) | `packages/assets/branding/minekube-mark.png` (`MinekubeMark`) |
 | Welcome screen | `apps/app-frontend/src/assets/welcome/minekube-icon.png` |
 | Spinning loader | `packages/ui/src/components/brand/AnimatedLogo.vue` now spins `MinekubeMark` |
@@ -862,6 +935,40 @@ apps/app-frontend/tests/welcome-state.test.ts` (Node 22+). Browser smoke checks
 should cover first run, all five steps, skip/Escape, replay, offline/reconnect,
 failed external links, reduced motion, and restart persistence. Native startup,
 window controls and opening external browsers should also be checked in Tauri.
+
+---
+
+## The same bugs after a "fixed" build (stale source folder)
+
+**Symptom:** a fix is reported as merged, the launcher is rebuilt, and the app
+still crashes in Rust or still shows the old error panel. The build output names
+paths such as `C:\Users\…\Desktop\Launcher\Launcher-main3\Launcher-main\apps\app`.
+
+**Cause:** that is a *second* unpacked copy of the ZIP. The compiler errors point
+at line numbers of the older sources — `friends.rs:449/450` and
+`process.rs:305/492/1005` — while the fixed tree has these at `451` and
+`306/493/1006`, because an added `use` line shifts everything below it. The
+build succeeds only because the old copy also lacks those imports; the resulting
+installer simply contains the old code, so nothing appears fixed. The folder
+name (`Launcher-main3`) comes from Windows appending a number when the ZIP is
+unpacked next to an existing `Launcher-main`.
+
+**Fixed**
+
+- `build-windows.bat` / `build-windows.ps1` refuse to build when the folder does
+  not contain the current sources (the project-detail files and both restored
+  imports) and say to unpack the fresh ZIP into an empty folder.
+- The version is `1.2.2`. *Settings* shows it, so the running build can be told
+  apart from an older 1.2.1 installation. The PowerShell script also prints the
+  version of the sources it is about to build.
+- The Windows installer for the previous fix (run 44860222341, PR #70) built
+  successfully from the correct sources; nothing in that work was reverted.
+  Running the installer from that run, or building the fresh `main`, replaces
+  the stale files — the old folder on the Desktop is not needed.
+
+The generic route error panel is unrelated to this: it is the visible fallback
+when a page's setup throws, and it names no reason. That is why the Rust errors
+above had to be read from the build output rather than from the panel.
 
 ---
 
@@ -1578,3 +1685,78 @@ and the version tooltip on the footer button are unchanged.
 *Verified:* ESLint and `prettier --check` are clean on every touched file,
 `vue-tsc --noEmit` passes, and `vite build` compiles the whole frontend
 (`packages/assets` export resolves). The Rust side is untouched.
+
+## Game network isolation (experimental)
+
+**Settings → Privacy → Run Minecraft without network access** applies to future
+launches of vanilla and modded instances. It is off by default so multiplayer
+keeps working. Linux uses an unprivileged user/network namespace through the
+system `unshare` utility; macOS uses the system `sandbox-exec` utility with a
+network-deny policy. The backend checks that the mechanism can start. If it is
+unavailable (including on Windows) there is no fallback to an unrestricted
+launch while this option is enabled.
+
+This blocks the game's direct IP traffic, not the launcher's downloads and online
+services. Multiplayer, Realms, and network-dependent mods cannot be expected to
+work. Isolated launches use a cached player profile and a dummy access token;
+launcher hooks, custom wrappers, custom environment variables, local TCP game
+RPC, and remote activity updates are skipped. Already-running games aren't
+changed. This is not a filesystem sandbox: software in the game can still
+read/write files and interact with local desktop services under the user's
+permissions. It does not mask the player's IP when playing online.
+
+Online launches keep ordinary multiplayer behavior. When present, Minecraft's
+`telemetryOptInExtra` is forced off before launch. This is only the optional game
+telemetry preference, not a way to suppress all Minecraft or mod traffic.
+
+Before calling this feature production-ready, test vanilla and modded starts on
+real Linux and macOS desktops, including direct TCP/UDP over IPv4 and IPv6 and
+child processes. Windows needs process-tree isolation that fails closed without
+leaving global firewall rules behind. Separately, an online privacy mode would
+need a user-chosen VPN/relay and verified failure behavior: no direct fallback,
+including DNS and IPv6. File access and contact with host services require a
+separate sandbox policy.
+
+## Local diagnostics and sign-in storage
+
+- The desktop launcher no longer initializes Sentry or automatically sends game
+  logs for analysis. **Logs → Preview diagnostic** prepares a short excerpt in
+  memory on this device, with best-effort redaction. Review it before copying:
+  server names, chat, and other private data may remain. The preview is cleared
+  after five minutes or on leaving the page; the OS clipboard has its own lifetime.
+- The launcher no longer records server joins or pings saved servers in the
+  background. On upgrade it clears its existing join table. Saved servers and
+  worlds are not deleted. Minecraft and mods may still write local game logs.
+  Discord Rich Presence is off by default. If enabled, it reports only that
+  Minecraft is running, not the instance name, and never connects just to clear
+  an activity. Update checks remain manual unless enabled in the update menu.
+- Microsoft, Xbox and Modrinth sign-in secrets are sealed before database
+  writes. Windows uses user-scoped DPAPI, macOS uses Keychain, and Linux needs
+  `/usr/bin/secret-tool` (the distribution's libsecret tools) and an unlocked
+  Secret Service. There is no plaintext fallback. Local Minecraft accounts
+  still work without a credential store. Restart the launcher after unlocking
+  the store. Existing plaintext secrets that cannot be sealed are cleared; sign
+  in again if necessary. Existing encrypted rows that cannot be decrypted are
+  retained. Reading the profile list no longer refreshes sign-in or fetches
+  profiles remotely.
+- New pre-migration database backups keep settings and profiles but omit
+  session secrets and server join history. They are **not** whole-file encrypted.
+  Old snapshots, exports and legacy `caches/metadata/auth.json` or
+  `minecraft_auth.json` files can still contain credentials and are not deleted
+  automatically, because they may belong to another launcher or be needed for
+  recovery. Review old copies, remove those no longer needed, and revoke/reissue
+  old sessions if you suspect exposure. Use OS disk encryption to protect local
+  files and backups; credential sealing does not protect against malicious code
+  running under the same user.
+- Experimental isolated launches now use cached runtime metadata, skip online
+  account and shared-instance checks, and do not automatically repair or
+  download missing runtime files. Repair the instance explicitly before retrying.
+  The Java version probe uses the same network restriction as the game. This
+  does not restrict unrelated launcher activity or replace a filesystem sandbox.
+
+The signed updater accepts a newer stable version, but this is not a complete
+anti-rollback protocol: the installer signature does not authenticate the
+version in the release manifest. Windows Authenticode signing still needs a
+release certificate; confinement is not enabled by default on unvalidated
+platforms. When you connect to a game server, it may see your IP address,
+account, and in-game activity regardless of the launcher settings.
