@@ -95,7 +95,3 @@ apps/frontend/src/public/robots.txt
 /test_result.md
 
 packages/tooling-config/script-utils/import-sort.js
-
-# Source archive uploaded through the web UI — binaries and archives belong to
-# GitHub Releases, not to the git tree.
-source-code (Latest).zip

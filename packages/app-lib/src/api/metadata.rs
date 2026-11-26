@@ -1,5 +1,5 @@
 use crate::State;
-use crate::state::CachedEntry;
+use crate::state::{CacheBehaviour, CachedEntry};
 pub use daedalus::minecraft::VersionManifest;
 pub use daedalus::modded::Manifest;
 
@@ -21,12 +21,19 @@ pub async fn get_minecraft_versions() -> crate::Result<VersionManifest> {
 
 // #[tracing::instrument]
 pub async fn get_loader_versions(loader: &str) -> crate::Result<Manifest> {
+    get_loader_versions_with_cache(loader, None).await
+}
+
+pub(crate) async fn get_loader_versions_with_cache(
+    loader: &str,
+    cache_behaviour: Option<CacheBehaviour>,
+) -> crate::Result<Manifest> {
     let state = State::get().await?;
     let cache_key =
         daedalus::modded::loader_manifest_metadata(loader).cache_key;
     let loaders = CachedEntry::get_loader_manifest(
         &cache_key,
-        None,
+        cache_behaviour,
         &state.pool,
         &state.api_semaphore,
     )

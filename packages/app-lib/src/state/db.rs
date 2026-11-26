@@ -22,7 +22,12 @@ pub(crate) async fn connect(
 }
 
 async fn connect_app_db(db_path: &Path) -> crate::Result<Pool<Sqlite>> {
-    super::db_backup::maybe_backup_existing_app_db(db_path).await?;
+    if db_path.try_exists()? {
+        let pool = open_app_db_pool(db_path).await?;
+        sanitize_private_records(&pool).await?;
+        pool.close().await;
+        super::db_backup::maybe_backup_existing_app_db(db_path).await?;
+    }
     open_migrated_app_db(db_path).await
 }
 
@@ -59,6 +64,7 @@ async fn open_app_db_pool(db_path: &Path) -> crate::Result<Pool<Sqlite>> {
         .filename(db_path)
         .busy_timeout(Duration::from_secs(30))
         .journal_mode(SqliteJournalMode::Wal)
+        .pragma("secure_delete", "ON")
         .optimize_on_close(true, None)
         .create_if_missing(true);
 
@@ -69,6 +75,70 @@ async fn open_app_db_pool(db_path: &Path) -> crate::Result<Pool<Sqlite>> {
         .max_lifetime(None)
         .connect_with(conn_options)
         .await?)
+}
+
+/// Sanitize old credentials before the database can be copied into a backup.
+async fn sanitize_private_records(pool: &Pool<Sqlite>) -> crate::Result<()> {
+    use sqlx::Row;
+    // These identifiers are fixed schema names, not user input.
+    const SECRET_COLUMNS: &[(&str, &str)] = &[
+        ("minecraft_users", "access_token"),
+        ("minecraft_users", "refresh_token"),
+        ("minecraft_device_tokens", "private_key"),
+        ("minecraft_device_tokens", "token"),
+        ("modrinth_users", "session_id"),
+    ];
+    let mut transaction = pool.begin().await?;
+    let history_exists: bool = sqlx::query_scalar(
+        "SELECT EXISTS (SELECT 1 FROM sqlite_schema WHERE type = 'table' AND name = 'join_log')",
+    )
+    .fetch_one(&mut *transaction)
+    .await?;
+    let mut changed = if history_exists {
+        sqlx::query("DELETE FROM join_log")
+            .execute(&mut *transaction)
+            .await?
+            .rows_affected()
+            > 0
+    } else {
+        false
+    };
+    for &(table, column) in SECRET_COLUMNS {
+        let exists: bool = sqlx::query_scalar(
+            "SELECT EXISTS (SELECT 1 FROM sqlite_schema WHERE type = 'table' AND name = ?)",
+        )
+        .bind(table)
+        .fetch_one(&mut *transaction)
+        .await?;
+        if !exists {
+            continue;
+        }
+        let select = format!(
+            "SELECT rowid, {column} FROM {table} WHERE {column} != '' AND {column} NOT GLOB 'mksealed2:*'"
+        );
+        let update = format!("UPDATE {table} SET {column} = ? WHERE rowid = ?");
+        for row in sqlx::query(&select).fetch_all(&mut *transaction).await? {
+            let stored: &str = row.try_get(1)?;
+            if let Some(replacement) =
+                crate::util::secret::migrate_value(stored)
+            {
+                let id: i64 = row.try_get(0)?;
+                sqlx::query(&update)
+                    .bind(replacement)
+                    .bind(id)
+                    .execute(&mut *transaction)
+                    .await?;
+                changed = true;
+            }
+        }
+    }
+    transaction.commit().await?;
+    if changed {
+        sqlx::query("PRAGMA wal_checkpoint(TRUNCATE)")
+            .execute(pool)
+            .await?;
+    }
+    Ok(())
 }
 
 async fn record_current_app_version(pool: &Pool<Sqlite>) -> crate::Result<()> {

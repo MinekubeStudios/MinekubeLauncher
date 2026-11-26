@@ -61,8 +61,8 @@ where
         settings.collapsed_navigation = legacy_settings.collapsed_navigation;
         settings.advanced_rendering = legacy_settings.advanced_rendering;
         settings.native_decorations = legacy_settings.native_decorations;
-        settings.telemetry = !legacy_settings.opt_out_analytics;
-        settings.discord_rpc = !legacy_settings.disable_discord_rpc;
+        settings.telemetry = false;
+        settings.discord_rpc = false;
         settings.developer_mode = legacy_settings.developer_mode;
         settings.extra_launch_args = legacy_settings.custom_java_args;
         settings.custom_env_vars = legacy_settings.custom_env_args;
@@ -96,7 +96,8 @@ where
 
         let modrinth_auth_path =
             old_launcher_root.join("caches/metadata/auth.json");
-        if let Ok(creds) = read_json::<LegacyModrinthCredentials>(
+        if crate::util::secret::sealing_available()
+            && let Ok(creds) = read_json::<LegacyModrinthCredentials>(
             &modrinth_auth_path,
             &io_semaphore,
         )
@@ -114,7 +115,8 @@ where
 
         let minecraft_auth_path =
             old_launcher_root.join("caches/metadata/minecraft_auth.json");
-        if let Ok(minecraft_auth) = read_json::<LegacyMinecraftAuthStore>(
+        if crate::util::secret::sealing_available()
+            && let Ok(minecraft_auth) = read_json::<LegacyMinecraftAuthStore>(
             &minecraft_auth_path,
             &io_semaphore,
         )
@@ -680,7 +682,8 @@ struct LegacySettings {
     pub max_concurrent_writes: usize,
     pub collapsed_navigation: bool,
     #[serde(default)]
-    pub disable_discord_rpc: bool,
+    #[serde(rename = "disable_discord_rpc")]
+    pub _disable_discord_rpc: bool,
     #[serde(default)]
     pub hide_on_process: bool,
     #[serde(default)]
@@ -690,7 +693,8 @@ struct LegacySettings {
     #[serde(default)]
     pub developer_mode: bool,
     #[serde(default)]
-    pub opt_out_analytics: bool,
+    #[serde(rename = "opt_out_analytics")]
+    pub _opt_out_analytics: bool,
     #[serde(default)]
     pub advanced_rendering: bool,
     #[serde(default = "default_settings_dir")]

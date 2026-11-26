@@ -1,6 +1,6 @@
 //! Minekube Shield — the launcher's built-in tracker and telemetry blocker.
 //!
-//! Every HTTP client the launcher builds resolves host names through
+//! The launcher’s shared Rust HTTP clients resolve host names through
 //! [`ShieldResolver`]. Before a connection is opened, the host is checked
 //! against a small in-memory blocklist:
 //!
@@ -12,10 +12,9 @@
 //!   files always stay reachable, so the game keeps working.
 //!
 //! A blocked host never gets a DNS lookup, so not a single packet leaves the
-//! computer for it. The check is a few string comparisons per new connection;
-//! there is no background work. No connection history is kept: allowed
-//! connections leave no trace, and a blocked one is only noted in the
-//! launcher's own debug log.
+//! computer for it through this resolver. Initial URL and redirect checks
+//! additionally protect the shared fetch path, including requests using proxies.
+//! This is not a system firewall or a filter for the Minecraft process.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 
@@ -112,20 +111,15 @@ pub fn strict() -> bool {
 /// Checks `url` for a request the interface is about to make.
 /// Returns `true` when the request may go ahead.
 pub fn check_url(url: &str) -> bool {
-    let Some(host) = url::Url::parse(url)
-        .ok()
-        .and_then(|url| url.host_str().map(str::to_owned))
-    else {
-        return true;
-    };
-    let blocked = is_blocked(&host);
-    if blocked {
-        tracing::debug!("Minekube Shield blocked a request to {host}");
-    }
-    !blocked
+    url::Url::parse(url).is_ok_and(|url| allows_url(&url))
 }
 
-/// DNS resolver used by every launcher HTTP client. Blocked hosts fail before
+pub(crate) fn allows_url(url: &url::Url) -> bool {
+    matches!(url.scheme(), "http" | "https")
+        && url.host_str().is_some_and(|host| !is_blocked(host))
+}
+
+/// DNS resolver used by the shared Rust HTTP clients. Blocked hosts fail before
 /// any lookup happens; allowed hosts resolve through the system resolver.
 #[derive(Clone, Copy, Default)]
 pub struct ShieldResolver;
@@ -135,9 +129,6 @@ impl Resolve for ShieldResolver {
         let host = name.as_str().to_owned();
         Box::pin(async move {
             if is_blocked(&host) {
-                tracing::info!(
-                    "Minekube Shield blocked a connection to {host}"
-                );
                 return Err(Box::new(std::io::Error::new(
                     std::io::ErrorKind::PermissionDenied,
                     format!("{host} is blocked by Minekube Shield"),

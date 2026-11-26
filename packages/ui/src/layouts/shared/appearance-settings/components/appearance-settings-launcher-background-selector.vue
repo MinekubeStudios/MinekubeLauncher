@@ -61,7 +61,20 @@ function modeDescription(mode: LauncherBackgroundMode): string {
 	return formatMessage(modeMessages[mode].description)
 }
 
+function previewBackgroundStyle(url: string): { backgroundImage: string } {
+	const escapedUrl = Array.from(url, (character) => {
+		const codePoint = character.codePointAt(0) ?? 0
+		if (codePoint <= 0x1f || codePoint === 0x7f || character === '"' || character === '\\') {
+			return `\\${codePoint.toString(16)} `
+		}
+		return character
+	}).join('')
+
+	return { backgroundImage: `url("${escapedUrl}")` }
+}
+
 function selectWallpaper(id: string): void {
+	if (id === props.modelValue) return
 	emit('update:modelValue', id)
 }
 
@@ -99,7 +112,7 @@ function selectMode(mode: LauncherBackgroundMode): void {
 					<span
 						v-if="option.previewUrl"
 						class="tile-preview"
-						:style="{ backgroundImage: `url(${option.previewUrl})` }"
+						:style="previewBackgroundStyle(option.previewUrl)"
 						aria-hidden="true"
 					></span>
 					<span v-else class="tile-preview is-empty" aria-hidden="true">

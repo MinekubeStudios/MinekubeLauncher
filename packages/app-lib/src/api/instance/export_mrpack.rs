@@ -168,25 +168,33 @@ async fn validate_export_destination(
     state: &State,
     export_path: &Path,
 ) -> crate::Result<()> {
-    let parent = export_path.parent().ok_or_else(|| {
-        crate::state::content_store::input("Invalid export destination")
-    })?;
+    canonical_export_parent(state, export_path).await?;
+    if tokio::fs::symlink_metadata(export_path)
+        .await
+        .is_ok_and(|metadata| !metadata.is_file())
+    {
+        return Err(input("Export to a regular file"));
+    }
+    Ok(())
+}
+
+async fn canonical_export_parent(
+    state: &State,
+    export_path: &Path,
+) -> crate::Result<PathBuf> {
+    let parent = export_path
+        .parent()
+        .ok_or_else(|| input("Invalid export destination"))?;
     let parent = tokio::fs::canonicalize(parent).await?;
     let store = tokio::fs::canonicalize(state.directories.store_dir()).await?;
     let profiles =
         tokio::fs::canonicalize(state.directories.instances_dir()).await?;
-    if parent.starts_with(store)
-        || parent.starts_with(profiles)
-        || tokio::fs::symlink_metadata(export_path)
-            .await
-            .is_ok_and(|metadata| metadata.file_type().is_symlink())
-    {
-        return Err(crate::state::content_store::input(
-            "Export to a regular file outside the store and instance directories",
+    if parent.starts_with(store) || parent.starts_with(profiles) {
+        return Err(input(
+            "Export outside the store and instance directories",
         ));
     }
-
-    Ok(())
+    Ok(parent)
 }
 
 async fn collect_export_files(
@@ -398,14 +406,28 @@ pub async fn export_zip(
 /// player who built the instance (see [`is_clean_export_excluded`]), so a
 /// modpack can be handed to other players ready to play. Instance settings,
 /// keybinds, mods and mod configs are kept untouched either way.
+/// With `keep_existing`, collisions are resolved by appending a number.
 #[tracing::instrument(skip_all)]
 pub async fn export_prism_instance_zip(
     instance_id: &str,
     export_path: PathBuf,
     clean: bool,
+    keep_existing: bool,
 ) -> crate::Result<()> {
     let state = State::get().await?;
-    validate_export_destination(&state, &export_path).await?;
+    let parent = canonical_export_parent(&state, &export_path).await?;
+    let export_path = parent.join(
+        export_path
+            .file_name()
+            .ok_or_else(|| input("Invalid export filename"))?,
+    );
+    if !keep_existing
+        && tokio::fs::symlink_metadata(&export_path)
+            .await
+            .is_ok_and(|metadata| !metadata.is_file())
+    {
+        return Err(input("Export to a regular file"));
+    }
     let _permit: tokio::sync::SemaphorePermit =
         state.io_semaphore.0.acquire().await?;
     let metadata = get(instance_id).await?.ok_or_else(|| {
@@ -463,6 +485,9 @@ pub async fn export_prism_instance_zip(
                 directories.push(path);
                 continue;
             }
+            if !file_type.is_file() {
+                continue;
+            }
             let relative_path =
                 pack_get_relative_path(&instance_base_path, &path)?;
             if relative_path.as_str() == PRISM_INSTANCE_CFG
@@ -490,9 +515,13 @@ pub async fn export_prism_instance_zip(
     }
     export_files.sort_by(|a, b| a.1.cmp(&b.1));
 
-    let total_bytes = export_files
-        .iter()
-        .fold(1_u64, |total, (_, _, size)| total.saturating_add(*size));
+    let metadata_bytes = metadata_files.iter().fold(1_u64, |total, (_, data)| {
+        total.saturating_add(data.len() as u64)
+    });
+    let total_bytes = export_files.iter().fold(
+        metadata_bytes,
+        |total, (_, _, size)| total.saturating_add(*size),
+    );
     let loading_bar = init_loading(
         LoadingBarType::PackExport {
             instance_id: metadata.instance.id.clone(),
@@ -504,20 +533,59 @@ pub async fn export_prism_instance_zip(
     .await?;
 
     tokio::task::spawn_blocking(move || {
-        let file = std::fs::File::create(&export_path)
-            .map_err(|error| IOError::with_path(error, &export_path))?;
+        let mut file = tempfile::NamedTempFile::new_in(&parent)
+            .map_err(|error| IOError::with_path(error, &parent))?;
         write_prism_zip_archive(
-            file,
+            file.as_file_mut(),
             export_files,
             metadata_files,
             |bytes_written| {
                 emit_loading(&loading_bar, bytes_written as f64, None)
             },
-        )
+        )?;
+        if keep_existing {
+            persist_unique_prism_export(file, &export_path)
+        } else {
+            file.persist(&export_path).map_err(|error| {
+                IOError::with_path(error.error, &export_path)
+            })?;
+            Ok(())
+        }
     })
     .await??;
 
     Ok(())
+}
+
+fn persist_unique_prism_export(
+    mut file: tempfile::NamedTempFile,
+    export_path: &Path,
+) -> crate::Result<()> {
+    let stem = export_path
+        .file_stem()
+        .ok_or_else(|| input("Invalid export filename"))?;
+    let mut destination = export_path.to_path_buf();
+    let mut suffix = 2_u64;
+    loop {
+        match file.persist_noclobber(&destination) {
+            Ok(_) => return Ok(()),
+            Err(error)
+                if error.error.kind() == std::io::ErrorKind::AlreadyExists
+                    || std::fs::symlink_metadata(&destination).is_ok() =>
+            {
+                file = error.file;
+                let mut name = stem.to_os_string();
+                name.push(format!(" ({suffix}).zip"));
+                destination.set_file_name(name);
+                suffix += 1;
+            }
+            Err(error) => {
+                return Err(
+                    IOError::with_path(error.error, &destination).into()
+                );
+            }
+        }
+    }
 }
 
 const PRISM_INSTANCE_CFG: &str = "instance.cfg";
@@ -713,6 +781,9 @@ where
     let options = SimpleFileOptions::default()
         .compression_method(CompressionMethod::Deflated);
     let mut writer = ZipWriter::new(writer);
+    writer
+        .add_directory(format!("{PRISM_GAME_DIRECTORY}/"), options)
+        .map_err(std::io::Error::from)?;
     let mut buffer = vec![0_u8; EXPORT_COPY_BUFFER_SIZE];
 
     for (path, relative_path, _) in export_files {
@@ -1202,4 +1273,36 @@ pub async fn create_mrpack_json(
         files,
         dependencies,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn prism_export_keeps_existing_archives() {
+        let temp = tempfile::tempdir().unwrap();
+        let destination = temp.path().join("Example.zip");
+        std::fs::write(&destination, b"original").unwrap();
+        std::fs::create_dir(temp.path().join("Example (2).zip")).unwrap();
+        let mut archive = tempfile::NamedTempFile::new_in(temp.path()).unwrap();
+        archive.write_all(b"new archive").unwrap();
+
+        persist_unique_prism_export(archive, &destination).unwrap();
+
+        assert_eq!(std::fs::read(destination).unwrap(), b"original");
+        assert_eq!(
+            std::fs::read(temp.path().join("Example (3).zip")).unwrap(),
+            b"new archive",
+        );
+    }
+
+    #[test]
+    fn empty_prism_export_has_a_minecraft_directory() {
+        let mut bytes = std::io::Cursor::new(Vec::new());
+        write_prism_zip_archive(&mut bytes, Vec::new(), Vec::new(), |_| Ok(()))
+            .unwrap();
+        let mut archive = zip::ZipArchive::new(bytes).unwrap();
+        assert!(archive.by_name(".minecraft/").unwrap().is_dir());
+    }
 }

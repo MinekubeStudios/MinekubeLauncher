@@ -21,31 +21,35 @@ fn clean_folder(
     cutoff: Option<SystemTime>,
     report: &mut CleanupReport,
 ) {
-    let Ok(entries) = std::fs::read_dir(folder) else {
-        return;
-    };
-    for entry in entries.flatten() {
-        let path = entry.path();
-        let Ok(metadata) = entry.metadata() else {
+    let mut directories = vec![folder.to_path_buf()];
+    while let Some(folder) = directories.pop() {
+        if !std::fs::symlink_metadata(&folder).is_ok_and(|m| m.is_dir()) {
+            continue;
+        }
+        let Ok(entries) = std::fs::read_dir(folder) else {
             continue;
         };
-        if metadata.is_dir() {
-            // e.g. logs/telemetry, logs/blobs
-            clean_folder(&path, cutoff, report);
-            continue;
-        }
-        if let Some(cutoff) = cutoff {
-            let modified =
-                metadata.modified().unwrap_or_else(|_| SystemTime::now());
-            if modified > cutoff {
+        for entry in entries.flatten() {
+            let Ok(metadata) = entry.metadata() else {
+                continue;
+            };
+            if metadata.is_dir() {
+                directories.push(entry.path());
                 continue;
             }
-        }
-        // A log the running game still holds open cannot be removed on
-        // Windows; that is fine, it goes next time.
-        if std::fs::remove_file(&path).is_ok() {
-            report.files_removed += 1;
-            report.bytes_freed += metadata.len();
+            if !metadata.is_file()
+                || cutoff.is_some_and(|cutoff| {
+                    metadata
+                        .modified()
+                        .map_or(true, |modified| modified > cutoff)
+                })
+            {
+                continue;
+            }
+            if std::fs::remove_file(entry.path()).is_ok() {
+                report.files_removed += 1;
+                report.bytes_freed += metadata.len();
+            }
         }
     }
 }
@@ -69,7 +73,7 @@ pub async fn clean_logs(
             return report;
         };
         for instance in instances.flatten() {
-            if !instance.path().is_dir() {
+            if !instance.file_type().is_ok_and(|ty| ty.is_dir()) {
                 continue;
             }
             for folder in LOG_FOLDERS {
@@ -82,8 +86,7 @@ pub async fn clean_logs(
         }
         report
     })
-    .await
-    .unwrap_or_default();
+    .await?;
 
     if report.files_removed > 0 {
         tracing::info!(
@@ -93,4 +96,25 @@ pub async fn clean_logs(
         );
     }
     Ok(report)
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+    use std::os::unix::fs::symlink;
+
+    #[test]
+    fn cleanup_does_not_follow_symlinked_log_directories() {
+        let temp = tempfile::tempdir().unwrap();
+        let outside = temp.path().join("outside");
+        let log_file = outside.join("keep.txt");
+        std::fs::create_dir(&outside).unwrap();
+        std::fs::write(&log_file, b"keep").unwrap();
+        let logs = temp.path().join("logs");
+        symlink(&outside, &logs).unwrap();
+        let mut report = CleanupReport::default();
+        clean_folder(&logs, None, &mut report);
+        assert_eq!(report.files_removed, 0);
+        assert!(log_file.is_file());
+    }
 }

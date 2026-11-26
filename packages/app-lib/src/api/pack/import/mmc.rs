@@ -167,9 +167,11 @@ pub async fn get_instances_subpath(config: PathBuf) -> Option<String> {
 
 // Loading the INI (instance.cfg) file
 async fn load_instance_cfg(file_path: &Path) -> crate::Result<MMCInstance> {
-    match serde_ini::from_str::<MMCInstanceEnum>(
-        &io::read_any_encoding_to_string(file_path).await?.0,
-    )? {
+    parse_instance_cfg(&io::read_any_encoding_to_string(file_path).await?.0)
+}
+
+fn parse_instance_cfg(contents: &str) -> crate::Result<MMCInstance> {
+    match serde_ini::from_str::<MMCInstanceEnum>(contents)? {
         MMCInstanceEnum::General(instance_cfg) => Ok(instance_cfg.general),
         MMCInstanceEnum::Instance(instance_cfg) => Ok(instance_cfg),
     }
@@ -470,10 +472,58 @@ pub async fn get_instance_archive_kind(
     .await?
 }
 
+/// The instance name stored in an exported Prism/MultiMC archive, so the new
+/// instance (and its download entry) carries it from the very start.
+pub async fn archive_instance_name(path: PathBuf) -> Option<String> {
+    tokio::task::spawn_blocking(move || {
+        use std::io::Read;
+
+        let mut archive = open_archive(&path).ok()?;
+        let names = archive_entry_names(&archive);
+        let prefix = mmc_archive_prefix(names.iter().map(String::as_str))?;
+        let cfg_name = format!("{prefix}instance.cfg");
+        let index = names.iter().position(|name| *name == cfg_name)?;
+        let mut entry = archive.by_index(index).ok()?;
+        // instance.cfg is a few hundred bytes; anything huge is not one.
+        let mut bytes = Vec::new();
+        (&mut entry)
+            .take(1024 * 1024)
+            .read_to_end(&mut bytes)
+            .ok()?;
+        let name = parse_instance_cfg(&String::from_utf8_lossy(&bytes))
+            .ok()?
+            .name?;
+        let name = name.trim();
+        (!name.is_empty()).then(|| name.to_string())
+    })
+    .await
+    .ok()
+    .flatten()
+}
+
 /// Whether `path` points at an exported instance archive rather than at a
 /// Prism Launcher / MultiMC data folder.
 pub(crate) fn is_instance_archive(path: &Path) -> bool {
     path.is_file()
+}
+
+/// Turns an archive entry name into a path relative to the instance folder.
+/// Both `/` and `\\` count as separators (Windows tools such as PowerShell's
+/// `Compress-Archive` write backslashes). Anything that could leave the
+/// destination — `..`, drive letters or NTFS streams (`:`) — rejects the entry.
+fn archive_entry_relative_path(name: &str, prefix: &str) -> Option<PathBuf> {
+    let name = name.replace('\\', "/");
+    let rest = name.strip_prefix(prefix)?;
+    let mut path = PathBuf::new();
+    for component in rest.split('/') {
+        match component {
+            "" | "." => {}
+            ".." => return None,
+            component if component.contains(':') => return None,
+            component => path.push(component),
+        }
+    }
+    (!path.as_os_str().is_empty()).then_some(path)
 }
 
 /// Extracts the instance folder of a Prism/MultiMC archive into `destination`.
@@ -492,25 +542,18 @@ fn extract_mmc_archive(
                     .to_string(),
             )
         })?;
-    let prefix = Path::new(&prefix);
 
-    for index in 0..zip.len() {
+    for (index, name) in names.iter().enumerate() {
+        let Some(relative) = archive_entry_relative_path(name, &prefix) else {
+            continue;
+        };
         let mut entry = zip.by_index(index).map_err(std::io::Error::from)?;
         if entry.is_symlink() {
             continue;
         }
-        let Some(name) = entry.enclosed_name() else {
-            continue;
-        };
-        let Ok(relative) = name.strip_prefix(prefix) else {
-            continue;
-        };
-        if relative.as_os_str().is_empty() {
-            continue;
-        }
         let target = destination.join(relative);
 
-        if entry.is_dir() {
+        if entry.is_dir() || name.ends_with('/') {
             std::fs::create_dir_all(&target)
                 .map_err(|error| io::IOError::with_path(error, &target))?;
             continue;
@@ -539,11 +582,23 @@ pub async fn import_mmc_archive(
     details: InstallPhaseDetails,
 ) -> crate::Result<()> {
     let state = State::get().await?;
+    // Instance ids look like `local:<uuid>`; `:` is not allowed in Windows
+    // folder names, so the staging folder is named after the safe part only.
+    let staging_name: String = instance_id
+        .chars()
+        .map(|c| {
+            if c.is_ascii_alphanumeric() || c == '-' {
+                c
+            } else {
+                '_'
+            }
+        })
+        .collect();
     let staging = state
         .directories
         .caches_dir()
         .join("instance-archive-imports")
-        .join(instance_id);
+        .join(staging_name);
     if tokio::fs::try_exists(&staging).await.unwrap_or(false) {
         io::remove_dir_all(&staging).await?;
     }
@@ -668,6 +723,50 @@ mod tests {
         assert!(!destination.join("__MACOSX").exists());
         assert!(!temp.path().join("escape.txt").exists());
         assert!(!temp.path().parent().unwrap().join("escape.txt").exists());
+    }
+
+    #[test]
+    fn extracts_archives_written_with_backslashes() {
+        let temp = tempfile::tempdir().unwrap();
+        let archive = temp.path().join("windows.zip");
+        write_zip(
+            &archive,
+            &[
+                ("Pack\\instance.cfg", b"name=Pack\n"),
+                ("Pack\\mmc-pack.json", b"{\"components\":[]}"),
+                ("Pack\\.minecraft\\config\\", b""),
+                ("Pack\\.minecraft\\mods\\a.jar", b"jar"),
+                ("Pack\\..\\..\\escape.txt", b"nope"),
+                ("Pack\\C:\\evil.txt", b"nope"),
+            ],
+        );
+        let destination = temp.path().join("out");
+        std::fs::create_dir_all(&destination).unwrap();
+
+        extract_mmc_archive(&archive, &destination).unwrap();
+
+        assert!(destination.join("instance.cfg").is_file());
+        assert!(destination.join(".minecraft/config").is_dir());
+        assert_eq!(
+            std::fs::read(destination.join(".minecraft/mods/a.jar")).unwrap(),
+            b"jar"
+        );
+        assert!(!temp.path().join("escape.txt").exists());
+        assert_eq!(std::fs::read_dir(&destination).unwrap().count(), 3);
+    }
+
+    #[test]
+    fn entry_paths_cannot_leave_the_instance() {
+        assert_eq!(archive_entry_relative_path("../x", ""), None);
+        assert_eq!(archive_entry_relative_path("a/../../x", ""), None);
+        assert_eq!(archive_entry_relative_path("C:/x", ""), None);
+        assert_eq!(archive_entry_relative_path("a/file:stream", ""), None);
+        assert_eq!(archive_entry_relative_path("other/x", "Pack/"), None);
+        assert_eq!(archive_entry_relative_path("Pack/", "Pack/"), None);
+        assert_eq!(
+            archive_entry_relative_path("/Pack/./mods//a.jar", "/Pack/"),
+            Some(PathBuf::from("mods").join("a.jar"))
+        );
     }
 
     #[test]

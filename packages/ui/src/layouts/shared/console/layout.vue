@@ -435,6 +435,7 @@ async function confirmDelete() {
 }
 
 async function handleShare() {
+	if (resolvedShareDisabled.value) return
 	const predicate = buildCombinedPredicate()
 	const lines = predicate ? ctx.logLines.value.filter(predicate) : ctx.logLines.value
 	const rawContent = lines.map((l) => l.text).join('\n')

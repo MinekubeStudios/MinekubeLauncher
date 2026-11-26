@@ -12,18 +12,19 @@ use crate::launcher::io::IOError;
 use crate::launcher::quick_play_version::{
     QuickPlayServerVersion, QuickPlayVersion,
 };
-use crate::server_address::{ServerAddress, parse_server_address};
-use crate::state::server_join_log::JoinLogEntry;
 use crate::state::{
-    Credentials, InstanceInstallStage, InstanceLaunchContext, InstanceLink,
-    JavaVersion, MemorySettings, ProcessMetadata, WindowSize,
+    CacheBehaviour, CachedEntry, Credentials, InstanceInstallStage,
+    InstanceLaunchContext, InstanceLink, JavaVersion, MemorySettings,
+    ProcessMetadata, WindowSize,
 };
 use crate::util::io;
 use crate::util::rpc::RpcServerBuilder;
 use crate::{State, get_resource_file, process};
 use chrono::Utc;
 use daedalus as d;
-use daedalus::minecraft::{LoggingSide, RuleAction, VersionInfo};
+use daedalus::minecraft::{
+    LoggingConfiguration, LoggingSide, RuleAction, VersionInfo,
+};
 use daedalus::modded::{LoaderVersion, Manifest};
 use serde::Deserialize;
 use std::future::Future;
@@ -35,6 +36,7 @@ pub(crate) mod hooks;
 
 pub mod download;
 pub mod mod_scan;
+pub(crate) mod network_isolation;
 pub mod quick_play_version;
 pub mod shield_game;
 
@@ -162,6 +164,15 @@ pub async fn get_loader_version_from_profile(
     loader: ModLoader,
     loader_version: Option<&str>,
 ) -> crate::Result<Option<LoaderVersion>> {
+    loader_version_with_cache(game_version, loader, loader_version, None).await
+}
+
+async fn loader_version_with_cache(
+    game_version: &str,
+    loader: ModLoader,
+    loader_version: Option<&str>,
+    cache_behaviour: Option<CacheBehaviour>,
+) -> crate::Result<Option<LoaderVersion>> {
     if loader == ModLoader::Vanilla {
         return Ok(None);
     }
@@ -174,8 +185,11 @@ pub async fn get_loader_version_from_profile(
         id => it.id == *id,
     };
 
-    let versions =
-        crate::api::metadata::get_loader_versions(loader.as_meta_str()).await?;
+    let versions = crate::api::metadata::get_loader_versions_with_cache(
+        loader.as_meta_str(),
+        cache_behaviour,
+    )
+    .await?;
 
     if let Some(loaders) =
         loader_versions_for_game_version(&versions, game_version)
@@ -816,7 +830,7 @@ fn link_project_and_version(
 
 #[tracing::instrument(skip_all)]
 #[allow(clippy::too_many_arguments)]
-pub async fn launch_minecraft(
+pub(crate) async fn launch_minecraft(
     java_args: &[String],
     env_args: &[(String, String)],
     mc_set_options: &[(String, String)],
@@ -827,6 +841,7 @@ pub async fn launch_minecraft(
     post_exit_hook: Option<String>,
     context: &InstanceLaunchContext,
     mut quick_play_type: QuickPlayType,
+    isolation: Option<&network_isolation::NetworkIsolation>,
 ) -> crate::Result<ProcessMetadata> {
     let instance = &context.instance;
     let content_set = &context.applied_content_set;
@@ -852,8 +867,24 @@ pub async fn launch_minecraft(
 
     let instance_path = get_instance_full_path(&instance.path).await?;
 
-    let (minecraft, version_index) =
-        resolve_minecraft_manifest(&content_set.game_version, &state).await?;
+    let cached_only = isolation.is_some();
+    let (minecraft, version_index) = if cached_only {
+        let manifest = CachedEntry::get_minecraft_manifest(
+            Some(CacheBehaviour::CacheOnly),
+            &state.pool,
+            &state.api_semaphore,
+        )
+        .await?
+        .ok_or_else(isolated_runtime_missing)?;
+        let index = manifest
+            .versions
+            .iter()
+            .position(|item| item.id == content_set.game_version)
+            .ok_or_else(isolated_runtime_missing)?;
+        (manifest, index)
+    } else {
+        resolve_minecraft_manifest(&content_set.game_version, &state).await?
+    };
     let version = &minecraft.versions[version_index];
     let minecraft_updated = version_index
         <= minecraft
@@ -862,10 +893,11 @@ pub async fn launch_minecraft(
             .position(|x| x.id == "22w16a")
             .unwrap_or(0);
 
-    let loader_version = get_loader_version_from_profile(
+    let loader_version = loader_version_with_cache(
         &content_set.game_version,
         content_set.loader,
         content_set.loader_version.as_deref(),
+        cached_only.then_some(CacheBehaviour::CacheOnly),
     )
     .await?;
 
@@ -882,50 +914,89 @@ pub async fn launch_minecraft(
             format!("{}-{}", version.id.clone(), it.id.clone())
         });
 
-    let mut version_info = download::download_version_info(
-        &state,
-        version,
-        loader_version.as_ref(),
-        None,
-        None,
-        None,
-    )
-    .await?;
-    if version_info.logging.is_none() {
-        let requires_logging_info = version_index
-            <= minecraft
-                .versions
-                .iter()
-                .position(|x| x.id == "13w39a")
-                .unwrap_or(0);
-        if requires_logging_info {
-            version_info = download::download_version_info(
-                &state,
-                version,
-                loader_version.as_ref(),
-                Some(true),
-                None,
-                None,
-            )
-            .await?;
+    let version_info = if cached_only {
+        let path = state
+            .directories
+            .version_dir(&version_jar)
+            .join(format!("{version_jar}.json"));
+        if !path.is_file() {
+            return Err(isolated_runtime_missing());
         }
-    }
-
-    let _ =
-        download_log_config(&state, &version_info, None, false, None).await?;
-
-    let java_version =
-        get_java_version_from_launch_context(context, &version_info)
-            .await?
-            .ok_or_else(|| {
-                crate::ErrorKind::LauncherError(
-                    "Missing correct java installation".to_string(),
+        let info: VersionInfo =
+            serde_json::from_slice(&io::read(&path).await?)?;
+        if let Some(LoggingConfiguration::Log4j2Xml { file, .. }) = info
+            .logging
+            .as_ref()
+            .and_then(|logging| logging.get(&LoggingSide::Client))
+            && !state.directories.log_configs_dir().join(&file.id).is_file()
+        {
+            return Err(isolated_runtime_missing());
+        }
+        info
+    } else {
+        let mut version_info = download::download_version_info(
+            &state,
+            version,
+            loader_version.as_ref(),
+            None,
+            None,
+            None,
+        )
+        .await?;
+        if version_info.logging.is_none() {
+            let requires_logging_info = version_index
+                <= minecraft
+                    .versions
+                    .iter()
+                    .position(|x| x.id == "13w39a")
+                    .unwrap_or(0);
+            if requires_logging_info {
+                version_info = download::download_version_info(
+                    &state,
+                    version,
+                    loader_version.as_ref(),
+                    Some(true),
+                    None,
+                    None,
                 )
-            })?;
+                .await?;
+            }
+        }
 
-    // Test jre version
-    let java_version =
-        crate::api::jre::check_jre(java_version.path.clone().into()).await?;
+        download_log_config(&state, &version_info, None, false, None).await?;
+        version_info
+    };
+
+    let missing_java = || {
+        crate::ErrorKind::LauncherError(
+            "Missing correct java installation".to_owned(),
+        )
+    };
+    let java_version = if let Some(isolation) = isolation {
+        let java_path = match context.launch_overrides.java_path.as_ref() {
+            Some(path) => PathBuf::from(path),
+            None => {
+                let major = version_info
+                    .java_version
+                    .as_ref()
+                    .map_or(8, |java| java.major_version);
+                JavaVersion::get(major, &state.pool)
+                    .await?
+                    .map(|java| PathBuf::from(java.path))
+                    .ok_or_else(missing_java)?
+            }
+        };
+        crate::util::jre::check_java_at_filepath_with_isolation(
+            &java_path,
+            Some(isolation),
+        )
+        .await?
+    } else {
+        let java = get_java_version_from_launch_context(context, &version_info)
+            .await?
+            .ok_or_else(missing_java)?;
+        crate::api::jre::check_jre(java.path.into()).await?
+    };
 
     let client_path = state
         .directories
@@ -933,8 +1004,9 @@ pub async fn launch_minecraft(
         .join(format!("{version_jar}.jar"));
 
     let args = version_info.arguments.clone().unwrap_or_default();
-    let mut command = match wrapper {
-        Some(hook) => {
+    let mut command = match (isolation, wrapper) {
+        (Some(isolation), _) => isolation.command(java_version.path.as_ref()),
+        (None, Some(hook)) => {
             let mut cmd = shlex::split(hook)
                 .ok_or_else(|| {
                     crate::ErrorKind::LauncherError(format!(
@@ -951,7 +1023,7 @@ pub async fn launch_minecraft(
             command.arg(&java_version.path);
             command
         }
-        None => Command::new(&java_version.path),
+        (None, None) => Command::new(&java_version.path),
     };
 
     let env_args = Vec::from(env_args);
@@ -979,6 +1051,9 @@ pub async fn launch_minecraft(
         &java_version.architecture,
         minecraft_updated,
     )? {
+        if cached_only {
+            return Err(isolated_runtime_missing());
+        }
         tracing::info!(instance_id = %instance.id, path = %path.display(), "Restoring missing Minecraft runtime files before launch");
         drop(runtime_lease);
         install_minecraft_with_reporter(context, false, None).await?;
@@ -1000,38 +1075,17 @@ pub async fn launch_minecraft(
     if let QuickPlayType::Server(address) = &mut quick_play_type
         && quick_play_version.server >= QuickPlayServerVersion::BuiltinLegacy
     {
-        // Record last-played for the original server address immediately so
-        // recent-worlds can match without DNS/SRV resolution.
-        let original = match address {
-            ServerAddress::Unresolved(address) => parse_server_address(address)
-                .ok()
-                .map(|(h, p)| (h.to_owned(), p)),
-            ServerAddress::Resolved {
-                original_host,
-                original_port,
-                ..
-            } => Some((original_host.clone(), *original_port)),
-        };
-        if let Some((host, port)) = original
-            && let Err(e) = (JoinLogEntry {
-                instance_id: instance.id.clone(),
-                host,
-                port,
-                join_time: Utc::now(),
-            })
-            .upsert(&state.pool)
-            .await
-        {
-            tracing::warn!("Failed to write server join log entry: {e}");
-        }
-
         address.resolve().await?;
     }
 
     let (main_class_keep_alive, main_class_path) =
         get_resource_file!(env "JAVA_JARS_DIR" / "theseus.jar")?;
 
-    let rpc_server = RpcServerBuilder::new().launch().await?;
+    let rpc_server = if isolation.is_some() {
+        None
+    } else {
+        Some(RpcServerBuilder::new().launch().await?)
+    };
 
     command.args(
         args::get_jvm_arguments(
@@ -1058,7 +1112,7 @@ pub async fn launch_minecraft(
                 .logging
                 .as_ref()
                 .and_then(|x| x.get(&LoggingSide::Client)),
-            rpc_server.address(),
+            rpc_server.as_ref().map(|server| server.address()),
         )?
         .into_iter(),
     );
@@ -1074,8 +1128,11 @@ pub async fn launch_minecraft(
         command.arg("--add-opens=jdk.internal/jdk.internal.misc=ALL-UNNAMED");
     }
 
+    command.arg("com.modrinth.theseus.MinecraftLaunch");
+    if isolation.is_some() {
+        command.arg("--minekube-isolated");
+    }
     command
-        .arg("com.modrinth.theseus.MinecraftLaunch")
         .arg(version_info.main_class.clone())
         .args(
             args::get_minecraft_arguments(
@@ -1092,6 +1149,7 @@ pub async fn launch_minecraft(
                 &java_version.architecture,
                 &quick_play_type,
                 quick_play_version,
+                isolation.is_some(),
             )
             .await?
             .into_iter(),
@@ -1106,10 +1164,13 @@ pub async fn launch_minecraft(
     // Java options should be set in instance options (the existence of _JAVA_OPTIONS overwrites them)
     command.env_remove("_JAVA_OPTIONS");
 
-    command.envs(env_args.iter().cloned());
+    if isolation.is_none() {
+        command.envs(env_args.iter().cloned());
+    }
 
-    if let Err(error) =
-        crate::api::instance::reconcile_synced_packs(&instance.id).await
+    if !cached_only
+        && let Err(error) =
+            crate::api::instance::reconcile_synced_packs(&instance.id).await
     {
         tracing::warn!(
             "Failed to reconcile synced packs before launching {}: {error}",
@@ -1133,8 +1194,13 @@ pub async fn launch_minecraft(
     )
     .await?;
 
-    crate::state::instances::commands::sync_content_files(&instance.id, &state)
+    if !cached_only {
+        crate::state::instances::commands::sync_content_files(
+            &instance.id,
+            &state,
+        )
         .await?;
+    }
     let _instance_content_lock =
         state.lock_instance_content(&instance.id).await;
     let _store_lock = state.content_store.files_lock.lock().await;
@@ -1191,15 +1257,12 @@ pub async fn launch_minecraft(
         }
     }
 
-    let _ = state
-        .discord_rpc
-        .set_activity(&format!("Playing {}", instance.name), true)
-        .await;
-
-    let _ = state
-        .friends_socket
-        .update_status(Some(instance.name.clone()))
-        .await;
+    if isolation.is_none() {
+        let _ = state
+            .discord_rpc
+            .set_activity("Playing Minecraft", true)
+            .await;
+    }
 
     // Create Minecraft child by inserting it into the state
     // This also spawns the process and prepares the subsequent processes
@@ -1247,4 +1310,11 @@ pub async fn launch_minecraft(
             },
         )
         .await
+}
+
+fn isolated_runtime_missing() -> crate::Error {
+    crate::ErrorKind::LauncherError(
+        "Installed game files or metadata are missing. Repair the instance online, then retry the isolated launch.".to_owned(),
+    )
+    .into()
 }

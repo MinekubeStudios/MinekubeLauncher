@@ -52,7 +52,7 @@ impl DiscordGuard {
         let state = State::get().await?;
         let settings = crate::state::Settings::get(&state.pool).await?;
         if !settings.discord_rpc {
-            Ok(self.clear_activity(true).await?)
+            self.clear_activity().await
         } else {
             Ok(self.force_set_activity(msg, reconnect_if_fail).await?)
         }
@@ -60,7 +60,7 @@ impl DiscordGuard {
 
     /// Sets the activity to the given message, regardless of if discord is disabled or offline
     /// Should not be used except for in the above method, or if it is already known that discord is enabled (specifically for state initialization) and we are connected to the internet
-    pub async fn force_set_activity(
+    async fn force_set_activity(
         &self,
         msg: &str,
         reconnect_if_fail: bool,
@@ -94,54 +94,11 @@ impl DiscordGuard {
         Ok(())
     }
 
-    /// Clear the activity entirely ('disabling' the RPC until the next set_activity)
-    pub async fn clear_activity(
-        &self,
-        reconnect_if_fail: bool,
-    ) -> crate::Result<()> {
-        // Attempt to connect if not connected. Do not continue if it fails, as the client.clear_activity can panic if it never was connected
-        if !self.retry_if_not_ready().await {
-            return Ok(());
-        }
-
-        // Attempt to clear the activity
-        // If the existing connection fails, attempt to reconnect and try again
+    /// Clear an activity only if this launcher already connected to Discord.
+    pub async fn clear_activity(&self) -> crate::Result<()> {
         let mut client = self.client.write().await;
-        let res = client.clear_activity();
-
-        if reconnect_if_fail {
-            if res.is_err() {
-                client.reconnect()?;
-                return Ok(client.clear_activity()?); // try again, but don't reconnect if it fails again
-            }
-        } else {
-            res?;
-        }
-        Ok(())
-    }
-
-    /// Clear the activity, but if there is a running profile, set the activity to that instead
-    pub async fn clear_to_default(
-        &self,
-        reconnect_if_fail: bool,
-    ) -> crate::Result<()> {
-        let state = State::get().await?;
-
-        let settings = crate::state::Settings::get(&state.pool).await?;
-        if !settings.discord_rpc {
-            println!("Discord is disabled, clearing activity");
-            return self.clear_activity(true).await;
-        }
-
-        let running_instances = state.process_manager.get_all();
-        if let Some(existing_child) = running_instances.first() {
-            self.set_activity(
-                &format!("Playing {}", existing_child.instance_name),
-                reconnect_if_fail,
-            )
-            .await?;
-        } else {
-            self.set_activity("Idling...", reconnect_if_fail).await?;
+        if self.connected.load(std::sync::atomic::Ordering::Relaxed) {
+            client.clear_activity()?;
         }
         Ok(())
     }

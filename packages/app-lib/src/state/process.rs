@@ -1,10 +1,10 @@
-use crate::event::emit::{emit_instance, emit_process};
-use crate::event::{InstancePayloadType, ProcessPayloadType};
+use crate::event::ProcessPayloadType;
+use crate::event::emit::emit_process;
 #[cfg(feature = "tauri")]
 use crate::event::{LogEvent, LogPayload};
 use crate::util::io::IOError;
 use crate::util::rpc::RpcServer;
-use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, TimeZone, Utc};
 use dashmap::DashMap;
 use quick_xml::Reader;
 use quick_xml::events::Event;
@@ -307,7 +307,7 @@ impl ProcessManager {
                     "Exited process",
                 )
                 .await;
-                let _ = state.discord_rpc.clear_to_default(true).await;
+                let _ = state.discord_rpc.clear_activity().await;
                 return;
             }
             tokio::time::sleep(DETACHED_POLL_INTERVAL).await;
@@ -326,7 +326,7 @@ impl ProcessManager {
         logs_folder: PathBuf,
         xml_logging: bool,
         main_class_keep_alive: TempDir,
-        rpc_server: RpcServer,
+        rpc_server: Option<RpcServer>,
         post_process_init: impl AsyncFnOnce(
             &ProcessMetadata,
             &RpcServer,
@@ -431,8 +431,8 @@ impl ProcessManager {
             }
         }
 
-        if let Err(e) =
-            post_process_init(&process.metadata, &process.rpc_server).await
+        if let Some(rpc_server) = &process.rpc_server
+            && let Err(e) = post_process_init(&process.metadata, rpc_server).await
         {
             tracing::error!("Failed to run post-process init: {e}");
             clear_persisted_process(&state, persisted_process).await;
@@ -506,7 +506,7 @@ impl ProcessManager {
     }
 
     pub fn get_rpc(&self, id: Uuid) -> Option<RpcServer> {
-        self.processes.get(&id).map(|x| x.rpc_server.clone())
+        self.processes.get(&id).and_then(|x| x.rpc_server.clone())
     }
 
     pub fn get_all(&self) -> Vec<ProcessMetadata> {
@@ -584,7 +584,7 @@ struct Process {
     metadata: ProcessMetadata,
     child: Child,
     _main_class_keep_alive: TempDir,
-    rpc_server: RpcServer,
+    rpc_server: Option<RpcServer>,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
@@ -754,25 +754,6 @@ impl Process {
                                         );
                                     }
 
-                                    if let Some(timestamp_millis) =
-                                        current_event.timestamp_millis
-                                    {
-                                        let timestamp =
-                                            timestamp_millis.to_string();
-                                        let message = current_event
-                                            .message
-                                            .as_deref()
-                                            .unwrap_or("")
-                                            .trim();
-                                        if let Err(e) = Self::maybe_handle_server_join_logging(
-											instance_id,
-											&timestamp,
-											message,
-                                        ).await {
-                                            tracing::error!("Failed to handle server join logging: {e}");
-                                        }
-                                    }
-
                                     Self::emit_log4j_event(
                                         instance_id,
                                         &current_event,
@@ -829,16 +810,6 @@ impl Process {
                         tracing::warn!("Failed to write to log file: {}", e);
                     }
                     Self::emit_legacy_log(instance_id, line.trim_ascii_end());
-                    if let Err(e) = Self::maybe_handle_old_server_join_logging(
-                        instance_id,
-                        line.trim_ascii_end(),
-                    )
-                    .await
-                    {
-                        tracing::error!(
-                            "Failed to handle old server join logging: {e}"
-                        );
-                    }
                 }
 
                 line.clear();
@@ -938,95 +909,6 @@ impl Process {
             OpenOptions::new().append(true).create(true).open(path)?;
 
         file.write_all(line.as_bytes())?;
-        Ok(())
-    }
-
-    async fn maybe_handle_server_join_logging(
-        instance_id: &str,
-        timestamp: &str,
-        message: &str,
-    ) -> crate::Result<()> {
-        let timestamp = timestamp
-            .parse::<i64>()
-            .map(|x| x / 1000)
-            .map_err(|x| {
-                crate::ErrorKind::OtherError(format!(
-                    "Failed to parse timestamp: {x}"
-                ))
-            })
-            .and_then(|x| {
-                Utc.timestamp_opt(x, 0).single().ok_or_else(|| {
-                    crate::ErrorKind::OtherError(
-                        "Failed to convert timestamp to DateTime".to_string(),
-                    )
-                })
-            })?;
-        Self::parse_and_insert_server_join(instance_id, message, timestamp)
-            .await
-    }
-
-    async fn maybe_handle_old_server_join_logging(
-        instance_id: &str,
-        line: &str,
-    ) -> crate::Result<()> {
-        if let Some((timestamp, message)) = line.split_once(" [CLIENT] [INFO] ")
-        {
-            let timestamp =
-                NaiveDateTime::parse_from_str(timestamp, "%Y-%m-%d %H:%M:%S")?
-                    .and_local_timezone(chrono::Local)
-                    .map(|x| x.to_utc())
-                    .single()
-                    .unwrap_or_else(Utc::now);
-            Self::parse_and_insert_server_join(instance_id, message, timestamp)
-                .await
-        } else {
-            Self::parse_and_insert_server_join(instance_id, line, Utc::now())
-                .await
-        }
-    }
-
-    async fn parse_and_insert_server_join(
-        instance_id: &str,
-        message: &str,
-        timestamp: DateTime<Utc>,
-    ) -> crate::Result<()> {
-        let Some(host_port_string) = message.strip_prefix("Connecting to ")
-        else {
-            return Ok(());
-        };
-        let Some((host, port_string)) = host_port_string.rsplit_once(", ")
-        else {
-            return Ok(());
-        };
-        let Some(port) = port_string.parse::<u16>().ok() else {
-            return Ok(());
-        };
-
-        let state = crate::State::get().await?;
-        crate::state::server_join_log::JoinLogEntry {
-            instance_id: instance_id.to_owned(),
-            host: host.to_string(),
-            port,
-            join_time: timestamp,
-        }
-        .upsert(&state.pool)
-        .await?;
-        {
-            let instance_id = instance_id.to_owned();
-            let host = host.to_owned();
-            tokio::spawn(async move {
-                let _ = emit_instance(
-                    &instance_id,
-                    InstancePayloadType::ServerJoined {
-                        host,
-                        port,
-                        timestamp: timestamp.to_rfc3339(),
-                    },
-                )
-                .await;
-            });
-        }
-
         Ok(())
     }
 
@@ -1160,9 +1042,7 @@ impl Process {
             tracing::warn!("Failed to write exit status to log file: {}", e);
         }
 
-        let _ = state.discord_rpc.clear_to_default(true).await;
-
-        let _ = state.friends_socket.update_status(None).await;
+        let _ = state.discord_rpc.clear_activity().await;
 
         // If in tauri, window should show itself again after process exists if it was hidden
         #[cfg(feature = "tauri")]

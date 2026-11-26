@@ -242,14 +242,12 @@ async fn import_instance_inner(
         }
     };
 
-    // If import failed, delete the profile
-    match res {
-        Ok(_) => {}
-        Err(e) => {
-            tracing::warn!("Import failed: {:?}", e);
-            let _ = crate::api::instance::remove(instance_id).await;
-            return Err(e);
-        }
+    // A failed import is cleaned up by the install job, which deletes the new
+    // instance itself. Removing it from here would wait for the job's own
+    // target lock and hang the job (and every queued install) forever.
+    if let Err(e) = res {
+        tracing::warn!("Import failed: {:?}", e);
+        return Err(e);
     }
 
     tracing::debug!("Completed import.");

@@ -880,6 +880,8 @@ pub enum CacheBehaviour {
     MustRevalidate,
     // Ignore cache- always fetch updated data from origin
     Bypass,
+    /// Read existing entries, including stale ones; never make a request.
+    CacheOnly,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1110,6 +1112,10 @@ impl CachedEntry {
                     remaining_keys.retain(remove_matching_key);
                 }
             }
+        }
+
+        if cache_behaviour == CacheBehaviour::CacheOnly {
+            return Ok(return_vals);
         }
 
         if !remaining_keys.is_empty() {

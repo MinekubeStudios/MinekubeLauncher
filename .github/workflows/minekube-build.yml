@@ -1,0 +1,201 @@
+name: Minekube Launcher (build)
+
+# Builds the Windows installer (.exe) of the Minekube Launcher on a standard
+# GitHub-hosted runner. The installer is not code-signed (no certificate), but
+# every release is signed with the launcher's updater key so the built-in
+# "automatic updates" can verify and install it. That key lives in two
+# repository secrets (Settings → Secrets and variables → Actions):
+#   TAURI_SIGNING_PRIVATE_KEY           contents of minekube-updater.key
+#   TAURI_SIGNING_PRIVATE_KEY_PASSWORD  its password
+#
+# Trigger it manually from the "Actions" tab (Run workflow), on a tag push
+# like `v1.0.0`, or open a pull request touching the launcher code. The
+# installer is uploaded as a build artifact on the run's summary page; a tag
+# push also publishes it as a GitHub release.
+
+on:
+  workflow_dispatch: {}
+  push:
+    tags:
+      - 'v*'
+  pull_request:
+    paths:
+      - .github/workflows/minekube-build.yml
+      - 'apps/app/**'
+      - 'apps/app-frontend/**'
+      - 'packages/**'
+      - Cargo.toml
+      - Cargo.lock
+      - pnpm-lock.yaml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Windows installer
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Rust toolchain (1.95.0, MSVC)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: '1.95.0'
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Check pnpm installation
+        run: pnpm --version
+
+      - name: Setup Java 17 (needed to build the bundled Java helpers)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # A tag like `v1.2.1` decides the version: the installers are named after
+      # it and the Launcher reports it, so the built-in update check never
+      # offers the release a player already has.
+      - name: Set version from tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME must look like v1.2.3"
+            exit 1
+          fi
+          node -e '
+            const fs = require("fs");
+            const version = process.argv[1];
+            const pkgFile = "apps/app-frontend/package.json";
+            const pkg = JSON.parse(fs.readFileSync(pkgFile, "utf8"));
+            pkg.version = version;
+            fs.writeFileSync(pkgFile, JSON.stringify(pkg, null, "\t") + "\n");
+            for (const file of ["apps/app/Cargo.toml", "packages/app-lib/Cargo.toml"]) {
+              const toml = fs.readFileSync(file, "utf8");
+              fs.writeFileSync(file, toml.replace(/^version = ".*"$/m, `version = "${version}"`));
+            }
+          ' "$VERSION"
+          echo "Building Minekube Launcher $VERSION"
+
+      - name: Provide backend environment (.env)
+        shell: bash
+        run: cp packages/app-lib/.env.prod packages/app-lib/.env
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test native credential protection and database backup redaction
+        if: github.event_name == 'pull_request'
+        run: |
+          cargo test --locked -p theseus --lib util::secret::tests
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo test --locked -p theseus --lib state::db_backup::tests
+
+      # With the updater key the Launcher is built with its self-updater and the
+      # installer gets a `.sig` signature next to it. A release (tag push) must
+      # have it; other builds (pull requests from forks get no secrets) fall
+      # back to a build without the self-updater.
+      - name: Build Minekube Launcher (NSIS installer)
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if [ -n "$TAURI_SIGNING_PRIVATE_KEY" ]; then
+            pnpm --filter=@modrinth/app run tauri build --bundles nsis --config tauri-release.conf.json
+          elif [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "::error::Secret TAURI_SIGNING_PRIVATE_KEY is missing. Add the contents of minekube-updater.key (and TAURI_SIGNING_PRIVATE_KEY_PASSWORD) under Settings → Secrets and variables → Actions, otherwise players cannot receive this release as an automatic update."
+            exit 1
+          else
+            echo "::warning::No updater key available; building without the self-updater."
+            unset TAURI_SIGNING_PRIVATE_KEY TAURI_SIGNING_PRIVATE_KEY_PASSWORD
+            pnpm --filter=@modrinth/app run tauri build --bundles nsis
+          fi
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: Minekube-Launcher-windows-setup
+          if-no-files-found: error
+          path: |
+            target/release/bundle/nsis/*-setup.exe
+            target/release/bundle/nsis/*-setup.exe.sig
+
+  # Publishes the installer as a GitHub release so the Launcher's built-in
+  # "Aktualizace" (update) button finds the latest release on GitHub and the
+  # updater endpoint (releases/latest/download/latest.json) has a release to
+  # point to.
+  release:
+    name: Create GitHub release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download installer
+        uses: actions/download-artifact@v5
+        with:
+          path: dist
+          merge-multiple: true
+
+      # latest.json is what the Launcher's updater reads (endpoint:
+      # releases/latest/download/latest.json). It names the new version, the
+      # installer to download and the signature that proves it is genuine.
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # "Minekube Launcher_1.2.3_x64-setup.exe" → "Minekube_Launcher_1.2.3_x64-setup.exe"
+          for f in dist/*; do
+            [ "$f" = "${f// /_}" ] || mv "$f" "${f// /_}"
+          done
+          VERSION="${GITHUB_REF_NAME#v}"
+          INSTALLER="$(ls dist/*-setup.exe | head -n 1)"
+          SIGNATURE_FILE="$INSTALLER.sig"
+          if [ ! -f "$SIGNATURE_FILE" ]; then
+            echo "::error::$SIGNATURE_FILE is missing; the installer was built without the updater key."
+            exit 1
+          fi
+          INSTALLER_NAME="$(basename "$INSTALLER")"
+          jq -n \
+            --arg version "$VERSION" \
+            --arg notes "Minekube Launcher $VERSION" \
+            --arg pub_date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg url "https://github.com/$GH_REPO/releases/download/$GITHUB_REF_NAME/$INSTALLER_NAME" \
+            --rawfile signature "$SIGNATURE_FILE" \
+            '{version: $version, notes: $notes, pub_date: $pub_date,
+              platforms: {"windows-x86_64": {signature: ($signature | rtrimstr("\n")), url: $url}}}' \
+            > dist/latest.json
+          cat dist/latest.json
+          ls -la dist
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+            exit 0
+          fi
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Minekube Launcher ${VERSION}" \
+            --notes "Minekube Launcher ${VERSION}" \
+            --latest \
+            dist/*

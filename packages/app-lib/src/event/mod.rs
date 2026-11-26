@@ -477,6 +477,7 @@ pub enum InstancePayloadType {
     WorldUpdated {
         world: String,
     },
+    // Reserved for compatibility with existing postcard event discriminants.
     ServerJoined {
         host: String,
         port: u16,

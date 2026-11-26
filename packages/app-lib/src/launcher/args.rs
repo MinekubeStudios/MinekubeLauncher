@@ -123,7 +123,7 @@ pub fn get_jvm_arguments(
     quick_play_type: &QuickPlayType,
     quick_play_version: QuickPlayVersion,
     log_config: Option<&LoggingConfiguration>,
-    ipc_addr: SocketAddr,
+    ipc_addr: Option<SocketAddr>,
 ) -> crate::Result<Vec<String>> {
     let mut parsed_arguments = Vec::new();
 
@@ -184,10 +184,12 @@ pub fn get_jvm_arguments(
             .to_string_lossy()
     ));
 
-    parsed_arguments
-        .push(format!("-Dmodrinth.internal.ipc.host={}", ipc_addr.ip()));
-    parsed_arguments
-        .push(format!("-Dmodrinth.internal.ipc.port={}", ipc_addr.port()));
+    if let Some(ipc_addr) = ipc_addr {
+        parsed_arguments.extend([
+            format!("-Dmodrinth.internal.ipc.host={}", ipc_addr.ip()),
+            format!("-Dmodrinth.internal.ipc.port={}", ipc_addr.port()),
+        ]);
+    }
 
     parsed_arguments.push(format!(
         "-Dmodrinth.internal.quickPlay.serverVersion={}",
@@ -269,13 +271,25 @@ pub async fn get_minecraft_arguments(
     java_arch: &str,
     quick_play_type: &QuickPlayType,
     quick_play_version: QuickPlayVersion,
+    isolated: bool,
 ) -> crate::Result<Vec<String>> {
-    let access_token = credentials.access_token.clone();
-    let profile = credentials.maybe_online_profile().await;
+    let online_profile = if isolated {
+        None
+    } else {
+        Some(credentials.maybe_online_profile().await)
+    };
+    let profile = online_profile
+        .as_deref()
+        .unwrap_or(&credentials.offline_profile);
+    let access_token = if isolated || credentials.is_local() {
+        "0"
+    } else {
+        credentials.access_token.as_str()
+    };
     // Local accounts are announced to the game as legacy (non-Microsoft) users,
     // which is what every launcher does for offline play: the game then does
     // not try to talk to Microsoft or Mojang services with the dummy token
-    let user_type = if credentials.is_local() {
+    let user_type = if isolated || credentials.is_local() {
         "legacy"
     } else {
         "msa"
@@ -289,7 +303,7 @@ pub async fn get_minecraft_arguments(
             |arg| {
                 parse_minecraft_argument(
                     arg,
-                    &access_token,
+                    access_token,
                     user_type,
                     &profile.name,
                     profile.id,
@@ -309,7 +323,7 @@ pub async fn get_minecraft_arguments(
         for x in legacy_arguments.split(' ') {
             parsed_arguments.push(parse_minecraft_argument(
                 &x.replace(' ', TEMPORARY_REPLACE_CHAR),
-                &access_token,
+                access_token,
                 user_type,
                 &profile.name,
                 profile.id,

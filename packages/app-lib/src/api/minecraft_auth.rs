@@ -4,11 +4,11 @@ use reqwest::StatusCode;
 
 use crate::State;
 use crate::state::{Credentials, MinecraftLoginFlow};
-use crate::util::fetch::INSECURE_REQWEST_CLIENT;
+use crate::util::fetch::REQWEST_CLIENT;
 
 #[tracing::instrument]
 pub async fn check_reachable() -> crate::Result<()> {
-    let resp = INSECURE_REQWEST_CLIENT
+    let resp = REQWEST_CLIENT
         .get("https://sessionserver.mojang.com/session/minecraft/hasJoined")
         .send()
         .await?;
@@ -26,7 +26,7 @@ pub async fn begin_login() -> crate::Result<MinecraftLoginFlow> {
     crate::state::login_begin(&state.pool).await
 }
 
-#[tracing::instrument]
+#[tracing::instrument(skip_all)]
 pub async fn finish_login(
     code: &str,
     flow: MinecraftLoginFlow,
@@ -49,7 +49,7 @@ pub async fn finish_login(
 
 /// Creates (or re-activates) a local account with the given username, which
 /// only exists on this device and never contacts Microsoft or Mojang services.
-#[tracing::instrument]
+#[tracing::instrument(skip_all)]
 pub async fn login_local(username: &str) -> crate::Result<Credentials> {
     let state = State::get().await?;
 
@@ -75,7 +75,7 @@ pub fn validate_local_username(username: &str) -> crate::Result<()> {
 #[tracing::instrument]
 pub async fn get_default_user() -> crate::Result<Option<uuid::Uuid>> {
     let state = State::get().await?;
-    let user = Credentials::get_default_credential(&state.pool).await?;
+    let user = Credentials::get_active_without_refresh(&state.pool).await?;
     Ok(user.map(|user| user.offline_profile.id))
 }
 
@@ -83,17 +83,13 @@ pub async fn get_default_user() -> crate::Result<Option<uuid::Uuid>> {
 pub async fn set_default_user(user: uuid::Uuid) -> crate::Result<()> {
     let state = State::get().await?;
     let users = Credentials::get_all(&state.pool).await?;
-    let (_, mut user) = users.remove(&user).ok_or_else(|| {
-        crate::ErrorKind::OtherError(format!(
-            "Tried to get nonexistent user with ID {user}"
-        ))
-        .as_error()
-    })?;
-
-    user.active = true;
-    user.upsert(&state.pool).await?;
-
-    Ok(())
+    if !users.contains_key(&user) {
+        return Err(crate::ErrorKind::InputError(
+            "Unknown Minecraft account".to_owned(),
+        )
+        .into());
+    }
+    Credentials::select(user, &state.pool).await
 }
 
 /// Remove a user account from the database
@@ -107,10 +103,9 @@ pub async fn remove_user(uuid: uuid::Uuid) -> crate::Result<()> {
         Credentials::remove(uuid, &state.pool).await?;
 
         if user.active
-            && let Some((_, mut user)) = users.into_iter().next()
+            && let Some((uuid, _)) = users.into_iter().next()
         {
-            user.active = true;
-            user.upsert(&state.pool).await?;
+            Credentials::select(uuid, &state.pool).await?;
         }
     }
 

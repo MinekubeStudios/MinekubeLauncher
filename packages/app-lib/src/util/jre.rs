@@ -1,10 +1,11 @@
 use super::io;
+use crate::launcher::network_isolation::NetworkIsolation;
 use crate::state::JavaVersion;
 use futures::prelude::*;
 use std::env;
 use std::path::PathBuf;
-use std::process::Command;
 use std::{collections::HashSet, path::Path};
+use tokio::process::Command;
 use tokio::task::JoinError;
 
 use crate::{State, get_resource_file};
@@ -251,6 +252,13 @@ pub async fn check_java_at_filepaths(
 // If no such path exists, or no such valid java at this path exists, returns None
 #[tracing::instrument]
 pub async fn check_java_at_filepath(path: &Path) -> crate::Result<JavaVersion> {
+    check_java_at_filepath_with_isolation(path, None).await
+}
+
+pub(crate) async fn check_java_at_filepath_with_isolation(
+    path: &Path,
+    isolation: Option<&NetworkIsolation>,
+) -> crate::Result<JavaVersion> {
     // Attempt to canonicalize the potential java filepath
     // If it fails, this path does not exist and None is returned (no Java here)
     let path = io::canonicalize(path)?;
@@ -274,12 +282,25 @@ pub async fn check_java_at_filepath(path: &Path) -> crate::Result<JavaVersion> {
     let (_temp, file_path) =
         get_resource_file!(env "JAVA_JARS_DIR" / "theseus.jar")?;
 
-    let output = Command::new(&java)
+    let mut command = match isolation {
+        Some(isolation) => isolation.command(java.as_os_str()),
+        None => Command::new(&java),
+    };
+    command
         .arg("-cp")
         .arg(file_path)
         .arg("com.modrinth.theseus.JavaInfo")
         .env_remove("_JAVA_OPTIONS")
-        .output()?;
+        .kill_on_drop(true);
+    let output = tokio::time::timeout(
+        std::time::Duration::from_secs(15),
+        command.output(),
+    )
+    .await
+    .map_err(|_| JREError::FailedJavaCheck(java.clone()))??;
+    if !output.status.success() {
+        return Err(JREError::FailedJavaCheck(java).into());
+    }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
 

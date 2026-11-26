@@ -11,10 +11,15 @@ import java.util.concurrent.CompletableFuture;
 
 public final class MinecraftLaunch {
     public static void main(String[] args) throws IOException, ReflectiveOperationException {
-        final String mainClass = args[0];
-        final String[] gameArgs = Arrays.copyOfRange(args, 1, args.length);
+        final boolean isolated = "--minekube-isolated".equals(args[0]);
+        final int mainClassIndex = isolated ? 1 : 0;
+        final String mainClass = args[mainClassIndex];
+        final String[] gameArgs = Arrays.copyOfRange(args, mainClassIndex + 1, args.length);
 
-        System.setProperty("modrinth.process.args", String.join("\u001f", gameArgs));
+        if (isolated) {
+            relaunch(mainClass, gameArgs);
+            return;
+        }
 
         final CompletableFuture<Void> waitForLaunch = new CompletableFuture<>();
         TheseusRpc.connectAndStart(

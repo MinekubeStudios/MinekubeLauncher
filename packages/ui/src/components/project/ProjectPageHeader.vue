@@ -15,7 +15,7 @@
 		</template>
 
 		<template v-if="showStatusBadge" #badges>
-			<ProjectStatusBadge :status="projectV3.status" />
+			<ProjectStatusBadge :status="projectV3?.status ?? project.status" />
 		</template>
 
 		<template #metadata>
